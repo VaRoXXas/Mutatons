@@ -8,9 +8,10 @@ public class creature_AI : MonoBehaviour
     public float moveForce;
     private bool moveForward;
     public Transform wallDetection;
+    public int element;
     void Start()
     {
-        
+        element = 0;
     }
 
     void Update()
@@ -33,6 +34,9 @@ public class creature_AI : MonoBehaviour
             }
         }
         
-
+        if(element != 0)
+        {
+            Debug.Log("changed element");
+        }
     }
 }
