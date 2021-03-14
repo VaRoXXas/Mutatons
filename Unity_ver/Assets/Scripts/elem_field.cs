@@ -20,11 +20,13 @@ public class elem_field : MonoBehaviour
         if( mutaton != null && mutaton.element == 1 && element == 1)
         {
             Destroy(child);
-            Debug.Log("hit");
+            Destroy(mutaton.gameObject);
+            GetComponent<Collider>().enabled = !GetComponent<Collider>().enabled;
         } else if( mutaton != null && element == 2 && element == 2)
         {
             Destroy(child);
-            Debug.Log("hit");
+            Destroy(mutaton.gameObject);
+            GetComponent<Collider>().enabled = !GetComponent<Collider>().enabled;
         } else if( mutaton != null )
         {
             Destroy(mutaton.gameObject);

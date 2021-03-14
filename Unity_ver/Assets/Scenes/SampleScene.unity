@@ -342,7 +342,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveForce: 1
   wallDetection: {fileID: 2131336129}
-  element: 0
+  element: 1
 --- !u!136 &505039370
 CapsuleCollider:
   m_ObjectHideFlags: 0
