@@ -1,0 +1,44 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class elem_field : MonoBehaviour
+{
+    public Material fire;
+    public Material water;
+    public int element;
+    GameObject child;
+    void Start()
+    {
+        child = this.gameObject.transform.GetChild(0).gameObject;
+        SetColor(element);
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        creature_AI mutaton = collider.GetComponent<creature_AI>();
+        if( mutaton != null && mutaton.element == 1 && element == 1)
+        {
+            Destroy(child);
+            Debug.Log("hit");
+        } else if( mutaton != null && element == 2 && element == 2)
+        {
+            Destroy(child);
+            Debug.Log("hit");
+        } else if( mutaton != null )
+        {
+            Destroy(mutaton.gameObject);
+        }
+    }
+
+    void SetColor( int elem )
+    {
+        if(elem == 1)
+        {
+            child.GetComponent<MeshRenderer>().material = fire;
+        } else if(elem == 2)
+        {
+            child.GetComponent<MeshRenderer>().material = water;
+        }
+    }
+}
