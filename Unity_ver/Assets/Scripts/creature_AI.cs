@@ -39,4 +39,10 @@ public class creature_AI : MonoBehaviour
             Debug.Log("changed element");
         }
     }
+
+    // Method used by crossings.
+    public void ChangeMovementDirection(WorldDirection newDirection)
+    {
+        // Mutaton's movement change implementation.
+    }
 }
