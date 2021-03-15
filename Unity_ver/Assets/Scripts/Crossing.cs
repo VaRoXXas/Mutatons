@@ -16,7 +16,7 @@ public class Crossing : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        creature_AI mutaton = other.gameObject.GetComponent<creature_AI>();
+        Creature mutaton = other.gameObject.GetComponent<Creature>();
         if(mutaton != null)
         {
             Debug.Log("Mutaton has entered the crossing!");

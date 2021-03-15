@@ -16,7 +16,7 @@ public class ElemField : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        creature_AI mutaton = collider.GetComponent<creature_AI>();
+        Creature mutaton = collider.GetComponent<Creature>();
         if( mutaton != null && mutaton.element == 1 && element == 1)
         {
             Destroy(child);

@@ -14,7 +14,7 @@ public class LabPoint : MonoBehaviour
     
     void OnTriggerEnter(Collider collider)
     {
-        creature_AI mutaton = collider.GetComponent<creature_AI>();
+        Creature mutaton = collider.GetComponent<Creature>();
         if( mutaton != null && element == 1)
         {
             Debug.Log("hit");

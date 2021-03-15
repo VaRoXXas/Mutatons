@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class creature_AI : MonoBehaviour
+public class Creature : MonoBehaviour
 {
 
     public float moveForce;
     private bool moveForward;
     public Transform wallDetection;
     public int element;
+    private WorldDirection newDirection;
     void Start()
     {
         element = 0;
