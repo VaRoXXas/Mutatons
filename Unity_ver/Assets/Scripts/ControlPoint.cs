@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class control_point : MonoBehaviour
+public class ControlPoint : MonoBehaviour
 {
     bool done;
 
@@ -14,7 +14,6 @@ public class control_point : MonoBehaviour
     
     void OnTriggerEnter(Collider collider)
     {
-        //creature_AI mutaton = collider.GetComponent<Player>();
         if(!done)
         {
             if( collider.gameObject.tag == "Mutaton" )

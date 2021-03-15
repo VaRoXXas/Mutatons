@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class elem_field : MonoBehaviour
+public class ElemField : MonoBehaviour
 {
     public Material fire;
     public Material water;
