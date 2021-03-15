@@ -106,7 +106,7 @@ public class Creature : MonoBehaviour
                 Debug.Log("north");
                 break;
             case WorldDirection.EAST:
-                transform.eulerAngles = new Vector3(0, -90, 0);
+                transform.eulerAngles = new Vector3(0, -270, 0);
                 currentDirection = newDirection;
                 Debug.Log("east");
                 break;
@@ -116,7 +116,7 @@ public class Creature : MonoBehaviour
                 Debug.Log("south");
                 break;
             case WorldDirection.WEST:
-                transform.eulerAngles = new Vector3(0, -270, 0);
+                transform.eulerAngles = new Vector3(0, -90, 0);
                 currentDirection = newDirection;
                 Debug.Log("west");
                 break;
