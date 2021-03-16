@@ -10,7 +10,8 @@ public class Bridge : MonoBehaviour
 
     void Awake()
     {
-        isOpen = false;
+        //isOpen = false;
+        isOpen = true;
     }
 
     void Update()
@@ -18,7 +19,7 @@ public class Bridge : MonoBehaviour
         if(currentlyRotating)
         {
             Vector3 addedRotation;
-            if(isOpen)
+            if(!isOpen)
             {
                 addedRotation = new Vector3(0.0f, 0.0f, -90.0f / timeToSwitchState * Time.deltaTime);
                 leftPartPivot.transform.Rotate(addedRotation);
