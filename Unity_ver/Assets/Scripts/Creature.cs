@@ -6,7 +6,7 @@ public class Creature : MonoBehaviour
 {
 
     public float moveForce;
-    private bool moveForward;
+    //private bool moveForward;
     public Transform wallDetection;
     public int element;
     private WorldDirection newDirection;
@@ -14,7 +14,7 @@ public class Creature : MonoBehaviour
     //private int turnAngle = 0;
     void Start()
     {
-        moveForward = true;
+        //moveForward = true;
         element = 0;
         newDirection = WorldDirection.EAST;
         currentDirection = WorldDirection.NORTH;
@@ -119,10 +119,6 @@ public class Creature : MonoBehaviour
                 transform.eulerAngles = new Vector3(0, -90, 0);
                 currentDirection = newDirection;
                 Debug.Log("west");
-                break;
-            case WorldDirection.NONE:
-                
-                Debug.Log("kurwa");
                 break;
             default:
                 break;
