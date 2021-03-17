@@ -22,7 +22,7 @@ public class ElemField : MonoBehaviour
             Destroy(child);
             Destroy(mutaton.gameObject);
             GetComponent<Collider>().enabled = !GetComponent<Collider>().enabled;
-        } else if( mutaton != null && element == 2 && element == 2)
+        } else if( mutaton != null && mutaton.element == 2 && element == 2)
         {
             Destroy(child);
             Destroy(mutaton.gameObject);

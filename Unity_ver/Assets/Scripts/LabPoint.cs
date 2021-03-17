@@ -6,6 +6,8 @@ public class LabPoint : MonoBehaviour
 {
     public int element;
     // 1 - fire, 2 - water,
+    public Material fire;
+    public Material water;
     void Start()
     {
         Debug.Log(gameObject.name);
@@ -19,10 +21,12 @@ public class LabPoint : MonoBehaviour
         {
             Debug.Log("hit");
             mutaton.element = 1;
+            mutaton.GetComponent<MeshRenderer>().material = fire;
         } else if( mutaton != null && element == 2)
         {
             Debug.Log("hit");
             mutaton.element = 2;
+            mutaton.GetComponent<MeshRenderer>().material = water;
         }
     }
     
