@@ -7,11 +7,39 @@ public class Crossing : MonoBehaviour
     [SerializeField] private WorldDirection defaultOpenBridgeDirection;
     private WorldDirection currentOpenBridgeDirection = WorldDirection.NONE;
     [SerializeField] private Bridge northBridge, eastBridge, southBridge, westBridge;
+    public Material[] material;
+    Renderer rend;
+    public bool isClickable;// to group crossing with bridges and without bridges
     
 
     void Start()
     {
         SetBridgeOpen(defaultOpenBridgeDirection);
+        currentOpenBridgeDirection = defaultOpenBridgeDirection;
+
+        if (isClickable)
+        {
+            rend = GetComponent<Renderer>();
+            rend.enabled = true;
+
+            switch (defaultOpenBridgeDirection)
+            {
+                case WorldDirection.NORTH:
+                    rend.sharedMaterial = material[0];
+                    break;
+                case WorldDirection.SOUTH:
+                    rend.sharedMaterial = material[1];
+                    break;
+                case WorldDirection.EAST:
+                    rend.sharedMaterial = material[2];
+                    break;
+                case WorldDirection.WEST:
+                    rend.sharedMaterial = material[3];
+                    break;
+
+            }
+        }
+        
     }
 
     void OnTriggerEnter(Collider other)
@@ -22,6 +50,35 @@ public class Crossing : MonoBehaviour
             Debug.Log("Mutaton has entered the crossing!");
             mutaton.ChangeMovementDirection(currentOpenBridgeDirection);
         }
+    }
+
+    void OnMouseDown()
+    {
+        if(isClickable)
+        {
+            switch (currentOpenBridgeDirection)
+            {
+                case WorldDirection.NORTH:
+                    currentOpenBridgeDirection = WorldDirection.SOUTH;
+                    rend.sharedMaterial = material[1];
+                    break;
+                case WorldDirection.SOUTH:
+                    currentOpenBridgeDirection = WorldDirection.NORTH;
+                    rend.sharedMaterial = material[0];
+                    break;
+                case WorldDirection.WEST:
+                    currentOpenBridgeDirection = WorldDirection.EAST;
+                    rend.sharedMaterial = material[2];
+                    break;
+                case WorldDirection.EAST:
+                    currentOpenBridgeDirection = WorldDirection.WEST;
+                    rend.sharedMaterial = material[3];
+                    break;
+
+            }
+            SetBridgeOpen(currentOpenBridgeDirection);
+        }
+        
     }
 
 

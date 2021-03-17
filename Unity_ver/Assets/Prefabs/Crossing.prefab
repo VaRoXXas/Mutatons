@@ -125,3 +125,8 @@ MonoBehaviour:
   eastBridge: {fileID: 0}
   southBridge: {fileID: 0}
   westBridge: {fileID: 0}
+  material:
+  - {fileID: 2100000, guid: 9165364d3ebac96409247df257e708f6, type: 2}
+  - {fileID: 2100000, guid: 35913341303cc364aa3f6350b3e6839b, type: 2}
+  - {fileID: 2100000, guid: d303c36c7f2983e49b420321cf85a284, type: 2}
+  - {fileID: 2100000, guid: 0651ae8935d77284ba85dba99ee24536, type: 2}
