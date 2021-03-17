@@ -10,8 +10,7 @@ public class Bridge : MonoBehaviour
 
     void Awake()
     {
-        isOpen = false;
-        //isOpen = true;
+        isOpen = true; // because prefab IS OPEN by default
     }
 
     void Update()
@@ -21,26 +20,26 @@ public class Bridge : MonoBehaviour
             Vector3 addedRotation;
             if(isOpen)
             {
-                addedRotation = new Vector3(0.0f, 0.0f, -90.0f / timeToSwitchState * Time.deltaTime);
+                addedRotation = new Vector3(0.0f, 0.0f, 90.0f / timeToSwitchState * Time.deltaTime);
                 leftPartPivot.transform.Rotate(addedRotation);
                 rightPartPivot.transform.Rotate(addedRotation);
                 Debug.Log(leftPartPivot.transform.rotation.eulerAngles.z);
-                if(leftPartPivot.transform.rotation.eulerAngles.z <= 360.0f - 90.0f) // -90 is represented as 270 in eulerAngles
+                if(leftPartPivot.transform.rotation.eulerAngles.z >= 0.0f) // -90 is represented as 270 in eulerAngles
                 {
-                    leftPartPivot.transform.rotation = Quaternion.Euler(0.0f, 0.0f, -90.0f);
-                    rightPartPivot.transform.rotation = Quaternion.Euler(0.0f, -180.0f, -90.0f);
+                    leftPartPivot.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+                    rightPartPivot.transform.rotation = Quaternion.Euler(0.0f, -180.0f, 0.0f);
                     currentlyRotating = false;
                 }
             }
             else
             {
-                addedRotation = new Vector3(0.0f, 0.0f, 90.0f / timeToSwitchState * Time.deltaTime);
+                addedRotation = new Vector3(0.0f, 0.0f, -90.0f / timeToSwitchState * Time.deltaTime);
                 leftPartPivot.transform.Rotate(addedRotation);
                 rightPartPivot.transform.Rotate(addedRotation);
-                if(leftPartPivot.transform.rotation.eulerAngles.z >= 0.0f)
+                if(leftPartPivot.transform.rotation.eulerAngles.z <= 360.0f - 90.0f) // -90 is represented as 270 in eulerAngles
                 {
-                    leftPartPivot.transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-                    rightPartPivot.transform.rotation = Quaternion.Euler(0.0f, -180.0f, 0.0f);
+                    leftPartPivot.transform.rotation = Quaternion.Euler(0.0f, 0.0f, -90.0f);
+                    rightPartPivot.transform.rotation = Quaternion.Euler(0.0f, -180.0f, -90.0f);
                     currentlyRotating = false;
                 }
             }
