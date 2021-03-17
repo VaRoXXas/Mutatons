@@ -15,7 +15,6 @@ public class Crossing : MonoBehaviour
     void Start()
     {
         SetBridgeOpen(defaultOpenBridgeDirection);
-        currentOpenBridgeDirection = defaultOpenBridgeDirection;
 
         if (isClickable)
         {
@@ -59,24 +58,23 @@ public class Crossing : MonoBehaviour
             switch (currentOpenBridgeDirection)
             {
                 case WorldDirection.NORTH:
-                    currentOpenBridgeDirection = WorldDirection.SOUTH;
+                    SetBridgeOpen(WorldDirection.SOUTH);
                     rend.sharedMaterial = material[1];
                     break;
                 case WorldDirection.SOUTH:
-                    currentOpenBridgeDirection = WorldDirection.NORTH;
+                    SetBridgeOpen(WorldDirection.NORTH);
                     rend.sharedMaterial = material[0];
                     break;
                 case WorldDirection.WEST:
-                    currentOpenBridgeDirection = WorldDirection.EAST;
+                    SetBridgeOpen(WorldDirection.EAST);
                     rend.sharedMaterial = material[2];
                     break;
                 case WorldDirection.EAST:
-                    currentOpenBridgeDirection = WorldDirection.WEST;
+                    SetBridgeOpen(WorldDirection.WEST);
                     rend.sharedMaterial = material[3];
                     break;
 
             }
-            SetBridgeOpen(currentOpenBridgeDirection);
         }
         
     }
@@ -94,6 +92,7 @@ public class Crossing : MonoBehaviour
                 southBridge.SetOpen(false);
             if(westBridge != null)
                 westBridge.SetOpen(false);
+
             switch (bridgeDirection)
             {
                 case WorldDirection.NORTH:
@@ -115,6 +114,7 @@ public class Crossing : MonoBehaviour
                 default:
                     break;
             }
+            
             currentOpenBridgeDirection = bridgeDirection;
         }
     }

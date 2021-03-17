@@ -9382,6 +9382,11 @@ PrefabInstance:
       propertyPath: westBridge
       value: 
       objectReference: {fileID: 1683939266}
+    - target: {fileID: 4708420578881581490, guid: 33e565b794087d2459a173325c566c21,
+        type: 3}
+      propertyPath: isClickable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6030297017854270229, guid: 33e565b794087d2459a173325c566c21,
         type: 3}
       propertyPath: m_Name
