@@ -1,0 +1,4 @@
+* docs.gl - przyjemna dokumentacja OpenGL
+* https://youtu.be/W3gAzLwfIP0 - super video tutorial OpenGL
+* https://shot511.github.io/pages/learnopengl/ - przyjemny tekstowy tutorial OpenGL
+* https://www.youtube.com/watch?v=EMFG5wmng-M&ab_channel=baldurkarlsson - samouczek RenderDoc'a
