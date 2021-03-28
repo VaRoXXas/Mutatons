@@ -7,10 +7,12 @@ public class ElemField : MonoBehaviour
     public Material fire;
     public Material water;
     public int element;
+    public bool destroyed;
     GameObject child;
     void Start()
     {
         child = this.gameObject.transform.GetChild(0).gameObject;
+        destroyed = false;
         SetColor(element);
     }
 
@@ -19,11 +21,13 @@ public class ElemField : MonoBehaviour
         Creature mutaton = collider.GetComponent<Creature>();
         if( mutaton != null && mutaton.element == 1 && element == 1)
         {
+            destroyed = true;
             Destroy(child);
             Destroy(mutaton.gameObject);
             GetComponent<Collider>().enabled = !GetComponent<Collider>().enabled;
         } else if( mutaton != null && mutaton.element == 2 && element == 2)
         {
+            destroyed = true;
             Destroy(child);
             Destroy(mutaton.gameObject);
             GetComponent<Collider>().enabled = !GetComponent<Collider>().enabled;
