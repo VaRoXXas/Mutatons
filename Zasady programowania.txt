@@ -1,8 +1,8 @@
-1. Komentarze po angielsku
+1. Komentarze po angielsku.
 2. Nazwy klas, interfejsów, struktur, metod, funkcji, enumów z dużej litery np. MojaKlasa.
 3. Nazwy pól, zmiennych z małej litery np. mojaZmienna.
-4. Nazwy ustawień z #define lub innych globalnych const piszemy O_WLASNIE_TAK
-5. Pusta linia na końcu każdego pliku .h, .cpp, z shaderem.
+4. Nazwy ustawień z #define lub innych globalnych const piszemy O_WLASNIE_TAK.
+5. Pusta linia na końcu każdego pliku .h, .cpp, z shaderem, tekstowego.
 6. Nie piszemy jednoliniowych ifów. Jeśli nie chcemy robić klamr to robimy:
 	if(warunek)
 		DoSomething();
