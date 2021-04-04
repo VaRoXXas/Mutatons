@@ -106,13 +106,6 @@ int main()
 
 
 
-	// muzyczka na test sfml'a
-	sf::Music music;
-	if(music.openFromFile("res/music/Intergalactic Odyssey.ogg"))
-		music.play();
-
-
-
 #pragma region shaders init
 
 	glEnable(GL_DEPTH_TEST);
