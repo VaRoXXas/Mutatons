@@ -15,7 +15,8 @@
 	zawierającą kilkadziesiąt elementów kilkaset razy na sekundę zamiast przekazać ją po prostu przez referencję.
 12. W miarę możliwości staramy się używać enum class zamiast zwykłego enum.
 13. Używamy static_cast'a zamiast "zwykłego" castowania z języka C.
-
+14. Pomiędzy #pragma once, a resztą kodu robimy jedną linię odstępu.
+15. Przed "główną" częścią danego pliku np. zbiorem definicji w pliku cpp, funkcją main, klasą w pliku .h robimy 3 linie odstępu.
 
 
 
