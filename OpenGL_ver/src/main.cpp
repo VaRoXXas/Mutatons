@@ -13,7 +13,7 @@
 #include "FragmentShaders.h"
 
 bool sceneExplorationModeEnabled = true;
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera mainCamera(glm::vec3(0.0f, 0.0f, 3.0f));
 GLfloat deltaTime = 0.0f;
 GLfloat lastFrame = 0.0f;
 GLfloat currentFrame = 0.0f;
@@ -34,14 +34,14 @@ GraphNode* house; // na pojedyncze domki
 GraphNode* roof; // na pojedyncze dachy
 int* meshDetailLevelPtr;
 bool* cursorDisabledPtr;
-void (*RKeyAction)();
-void (*TKeyAction)();
-void (*EKeyAction)();
-void (*QKeyAction)();
-void (*WKeyAction)();
-void (*SKeyAction)();
-void (*AKeyAction)();
-void (*DKeyAction)();
+void (*rKeyAction)();
+void (*tKeyAction)();
+void (*eKeyAction)();
+void (*qKeyAction)();
+void (*wKeyAction)();
+void (*sKeyAction)();
+void (*aKeyAction)();
+void (*dKeyAction)();
 static GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, planeVAO, planeVBO, instancedCubeVAO, instancedPyramidVAO, instanceVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
 static GLuint houseBase_diffuse, roof_diffuse, plane_diffuse, houseBase_specular, roof_specular, plane_specular, cubemapTexture;
 static const int HOUSES_ROW_LENGTH = 200;
@@ -92,8 +92,8 @@ int main()
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, Util::FramebufferSizeCallback);
-	glfwSetCursorPosCallback(window, Input::MouseCallback);
-	//glfwSetScrollCallback(window, Input::ScrollCallback);
+	glfwSetCursorPosCallback(window, Input::CursorPosCallback);
+	glfwSetScrollCallback(window, Input::ScrollCallback);
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Blocking cursor inside a window and disabling its graphic representation.
 
 	// glad: load all OpenGL function pointers
@@ -486,14 +486,14 @@ int main()
 	delete lightColors;
 
 	// Assigning keyboard actions.
-	RKeyAction = &ToggleCursor;
-	TKeyAction = &ToggleSceneExplorationMode;
-	EKeyAction = &MoveCameraRight;
-	QKeyAction = &MoveCameraLeft;
-	WKeyAction = &MoveCameraForward;
-	SKeyAction = &MoveCameraBackward;
-	AKeyAction = &MoveCameraLeft;
-	DKeyAction = &MoveCameraRight;
+	rKeyAction = &ToggleCursor;
+	tKeyAction = &ToggleSceneExplorationMode;
+	eKeyAction = &MoveCameraRight;
+	qKeyAction = &MoveCameraLeft;
+	wKeyAction = &MoveCameraForward;
+	sKeyAction = &MoveCameraBackward;
+	aKeyAction = &MoveCameraLeft;
+	dKeyAction = &MoveCameraRight;
 
 #pragma endregion
 
@@ -529,8 +529,8 @@ int main()
 		transform = glm::mat4(1.0f);
 		model = glm::mat4(1.0f);
 		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		view = camera.GetViewMatrix();
-		projection = glm::perspective(glm::radians(camera.zoom), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
+		view = mainCamera.GetViewMatrix();
+		projection = glm::perspective(glm::radians(mainCamera.zoom), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
 
 		if (xRotationEnabled)
 			model = glm::rotate(model, (GLfloat)glfwGetTime() * 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -572,7 +572,7 @@ int main()
 		glm::vec3 ambientColor;
 
 		lt.Use();
-		lt.SetVecf3("viewPos", camera.position);
+		lt.SetVecf3("viewPos", mainCamera.position);
 		lt.SetFloat("material.shininess", 16.0f);
 		lt.SetVecf3("dirLight.direction", directionalLightsDirection);
 		lt.SetVecf3("pointLight.position", pointLightPos);
@@ -648,7 +648,7 @@ int main()
 
 		
 		lti.Use();
-		lti.SetVecf3("viewPos", camera.position);
+		lti.SetVecf3("viewPos", mainCamera.position);
 		lti.SetFloat("material.shininess", 16.0f);
 		lti.SetVecf3("dirLight.direction", directionalLightsDirection);
 		lti.SetVecf3("pointLight.position", pointLightPos);
@@ -775,7 +775,7 @@ int main()
 		PseudoMesh androidHead(DrawReflected); GraphNode androidHeadNode(&androidHead, androidHeadTransformFinal);
 
 		if(!sceneExplorationModeEnabled)
-			camera.position = glm::vec3(androidStartTransform[3]) + glm::vec3(0.0f, 1.5f, 3.0f);
+			mainCamera.position = glm::vec3(androidStartTransform[3]) + glm::vec3(0.0f, 1.5f, 3.0f);
 		
 		
 		// parenting
@@ -813,7 +813,7 @@ int main()
 		// skybox
 		glDepthFunc(GL_LEQUAL);
 		skyboxShader.Use();
-		view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
+		view = glm::mat4(glm::mat3(mainCamera.GetViewMatrix())); // remove translation from the view matrix
 		skyboxShader.SetMat4("view", view);
 		skyboxShader.SetMat4("projection", projection);
 		// skybox cube
@@ -888,43 +888,43 @@ void ToggleSceneExplorationMode()
 	sceneExplorationModeEnabled = !sceneExplorationModeEnabled;
 	if (sceneExplorationModeEnabled)
 	{
-		EKeyAction = &MoveCameraRight;
-		QKeyAction = &MoveCameraLeft;
-		WKeyAction = &MoveCameraForward;
-		SKeyAction = &MoveCameraBackward;
-		AKeyAction = &MoveCameraLeft;
-		DKeyAction = &MoveCameraRight;
+		eKeyAction = &MoveCameraRight;
+		qKeyAction = &MoveCameraLeft;
+		wKeyAction = &MoveCameraForward;
+		sKeyAction = &MoveCameraBackward;
+		aKeyAction = &MoveCameraLeft;
+		dKeyAction = &MoveCameraRight;
 	}
 	else
 	{
-		EKeyAction = &RotateAndroidHeadRight;
-		QKeyAction = &RotateAndroidHeadLeft;
-		WKeyAction = &MoveAndroidForward;
-		SKeyAction = &MoveAndroidBackward;
-		AKeyAction = &MoveAndroidLeft;
-		DKeyAction = &MoveAndroidRight;
+		eKeyAction = &RotateAndroidHeadRight;
+		qKeyAction = &RotateAndroidHeadLeft;
+		wKeyAction = &MoveAndroidForward;
+		sKeyAction = &MoveAndroidBackward;
+		aKeyAction = &MoveAndroidLeft;
+		dKeyAction = &MoveAndroidRight;
 	}
 	std::this_thread::sleep_for(0.25s);
 }
 
 void MoveCameraForward()
 {
-	camera.ProcessKeyboard(CameraDirection::Forward, deltaTime);
+	mainCamera.ProcessKeyboard(CameraDirection::Forward, deltaTime);
 }
 
 void MoveCameraBackward()
 {
-	camera.ProcessKeyboard(CameraDirection::Backward, deltaTime);
+	mainCamera.ProcessKeyboard(CameraDirection::Backward, deltaTime);
 }
 
 void MoveCameraLeft()
 {
-	camera.ProcessKeyboard(CameraDirection::Left, deltaTime);
+	mainCamera.ProcessKeyboard(CameraDirection::Left, deltaTime);
 }
 
 void MoveCameraRight()
 {
-	camera.ProcessKeyboard(CameraDirection::Right, deltaTime);
+	mainCamera.ProcessKeyboard(CameraDirection::Right, deltaTime);
 }
 
 void RotateAndroidHeadLeft()
@@ -1060,7 +1060,7 @@ void DrawReflected(glm::mat4 transform)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
 	refractShaderPtr->Use();
-	refractShaderPtr->SetVecf3("viewPos", camera.position);
+	refractShaderPtr->SetVecf3("viewPos", mainCamera.position);
 	refractShaderPtr->SetBool("refractMode", false);
 	refractShaderPtr->SetMat4("transform", transform);
 	glBindVertexArray(cubeVAO);
@@ -1073,7 +1073,7 @@ void DrawRefracted(glm::mat4 transform)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
 	refractShaderPtr->Use();
-	refractShaderPtr->SetVecf3("viewPos", camera.position);
+	refractShaderPtr->SetVecf3("viewPos", mainCamera.position);
 	refractShaderPtr->SetBool("refractMode", true);
 	refractShaderPtr->SetMat4("transform", transform);
 	glBindVertexArray(cubeVAO);

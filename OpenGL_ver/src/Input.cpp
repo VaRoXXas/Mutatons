@@ -3,65 +3,68 @@
 #include "Settings.h"
 #include "Camera.h"
 
-extern Camera camera;
+extern Camera mainCamera;
 extern GLfloat deltaTime;
-extern void (*RKeyAction)();
-extern void (*TKeyAction)();
-extern void (*EKeyAction)();
-extern void (*QKeyAction)();
-extern void (*WKeyAction)();
-extern void (*SKeyAction)();
-extern void (*AKeyAction)();
-extern void (*DKeyAction)();
+extern void (*rKeyAction)();
+extern void (*tKeyAction)();
+extern void (*eKeyAction)();
+extern void (*qKeyAction)();
+extern void (*wKeyAction)();
+extern void (*sKeyAction)();
+extern void (*aKeyAction)();
+extern void (*dKeyAction)();
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-void Input::ProcessInput(GLFWwindow* window)
+
+
+void Input::ProcessInput(GLFWwindow* windowPtr)
 {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
+	// We use if-cascade instead of switch, because we want to be able to press multiple keys in a single frame.
+	
+	if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(windowPtr, true);
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		WKeyAction();
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		SKeyAction();
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		AKeyAction();
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		DKeyAction();
+	if (glfwGetKey(windowPtr, GLFW_KEY_W) == GLFW_PRESS)
+		wKeyAction();
+	if (glfwGetKey(windowPtr, GLFW_KEY_S) == GLFW_PRESS)
+		sKeyAction();
+	if (glfwGetKey(windowPtr, GLFW_KEY_A) == GLFW_PRESS)
+		aKeyAction();
+	if (glfwGetKey(windowPtr, GLFW_KEY_D) == GLFW_PRESS)
+		dKeyAction();
 
 	// special actions
-	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
-		RKeyAction();
-	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
-		TKeyAction();
-	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		EKeyAction();
-	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-		QKeyAction();
+	if (glfwGetKey(windowPtr, GLFW_KEY_R) == GLFW_PRESS)
+		rKeyAction();
+	if (glfwGetKey(windowPtr, GLFW_KEY_T) == GLFW_PRESS)
+		tKeyAction();
+	if (glfwGetKey(windowPtr, GLFW_KEY_E) == GLFW_PRESS)
+		eKeyAction();
+	if (glfwGetKey(windowPtr, GLFW_KEY_Q) == GLFW_PRESS)
+		qKeyAction();
 }
 
-void Input::MouseCallback(GLFWwindow* window, double xpos, double ypos)
+void Input::CursorPosCallback(GLFWwindow* windowPtr, const double xpos, const double ypos)
 {
-	static GLfloat lastX = WINDOW_WIDTH / 2, lastY = WINDOW_HEIGHT / 2;
-	static bool firstMouse = true;
+	static float lastX = WINDOW_WIDTH / 2, lastY = WINDOW_HEIGHT / 2;
+	static auto firstMouse = true;
 
 	if (firstMouse)
 	{
-		lastX = (GLfloat)xpos;
-		lastY = (GLfloat)ypos;
+		lastX = static_cast<float>(xpos);
+		lastY = static_cast<float>(ypos);
 		firstMouse = false;
 	}
 
-	float xoffset = (GLfloat)xpos - lastX;
-	float yoffset = lastY - (GLfloat)ypos; // reversed since y-coordinates go from bottom to top
+	auto xoffset = static_cast<float>(xpos) - lastX;
+	auto yoffset = lastY - static_cast<float>(ypos); // Reversed since y-coordinates go from bottom to top.
 
-	lastX = (GLfloat)xpos;
-	lastY = (GLfloat)ypos;
+	lastX = static_cast<float>(xpos);
+	lastY = static_cast<float>(ypos);
 
-	camera.ProcessMouseMovement(xoffset, yoffset);
+	mainCamera.ProcessMouseMovement(xoffset, yoffset);
 }
 
-void Input::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+void Input::ScrollCallback(GLFWwindow* windowPtr, const double xoffset, const double yoffset)
 {
-	camera.ProcessMouseScroll(static_cast<GLfloat>(yoffset));
+	mainCamera.ProcessMouseScroll(static_cast<float>(yoffset));
 }

@@ -1,21 +1,23 @@
 // ReSharper disable CppUseAuto
+// ReSharper disable CppRedundantQualifier
 #include "pch.h"
 #include "Camera.h"
 
+
+
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-: position(position), front(glm::vec3(0.0f, 0.0f, -1.0f)), worldUp(up), yaw(yaw), pitch(pitch), movementSpeed(SPEED_DEFAULT), mouseSensitivity(SENSITIVITY_DEFAULT), zoom(ZOOM_DEFAULT)
+: position(position), front(glm::vec3(0.0f, 0.0f, -1.0f)), worldUp(up), yaw(yaw), pitch(pitch), movementSpeed(S_SPEED_DEFAULT), mouseSensitivity(S_SENSITIVITY_DEFAULT), zoom(S_ZOOM_DEFAULT)
 {
     UpdateCameraVectors();
 }
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
-: position(glm::vec3(posX, posY, posZ)), front(glm::vec3(0.0f, 0.0f, -1.0f)), worldUp(glm::vec3(upX, upY, upZ)), yaw(yaw), pitch(pitch), movementSpeed(SPEED_DEFAULT), mouseSensitivity(SENSITIVITY_DEFAULT), zoom(ZOOM_DEFAULT)
+: position(glm::vec3(posX, posY, posZ)), front(glm::vec3(0.0f, 0.0f, -1.0f)), worldUp(glm::vec3(upX, upY, upZ)), yaw(yaw), pitch(pitch), movementSpeed(S_SPEED_DEFAULT), mouseSensitivity(S_SENSITIVITY_DEFAULT), zoom(S_ZOOM_DEFAULT)
 {
-    float x = posX;
     UpdateCameraVectors();
 }
 
-const glm::mat4& Camera::GetViewMatrix() const
+glm::mat4 Camera::GetViewMatrix() const
 {
     return glm::lookAt(position, position + front, up);
 }
@@ -43,7 +45,7 @@ void Camera::ProcessKeyboard(const CameraDirection& direction, const float& delt
     }
 }
 
-void Camera::ProcessMouseMovement(float& xoffset, float& yoffset, const GLboolean constrainPitch)
+void Camera::ProcessMouseMovement(float& xoffset, float& yoffset, const bool constrainPitch)
 {
     xoffset *= mouseSensitivity;
     yoffset *= mouseSensitivity;

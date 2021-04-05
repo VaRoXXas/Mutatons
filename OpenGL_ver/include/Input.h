@@ -2,7 +2,8 @@
 
 namespace Input
 {
-	void ProcessInput(GLFWwindow* window);
-	void MouseCallback(GLFWwindow* window, double xpos, double ypos);
-	void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+	// Process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly.
+	void ProcessInput(GLFWwindow* windowPtr);
+	void CursorPosCallback(GLFWwindow* windowPtr, const double xpos, const double ypos);
+	void ScrollCallback(GLFWwindow* windowPtr, const double xoffset, const double yoffset);
 }
