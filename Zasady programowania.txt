@@ -9,3 +9,5 @@
 7. Nie pushujemy kodu, który się nie kompiluje.
 8. Zmienne statyczne nazywamy s_zmienna.
 9. Wszystkie wskaźniki nazywamy nazwaPtr.
+10. Nie piszemy nigdzie using namespace std.
+11. Pamiętamy o zwracaniu uwagi na (jeśli to możliwe ofc) niekopiowanie danych (tj. pisanie np. int zamiast const int &).
