@@ -2,10 +2,10 @@
 #include "Settings.h"
 #include "Util.h"
 #include "Input.h"
-#include "Shader.h"
+#include "Rendering/Shader.h"
 #include "Camera.h"
-#include "Model.h"
-#include "GraphNode.h"
+#include "Rendering/Model.h"
+#include "Scene/GraphNode.h"
 
 // Shaders
 #include "VertexShaders.h"

@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "GraphNode.h"
+#include "Scene/GraphNode.h"
 
 GraphNode::GraphNode(PseudoMesh* pseudoMesh, glm::mat4 localTransform) : pseudoMesh(pseudoMesh), localTransform(localTransform)
 {}

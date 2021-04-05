@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include "PseudoMesh.h"
-#include "Model.h"
+#include "Rendering/PseudoMesh.h"
+#include "Rendering/Model.h"
 
 extern Shader* litTexturedShaderPtr;
 extern Shader* orbitShaderPtr;

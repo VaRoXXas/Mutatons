@@ -9,7 +9,7 @@
 #endif
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Shader.h"
+#include "Rendering/Shader.h"
 
 struct Vertex {
     glm::vec3 Position;

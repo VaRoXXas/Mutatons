@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Shader.h"
+#include "Rendering/Shader.h"
 
 Shader::Shader(const char* vertexShaderName, const char* fragmentShaderName)
 {

@@ -1,14 +1,15 @@
+// ReSharper disable CppUseAuto
 #include "pch.h"
 #include "Camera.h"
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-: front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED_DEFAULT), mouseSensitivity(SENSITIVITY_DEFAULT), zoom(ZOOM_DEFAULT), position(position), worldUp(up), yaw(yaw), pitch(pitch)
+: position(position), front(glm::vec3(0.0f, 0.0f, -1.0f)), worldUp(up), yaw(yaw), pitch(pitch), movementSpeed(SPEED_DEFAULT), mouseSensitivity(SENSITIVITY_DEFAULT), zoom(ZOOM_DEFAULT)
 {
     UpdateCameraVectors();
 }
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
-: front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED_DEFAULT), mouseSensitivity(SENSITIVITY_DEFAULT), zoom(ZOOM_DEFAULT), position(glm::vec3(posX, posY, posZ)), worldUp(glm::vec3(upX, upY, upZ)), yaw(yaw), pitch(pitch)
+: position(glm::vec3(posX, posY, posZ)), front(glm::vec3(0.0f, 0.0f, -1.0f)), worldUp(glm::vec3(upX, upY, upZ)), yaw(yaw), pitch(pitch), movementSpeed(SPEED_DEFAULT), mouseSensitivity(SENSITIVITY_DEFAULT), zoom(ZOOM_DEFAULT)
 {
     UpdateCameraVectors();
 }
@@ -21,6 +22,12 @@ glm::mat4 Camera::GetViewMatrix() const
 void Camera::ProcessKeyboard(const CameraDirection direction, const float deltaTime)
 {
     const float velocity = movementSpeed * deltaTime;
+
+    switch(direction)
+    {
+	    default:
+	        break;
+    }
 	
     if (direction == Forward)
         position += front * velocity;

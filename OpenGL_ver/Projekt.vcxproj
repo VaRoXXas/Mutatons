@@ -195,7 +195,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\GraphNode.cpp" />
+    <ClCompile Include="src\Scene\GraphNode.cpp" />
     <ClCompile Include="res\lib\glad.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -257,8 +257,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\stb_image_implementation.cpp">
+    <ClCompile Include="src\Rendering\Shader.cpp" />
+    <ClCompile Include="res\lib\stb_image_implementation.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -267,16 +267,16 @@
     <ClCompile Include="src\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\GraphNode.h" />
+    <ClInclude Include="include\Scene\GraphNode.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Input.h" />
-    <ClInclude Include="include\Model.h" />
+    <ClInclude Include="include\Rendering\Model.h" />
     <ClInclude Include="include\pch.h" />
-    <ClInclude Include="include\PseudoMesh.h" />
+    <ClInclude Include="include\Rendering\PseudoMesh.h" />
     <ClInclude Include="include\Settings.h" />
-    <ClInclude Include="include\Shader.h" />
+    <ClInclude Include="include\Rendering\Shader.h" />
     <ClInclude Include="include\Util.h" />
-    <ClInclude Include="include\Mesh.h" />
+    <ClInclude Include="include\Rendering\Mesh.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\BasicF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\OrbitF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\SphereF.h" />
