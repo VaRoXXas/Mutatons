@@ -63,5 +63,5 @@ void Input::MouseCallback(GLFWwindow* window, double xpos, double ypos)
 
 void Input::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	camera.ProcessMouseScroll((GLfloat)yoffset);
+	camera.ProcessMouseScroll(static_cast<GLfloat>(yoffset));
 }

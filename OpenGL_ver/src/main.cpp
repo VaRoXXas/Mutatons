@@ -909,22 +909,22 @@ void ToggleSceneExplorationMode()
 
 void MoveCameraForward()
 {
-	camera.ProcessKeyboard(Forward, deltaTime);
+	camera.ProcessKeyboard(CameraDirection::Forward, deltaTime);
 }
 
 void MoveCameraBackward()
 {
-	camera.ProcessKeyboard(Backward, deltaTime);
+	camera.ProcessKeyboard(CameraDirection::Backward, deltaTime);
 }
 
 void MoveCameraLeft()
 {
-	camera.ProcessKeyboard(Left, deltaTime);
+	camera.ProcessKeyboard(CameraDirection::Left, deltaTime);
 }
 
 void MoveCameraRight()
 {
-	camera.ProcessKeyboard(Right, deltaTime);
+	camera.ProcessKeyboard(CameraDirection::Right, deltaTime);
 }
 
 void RotateAndroidHeadLeft()

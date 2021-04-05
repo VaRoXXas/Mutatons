@@ -1,7 +1,7 @@
 #pragma once
 
 // Defines several possible options for camera movement. Used as an abstraction to stay away from window-system specific input methods.
-enum CameraDirection {
+enum class CameraDirection {
     Forward,
     Backward,
     Left,
@@ -43,16 +43,16 @@ public:
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
     // Returns the view matrix calculated using Euler angles and the lookAt matrix.
-    glm::mat4 GetViewMatrix() const;
+    const glm::mat4& GetViewMatrix() const;
 	
     // Processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined enum (to abstract it from windowing systems).
-    void ProcessKeyboard(const CameraDirection direction, const float deltaTime);
+    void ProcessKeyboard(const CameraDirection& direction, const float& deltaTime);
 	
     // Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
-    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
+    void ProcessMouseMovement(float& xoffset, float& yoffset, const GLboolean constrainPitch = true);
 
     // Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis.
-    void ProcessMouseScroll(float yoffset);
+    void ProcessMouseScroll(const float& yoffset);
 
 	
 private:

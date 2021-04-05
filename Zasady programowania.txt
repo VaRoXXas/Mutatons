@@ -10,4 +10,12 @@
 8. Zmienne statyczne nazywamy s_zmienna.
 9. Wszystkie wskaźniki nazywamy nazwaPtr.
 10. Nie piszemy nigdzie using namespace std.
-11. Pamiętamy o zwracaniu uwagi na (jeśli to możliwe ofc) niekopiowanie danych (tj. pisanie np. int zamiast const int &).
+11. Pamiętamy o (jeśli to możliwe ofc) niekopiowaniu danych (tj. używanie referencji i wskaźników).
+	Szczególnie istotne jest to tam gdzie np. używamy funkcji w pętli gry i np. kopiujemy sobie wesoło macierz
+	zawierającą kilkadziesiąt elementów kilkaset razy na sekundę zamiast przekazać ją po prostu przez referencję.
+12. W miarę możliwości staramy się używać enum class zamiast zwykłego enum.
+13. Używamy static_cast'a zamiast "zwykłego" castowania z języka C.
+
+
+
+
