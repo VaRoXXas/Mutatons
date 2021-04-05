@@ -1,12 +1,10 @@
 #pragma once
-#include <vector>
-#include "Rendering/PseudoMesh.h"
-#include "Rendering/Model.h"
 
-extern Shader* litTexturedShaderPtr;
-extern Shader* orbitShaderPtr;
-extern Shader* sphereShaderPtr;
-extern Shader* litTexturedInstancedShaderPtr;
+class Shader;
+class PseudoMesh;
+class Model;
+
+
 
 class GraphNode
 {

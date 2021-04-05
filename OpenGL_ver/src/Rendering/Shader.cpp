@@ -1,6 +1,13 @@
 #include "pch.h"
 #include "Rendering/Shader.h"
 
+extern glm::mat4* transformPtr;
+extern glm::mat4* modelPtr;
+extern glm::mat4* viewPtr;
+extern glm::mat4* projectionPtr;
+
+
+
 Shader::Shader(const char* vertexShaderName, const char* fragmentShaderName)
 {
 	// This strange method of loading shaders is caused by my linking errors connected to fstream, sstream, string libraries.

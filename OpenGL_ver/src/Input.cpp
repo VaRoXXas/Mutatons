@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Input.h"
-#include "Settings.h"
 #include "Camera.h"
+#include "Settings.h"
 
 extern Camera mainCamera;
 extern GLfloat deltaTime;

@@ -22,6 +22,8 @@ using namespace std;
 
 static unsigned int TextureFromFile(const char* path, const string& directory, bool gamma = false);
 
+
+
 class Model
 {
 public:

@@ -1,5 +1,14 @@
 #include "pch.h"
 #include "Scene/GraphNode.h"
+#include "Rendering/PseudoMesh.h"
+#include "Rendering/Model.h"
+
+extern Shader* litTexturedShaderPtr;
+extern Shader* litTexturedInstancedShaderPtr;
+extern Shader* orbitShaderPtr;
+extern Shader* sphereShaderPtr;
+
+
 
 GraphNode::GraphNode(PseudoMesh* pseudoMesh, glm::mat4 localTransform) : pseudoMesh(pseudoMesh), localTransform(localTransform)
 {}

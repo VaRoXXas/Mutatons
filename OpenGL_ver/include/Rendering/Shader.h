@@ -1,15 +1,5 @@
 #pragma once
 
-#ifdef _DEBUG
-#include <glad/gladDEBUG.h>
-#else
-#include <glad/glad.h>
-#endif
-
-extern glm::mat4* transformPtr;
-extern glm::mat4* modelPtr;
-extern glm::mat4* viewPtr;
-extern glm::mat4* projectionPtr;
 
 
 class Shader

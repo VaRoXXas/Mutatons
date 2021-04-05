@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Util.h"
 
+
+
 void Util::HideTerminal()
 {
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
