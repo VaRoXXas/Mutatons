@@ -1,0 +1,2 @@
+1) Wywalenie assimp.dll z buildowania wersji debug.
+2) Wywalenie ignorowania msvcrtd.lib w ustawieniach projektu -> Linker -> Input w wersji debug.
