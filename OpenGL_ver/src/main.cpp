@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Rendering/Shader.h"
+#include "Rendering/Mesh.h"
 #include "Rendering/Model.h"
 #include "Rendering/PseudoMesh.h"
 #include "Scene/GraphNode.h"
@@ -24,10 +25,10 @@ Shader* sphereShaderPtr;
 Shader* litTexturedInstancedShaderPtr;
 Shader* lineShaderPtr;
 Shader* refractShaderPtr;
-glm::mat4* transformPtr;
-glm::mat4* modelPtr;
-glm::mat4* viewPtr;
-glm::mat4* projectionPtr;
+glm::mat4* transformMatrixPtr;
+glm::mat4* modelMatrixPtr;
+glm::mat4* viewMatrixPtr;
+glm::mat4* projectionMatrixPtr;
 glm::mat4 androidTransform = glm::mat4(1.0f);
 glm::mat4 androidHeadTransform = glm::mat4(1.0f);
 glm::vec3 lineShaderEndPointPos;
@@ -506,10 +507,10 @@ int main()
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
-	transformPtr = &transform;
-	modelPtr = &model;
-	viewPtr = &view;
-	projectionPtr = &projection;
+	transformMatrixPtr = &transform;
+	modelMatrixPtr = &model;
+	viewMatrixPtr = &view;
+	projectionMatrixPtr = &projection;
 
 #pragma endregion
 
@@ -538,12 +539,12 @@ int main()
 		if (yRotationEnabled)
 			model = glm::rotate(model, (GLfloat)glfwGetTime() * 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
 
-		litTexturedShader.ApplyMVPT();
-		orbitShader.ApplyMVPT();
-		sphereShader.ApplyMVPT();
-		litTexturedInstancedShader.ApplyMVPT();
-		lineShader.ApplyMVPT();
-		refractShader.ApplyMVPT();
+		litTexturedShader.ApplyMvptMatrices();
+		orbitShader.ApplyMvptMatrices();
+		sphereShader.ApplyMvptMatrices();
+		litTexturedInstancedShader.ApplyMvptMatrices();
+		lineShader.ApplyMvptMatrices();
+		refractShader.ApplyMvptMatrices();
 
 		orbitShader.Use();
 		orbitShader.SetInt("sidesCount", 64);

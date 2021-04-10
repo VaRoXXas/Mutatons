@@ -6,25 +6,30 @@ class Shader
 {
 public:
 	
-    unsigned int ID;
-	
-    Shader(const char* vertexShaderName, const char* fragmentShaderName);
-    Shader(const char* vertexShaderName, const char* geometryShaderName, const char* fragmentShaderName);
+    Shader(const char* vertexShaderNamePtr, const char* fragmentShaderNamePtr);
+    Shader(const char* vertexShaderNamePtr, const char* geometryShaderNamePtr, const char* fragmentShaderNamePtr);
     ~Shader();
+
+	// Makes this shader the one currently used by OpenGL (and your graphics card).
     void Use() const;
-    void ApplyMVPT() const;
+	// Applies global matrices' data to the shader's uniforms.
+    void ApplyMvptMatrices() const;
 
 	// shader uniforms' setters
-    void SetBool(const char* name, bool value) const;
-    void SetInt(const char* name, int value) const;
-    void SetFloat(const char* name, float value) const;
-    void SetMat4(const char* name, glm::mat4 value) const;
-    void SetVecf3(const char* name, const float* value) const;
-    void SetVecf3(const char* name, glm::vec3 value) const;
-    void SetVecf4(const char* name, const float* value) const;
-    void SetVecf4(const char* name, glm::vec4 value) const;
+    void SetBool(const char* namePtr, const bool& value) const;
+    void SetInt(const char* namePtr, const int& value) const;
+    void SetFloat(const char* namePtr, const float& value) const;
+    void SetMat4(const char* namePtr, const glm::mat4& value) const;
+    void SetVecf3(const char* namePtr, const float* valuePtr) const;
+    void SetVecf3(const char* namePtr, const glm::vec3& value) const;
+    void SetVecf4(const char* namePtr, const float* valuePtr) const;
+    void SetVecf4(const char* namePtr, const glm::vec4& value) const;
 
 	// getters and setters
     unsigned GetId() const;
-    void SetId(const unsigned id);
+    void SetId(const unsigned newId);
+
+private:
+
+    unsigned int id;
 };
