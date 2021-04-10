@@ -126,6 +126,15 @@ void Shader::Use() const
     glUseProgram(ID);
 }
 
+void Shader::ApplyMVPT() const
+{
+    Use();
+    SetMat4("projection", (*projectionPtr));
+    SetMat4("view", (*viewPtr));
+    SetMat4("model", (*modelPtr));
+    SetMat4("transform", (*transformPtr));
+}
+
 void Shader::SetBool(const char* name, bool value) const
 {
     glUniform1i(glGetUniformLocation(ID, name), (int)value);
@@ -164,11 +173,12 @@ void Shader::SetVecf4(const char* name, glm::vec4 value) const
     glUniform4f(glGetUniformLocation(ID, name), value.x, value.y, value.z, value.w);
 }
 
-void Shader::ApplyMVPT() const
+unsigned Shader::GetId() const
 {
-    Use();
-    SetMat4("projection", (*projectionPtr));
-    SetMat4("view", (*viewPtr));
-    SetMat4("model", (*modelPtr));
-    SetMat4("transform", (*transformPtr));
+	return ID;
+}
+
+void Shader::SetId(const unsigned id)
+{
+	ID = id;
 }

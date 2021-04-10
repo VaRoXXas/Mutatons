@@ -76,6 +76,106 @@ void Camera::ProcessMouseScroll(const float& yoffset)
         zoom = 90.0f;
 }
 
+const glm::vec3& Camera::GetPosition() const
+{
+	return position;
+}
+
+void Camera::SetPosition(const glm::vec3 position)
+{
+	this->position = position;
+}
+
+const glm::vec3& Camera::GetFront() const
+{
+	return front;
+}
+
+void Camera::SetFront(const glm::vec3 front)
+{
+	this->front = front;
+}
+
+const glm::vec3& Camera::GetUp() const
+{
+	return up;
+}
+
+void Camera::SetUp(const glm::vec3 up)
+{
+	this->up = up;
+}
+
+const glm::vec3& Camera::GetRight() const
+{
+	return right;
+}
+
+void Camera::SetRight(const glm::vec3 right)
+{
+	this->right = right;
+}
+
+const glm::vec3& Camera::GetWorldUp() const
+{
+	return worldUp;
+}
+
+void Camera::SetWorldUp(const glm::vec3 worldUp)
+{
+	this->worldUp = worldUp;
+}
+
+float Camera::GetYaw() const
+{
+	return yaw;
+}
+
+void Camera::SetYaw(const float yaw)
+{
+	this->yaw = yaw;
+}
+
+float Camera::GetPitch() const
+{
+	return pitch;
+}
+
+void Camera::SetPitch(const float pitch)
+{
+	this->pitch = pitch;
+}
+
+float Camera::GetMovementSpeed() const
+{
+	return movementSpeed;
+}
+
+void Camera::SetMovementSpeed(const float movementSpeed)
+{
+	this->movementSpeed = movementSpeed;
+}
+
+float Camera::GetMouseSensitivity() const
+{
+	return mouseSensitivity;
+}
+
+void Camera::SetMouseSensitivity(const float mouseSensitivity)
+{
+	this->mouseSensitivity = mouseSensitivity;
+}
+
+float Camera::GetZoom() const
+{
+	return zoom;
+}
+
+void Camera::SetZoom(const float zoom)
+{
+	this->zoom = zoom;
+}
+
 void Camera::UpdateCameraVectors()
 {
     // Calculate the new front vector.

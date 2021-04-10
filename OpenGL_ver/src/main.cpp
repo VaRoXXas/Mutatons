@@ -531,7 +531,7 @@ int main()
 		model = glm::mat4(1.0f);
 		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		view = mainCamera.GetViewMatrix();
-		projection = glm::perspective(glm::radians(mainCamera.zoom), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(mainCamera.GetZoom()), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
 
 		if (xRotationEnabled)
 			model = glm::rotate(model, (GLfloat)glfwGetTime() * 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -573,7 +573,7 @@ int main()
 		glm::vec3 ambientColor;
 
 		lt.Use();
-		lt.SetVecf3("viewPos", mainCamera.position);
+		lt.SetVecf3("viewPos", mainCamera.GetPosition());
 		lt.SetFloat("material.shininess", 16.0f);
 		lt.SetVecf3("dirLight.direction", directionalLightsDirection);
 		lt.SetVecf3("pointLight.position", pointLightPos);
@@ -649,7 +649,7 @@ int main()
 
 		
 		lti.Use();
-		lti.SetVecf3("viewPos", mainCamera.position);
+		lti.SetVecf3("viewPos", mainCamera.GetPosition());
 		lti.SetFloat("material.shininess", 16.0f);
 		lti.SetVecf3("dirLight.direction", directionalLightsDirection);
 		lti.SetVecf3("pointLight.position", pointLightPos);
@@ -776,7 +776,7 @@ int main()
 		PseudoMesh androidHead(DrawReflected); GraphNode androidHeadNode(&androidHead, androidHeadTransformFinal);
 
 		if(!sceneExplorationModeEnabled)
-			mainCamera.position = glm::vec3(androidStartTransform[3]) + glm::vec3(0.0f, 1.5f, 3.0f);
+			mainCamera.SetPosition(glm::vec3(androidStartTransform[3]) + glm::vec3(0.0f, 1.5f, 3.0f));
 		
 		
 		// parenting
@@ -1061,7 +1061,7 @@ void DrawReflected(glm::mat4 transform)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
 	refractShaderPtr->Use();
-	refractShaderPtr->SetVecf3("viewPos", mainCamera.position);
+	refractShaderPtr->SetVecf3("viewPos", mainCamera.GetPosition());
 	refractShaderPtr->SetBool("refractMode", false);
 	refractShaderPtr->SetMat4("transform", transform);
 	glBindVertexArray(cubeVAO);
@@ -1074,7 +1074,7 @@ void DrawRefracted(glm::mat4 transform)
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
 	refractShaderPtr->Use();
-	refractShaderPtr->SetVecf3("viewPos", mainCamera.position);
+	refractShaderPtr->SetVecf3("viewPos", mainCamera.GetPosition());
 	refractShaderPtr->SetBool("refractMode", true);
 	refractShaderPtr->SetMat4("transform", transform);
 	glBindVertexArray(cubeVAO);
