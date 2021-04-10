@@ -62,15 +62,15 @@ void MoveAndroidForward();
 void MoveAndroidBackward();
 void MoveAndroidLeft();
 void MoveAndroidRight();
-void DrawOrbit(const float radius, float* color, glm::mat4 transform);
-void DrawSphere(const float radius, float* color, glm::mat4 transform);
-void DrawPlane(glm::mat4 transform);
-void DrawCube(glm::mat4 transform);
-void DrawPyramid(glm::mat4 transform);
-void DrawHouses(glm::mat4 transform);
-void DrawLine(glm::mat4 transform);
-void DrawReflected(glm::mat4 transform);
-void DrawRefracted(glm::mat4 transform);
+void DrawOrbit(const float& radius, const float* color, const glm::mat4& transform);
+void DrawSphere(const float& radius, const float* color, const glm::mat4& transform);
+void DrawPlane(const glm::mat4& transform);
+void DrawCube(const glm::mat4& transform);
+void DrawPyramid(const glm::mat4& transform);
+void DrawHouses(const glm::mat4& transform);
+void DrawLine(const glm::mat4& transform);
+void DrawReflected(const glm::mat4& transform);
+void DrawRefracted(const glm::mat4& transform);
 unsigned int LoadTexture(char const* path);
 unsigned int LoadCubemap(std::vector<std::string> faces);
 
@@ -959,7 +959,7 @@ void MoveAndroidRight()
 	androidTransform = glm::translate(androidTransform, glm::vec3(1.0f, 0.0f, 0.00f) * deltaTime * ANDROID_SPEED);
 }
 
-void DrawOrbit(const float radius, float* color, glm::mat4 transform)
+void DrawOrbit(const float& radius, const float* color, const glm::mat4& transform)
 {
 	orbitShaderPtr->Use();
 	orbitShaderPtr->SetFloat("radius", radius);
@@ -970,7 +970,7 @@ void DrawOrbit(const float radius, float* color, glm::mat4 transform)
 	glBindVertexArray(0);
 }
 
-void DrawSphere(const float radius, float* color, glm::mat4 transform)
+void DrawSphere(const float& radius, const float* color, const glm::mat4& transform)
 {
 	sphereShaderPtr->Use();
 	sphereShaderPtr->SetFloat("radius", radius);
@@ -982,7 +982,7 @@ void DrawSphere(const float radius, float* color, glm::mat4 transform)
 	glBindVertexArray(0);
 }
 
-void DrawPlane(glm::mat4 transform)
+void DrawPlane(const glm::mat4& transform)
 {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, plane_diffuse);
@@ -995,7 +995,7 @@ void DrawPlane(glm::mat4 transform)
 	glBindVertexArray(0);
 }
 
-void DrawCube(glm::mat4 transform)
+void DrawCube(const glm::mat4& transform)
 {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, houseBase_diffuse);
@@ -1008,7 +1008,7 @@ void DrawCube(glm::mat4 transform)
 	glBindVertexArray(0);
 }
 
-void DrawPyramid(glm::mat4 transform)
+void DrawPyramid(const glm::mat4& transform)
 {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, roof_diffuse);
@@ -1021,7 +1021,7 @@ void DrawPyramid(glm::mat4 transform)
 	glBindVertexArray(0);
 }
 
-void DrawHouses(glm::mat4 transform)
+void DrawHouses(const glm::mat4& transform)
 {
 	litTexturedInstancedShaderPtr->Use();
 	litTexturedInstancedShaderPtr->SetMat4("transform", transform);
@@ -1047,7 +1047,7 @@ void DrawHouses(glm::mat4 transform)
 	glBindVertexArray(0);
 }
 
-void DrawLine(glm::mat4 transform)
+void DrawLine(const glm::mat4& transform)
 {
 	lineShaderPtr->Use();
 	lineShaderPtr->SetMat4("transform", transform);
@@ -1057,7 +1057,7 @@ void DrawLine(glm::mat4 transform)
 	glBindVertexArray(0);
 }
 
-void DrawReflected(glm::mat4 transform)
+void DrawReflected(const glm::mat4& transform)
 {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
@@ -1070,7 +1070,7 @@ void DrawReflected(glm::mat4 transform)
 	glBindVertexArray(0);
 }
 
-void DrawRefracted(glm::mat4 transform)
+void DrawRefracted(const glm::mat4& transform)
 {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);

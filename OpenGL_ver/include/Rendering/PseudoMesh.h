@@ -1,49 +1,26 @@
 #pragma once
 
-#include "Rendering/Shader.h"
-
-extern Shader* orbitShaderPtr;
-extern Shader* sphereShaderPtr;
 
 
-
+// This class is designed to handle meshes generated on the fly using geometry shaders and other non-standard meshes, which have their own drawing function defined in code.
 class PseudoMesh
 {
 public:
-	void Render(glm::mat4 transform) const
-	{
-		if (drawFunctionG)
-			drawFunctionG(size, mColor, transform);
-		else if (drawFunction)
-			drawFunction(transform);
-	}
 
-	PseudoMesh(void (*drawFunctionArg)(const float, float*, glm::mat4), float size, float* color) : drawFunctionG(drawFunctionArg), size(size)
-	{
-		for (int i = 0; i < 4; i++)
-		{
-			if (!color)
-				std::cerr << "PUSTY KOLOR!!!";
-			float copy = color[i];
-			mColor[i] = copy;
-		}
-		drawFunction = nullptr;
-	}
-
-	PseudoMesh(void (*drawFunctionArg)(glm::mat4)) : drawFunction(drawFunctionArg)
-	{
-		size = 0;
-		drawFunctionG = nullptr;
-	}
-
-	~PseudoMesh()
-	{
-		delete[] mColor;
-	}
+	// Calls the drawing function set for this PseudoMesh.
+	void Draw(const glm::mat4& transformMatrix) const;
+	
+	PseudoMesh(void (*drawFunctionPtr)(const float&, const float*, const glm::mat4&), const float& sizeArg, const float* colorArgPtr);
+	PseudoMesh(void (*drawFunctionPtr)(const glm::mat4&));
+	~PseudoMesh();
 	
 private:
-	void (*drawFunctionG)(const float, float*, glm::mat4); // function pointer to draw this PseudoMesh
-	void (*drawFunction)(glm::mat4);
-	float size;
-	float* mColor = new float[4];
+
+	// Drawing functions' pointers.
+	void (*drawFunctionWithSizeAndColorPtr)(const float&, const float*, const glm::mat4&) = nullptr;
+	void (*drawFunctionPtr)(const glm::mat4&) = nullptr;
+
+	// For objects being drawn using geometry shader.
+	float size = 0;
+	float* colorPtr = new float[4];
 };

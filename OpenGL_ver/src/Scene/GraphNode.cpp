@@ -24,7 +24,7 @@ void GraphNode::Render(glm::mat4 parentTransform)
 	glm::mat4 absoluteTransform = parentTransform * localTransform;
 
 	if (pseudoMesh)
-		pseudoMesh->Render(absoluteTransform); // rendering mesh in its actual position
+		pseudoMesh->Draw(absoluteTransform); // rendering mesh in its actual position
 	if (model)
 		model->CustomRender(*litTexturedShaderPtr, absoluteTransform);
 
