@@ -1,6 +1,6 @@
 #pragma once
 
-static const char* LitTexturedV = R"(
+static const char* s_litTexturedVertexPtr = R"(
     #version 330 core
 	layout (location = 0) in vec3 aPos;
 	layout (location = 1) in vec3 aNormal;
@@ -19,7 +19,7 @@ static const char* LitTexturedV = R"(
 	{
 	    TexCoords = aTexCoords;    
 	    gl_Position = projection * view * model * transform * vec4(aPos, 1.0);
-		Normal = mat3(transpose(inverse(model))) * aNormal; // Przeksztalcenie do macierzy normalnych usuwa problemy z nieprawidlowym oswietleniem przy nierownomiernym skalowaniu obiektu.
+		Normal = mat3(transpose(inverse(model))) * aNormal; // It removes the problems with invalid lighting when we scale an object unevenly.
 		FragPos = vec3(model * transform * vec4(aPos, 1.0));
 	}
 )";

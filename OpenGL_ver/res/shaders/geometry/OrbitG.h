@@ -1,6 +1,6 @@
 #pragma once
 
-static const char* OrbitG = R"(
+static const char* s_orbitGeometryPtr = R"(
 	#version 330 core
 	layout(points) in;
 	layout(line_strip, max_vertices = 256) out;

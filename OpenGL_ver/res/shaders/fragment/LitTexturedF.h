@@ -1,6 +1,6 @@
 #pragma once
 
-static const char* LitTexturedF = R"(
+static const char* s_litTexturedFragmentPtr = R"(
     #version 330 core
 	in vec2 TexCoords;
 	in vec3 Normal;

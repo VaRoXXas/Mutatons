@@ -1,6 +1,6 @@
 #pragma once
 
-static const char* UnlitV = R"(
+static const char* s_unlitVertexPtr = R"(
 	#version 330 core
 	layout (location = 0) in vec3 aPos;
 

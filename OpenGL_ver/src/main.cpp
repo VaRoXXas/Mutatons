@@ -111,13 +111,13 @@ int main()
 #pragma region shaders init
 
 	glEnable(GL_DEPTH_TEST);
-	Shader litTexturedShader(LitTexturedV, LitTexturedF);
-	Shader orbitShader(UnlitV, OrbitG, UnlitF);
-	Shader sphereShader(UnlitV, SphereG, UnlitF);
-	Shader litTexturedInstancedShader(LitTexturedInstancedV, LitTexturedF);
-	Shader lineShader(UnlitV, LineG, UnlitF);
-	Shader skyboxShader(SkyboxV, SkyboxF);
-	Shader refractShader(LitTexturedV, RefractF);
+	Shader litTexturedShader(s_litTexturedVertexPtr, s_litTexturedFragmentPtr);
+	Shader orbitShader(s_unlitVertexPtr, s_orbitGeometryPtr, s_unlitFragmentPtr);
+	Shader sphereShader(s_unlitVertexPtr, s_sphereGeometryPtr, s_unlitFragmentPtr);
+	Shader litTexturedInstancedShader(s_litTexturedInstancedVertexPtr, s_litTexturedFragmentPtr);
+	Shader lineShader(s_unlitVertexPtr, s_lineGeometryPtr, s_unlitFragmentPtr);
+	Shader skyboxShader(s_skyboxVertexPtr, s_skyboxFragmentPtr);
+	Shader refractShader(s_litTexturedVertexPtr, s_refractFragmentPtr);
 	litTexturedShaderPtr = &litTexturedShader;
 	orbitShaderPtr = &orbitShader;
 	sphereShaderPtr = &sphereShader;

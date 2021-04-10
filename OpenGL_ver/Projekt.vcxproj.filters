@@ -122,12 +122,6 @@
     <ClInclude Include="res\shaders\fragment\deprecated\OrbitF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="res\shaders\vertex\LitTexturedV.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="res\shaders\vertex\UnlitV.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="res\shaders\vertex\LitTexturedInstancedV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -141,9 +135,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="res\shaders\fragment\SkyboxF.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="res\shaders\vertex\SkyboxV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="res\shaders\fragment\RefractF.h">
@@ -162,6 +153,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Rendering\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="res\shaders\vertex\UnlitV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="res\shaders\vertex\SkyboxV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="res\shaders\vertex\LitTexturedV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

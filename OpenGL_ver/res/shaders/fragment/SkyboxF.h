@@ -1,6 +1,6 @@
 #pragma once
 
-static const char* SkyboxF = R"(
+static const char* s_skyboxFragmentPtr = R"(
 	#version 330 core
     out vec4 FragColor;
 
