@@ -196,6 +196,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\DataManager.cpp" />
+    <ClCompile Include="src\Rendering\CustomDrawing.cpp" />
     <ClCompile Include="src\Rendering\PseudoMesh.cpp" />
     <ClCompile Include="src\Scene\GraphNode.cpp" />
     <ClCompile Include="res\lib\glad.c">
@@ -271,6 +272,7 @@
   <ItemGroup>
     <ClInclude Include="include\DataManager.h" />
     <ClInclude Include="include\FileNames.h" />
+    <ClInclude Include="include\Rendering\CustomDrawing.h" />
     <ClInclude Include="include\Scene\GraphNode.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Input.h" />
