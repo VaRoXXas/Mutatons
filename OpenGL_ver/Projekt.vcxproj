@@ -199,7 +199,9 @@
     <ClCompile Include="src\Components\GraphicsComponent.cpp" />
     <ClCompile Include="src\Components\ColliderComponent.cpp" />
     <ClCompile Include="src\DataManager.cpp" />
+    <ClCompile Include="src\Rendering\Model.cpp" />
     <ClCompile Include="src\Rendering\CustomDrawing.cpp" />
+    <ClCompile Include="src\Rendering\Mesh.cpp" />
     <ClCompile Include="src\Rendering\PseudoMesh.cpp" />
     <ClCompile Include="src\Scene\GraphNode.cpp" />
     <ClCompile Include="res\lib\glad.c">
@@ -349,11 +351,19 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
     <None Include="Projekt.sln.DotSettings" />
+    <None Include="res\models\backpack\backpack.mtl" />
+    <None Include="res\models\tank\tank1.mtl" />
     <None Include="res\music\Intergalactic Odyssey.ogg" />
     <None Include="res\shaders\FragmentShaders.h" />
     <None Include="res\shaders\VertexShaders.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\models\backpack\ao.jpg" />
+    <Image Include="res\models\backpack\diffuse.jpg" />
+    <Image Include="res\models\backpack\normal.png" />
+    <Image Include="res\models\backpack\roughness.jpg" />
+    <Image Include="res\models\backpack\specular.jpg" />
+    <Image Include="res\models\tank\tank1_texture.tga" />
     <Image Include="res\textures\container_diffuse.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
@@ -396,6 +406,14 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="res\models\backpack\backpack.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tank\tank1.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
