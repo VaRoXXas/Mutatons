@@ -1,5 +1,3 @@
-#pragma once
-
 #include "pch.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

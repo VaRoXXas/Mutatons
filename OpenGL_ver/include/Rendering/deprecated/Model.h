@@ -1,12 +1,11 @@
 #pragma once
 
-#include "pch.h"
+//#include "pch.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
 #include <Rendering/deprecated/Mesh.h>
-#include <Rendering/Shader.h>
 
 static unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
 

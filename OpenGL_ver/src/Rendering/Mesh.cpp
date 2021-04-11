@@ -1,6 +1,4 @@
-#pragma once
-
-#include"pch.h"
+#include "pch.h"
 #include <Rendering/Shader.h>
 #include <Rendering/deprecated/Mesh.h>
 
