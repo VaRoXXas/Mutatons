@@ -195,6 +195,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\Components\GraphicsComponent.cpp" />
+    <ClCompile Include="src\Components\ColliderComponent.cpp" />
     <ClCompile Include="src\DataManager.cpp" />
     <ClCompile Include="src\Rendering\CustomDrawing.cpp" />
     <ClCompile Include="src\Rendering\PseudoMesh.cpp" />
@@ -268,8 +271,15 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Util.cpp" />
+    <ClCompile Include="src\Components\StandardGraphicsComponent.cpp" />
+    <ClCompile Include="src\Components\TransformComponent.cpp" />
+    <ClCompile Include="src\Components\UpdateComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\GameObject.h" />
+    <ClInclude Include="include\Components\GraphicsComponent.h" />
+    <ClInclude Include="include\Component.h" />
+    <ClInclude Include="include\Components\ColliderComponent.h" />
     <ClInclude Include="include\DataManager.h" />
     <ClInclude Include="include\FileNames.h" />
     <ClInclude Include="include\Rendering\CustomDrawing.h" />
@@ -306,6 +316,9 @@
     <ClInclude Include="res\shaders\vertex\LitTexturedV.h" />
     <ClInclude Include="res\shaders\vertex\SkyboxV.h" />
     <ClInclude Include="res\shaders\vertex\UnlitV.h" />
+    <ClInclude Include="include\Components\StandardGraphicsComponent.h" />
+    <ClInclude Include="include\Components\TransformComponent.h" />
+    <ClInclude Include="include\Components\UpdateComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Readme.txt" />
