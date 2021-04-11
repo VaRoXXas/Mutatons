@@ -1,6 +1,5 @@
 #pragma once
 
-class Shader;
 class PseudoMesh;
 class Model;
 
@@ -9,18 +8,23 @@ class Model;
 class GraphNode
 {
 public:
-	GraphNode(PseudoMesh* pseudoMesh, glm::mat4 localTransform);
-	GraphNode(Model* model, glm::mat4 localTransform);
-	GraphNode(glm::mat4 localTransform);
+	
+	GraphNode(PseudoMesh* pseudoMesh, const glm::mat4& localTransform);
+	GraphNode(Model* model, const glm::mat4& localTransform);
+	GraphNode(const glm::mat4& localTransform);
 
-	void Render(glm::mat4 parentTransform = glm::mat4(1.0f));
-	void AddChild(GraphNode* child);
-	//void AddChild(GraphNode& child);
+	// Draws the associated objects and all children's associated objects.
+	void Render(const glm::mat4& parentTransform = glm::mat4(1.0f)) const;
+
+	// Assigns a new child to this GraphNode.
+	void AddChild(const GraphNode* childPtr);
+	//void AddChild(const GraphNode& child);
 
 private:
-	PseudoMesh* pseudoMesh;
-	Model* model;
-	glm::mat4 localTransform;
-
-	std::vector<GraphNode*> children;
+	
+	glm::mat4 transform;
+	PseudoMesh* pseudoMeshPtr = nullptr;
+	Model* modelPtr = nullptr;
+	
+	std::vector<const GraphNode*> children;
 };

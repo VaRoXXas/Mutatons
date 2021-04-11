@@ -4,8 +4,8 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Rendering/Shader.h"
-#include "Rendering/Mesh.h"
-#include "Rendering/Model.h"
+#include "Rendering/deprecated/Mesh.h" // TODO: Change this to new Mesh class file.
+#include "Rendering/deprecated/Model.h" // TODO: Change this to new Model class file.
 #include "Rendering/PseudoMesh.h"
 #include "Scene/GraphNode.h"
 
@@ -14,9 +14,22 @@
 #include "GeometryShaders.h"
 #include "FragmentShaders.h"
 
+// input externs
+extern bool cursorEnabled;
+extern void (*wKeyAction)();
+extern void (*sKeyAction)();
+extern void (*aKeyAction)();
+extern void (*dKeyAction)();
+extern void (*rKeyAction)();
+extern void (*tKeyAction)();
+extern void (*eKeyAction)();
+extern void (*qKeyAction)();
+
+
+
 bool sceneExplorationModeEnabled = true;
 Camera mainCamera(glm::vec3(0.0f, 0.0f, 3.0f));
-GLfloat deltaTime = 0.0f;
+GLfloat deltaTime = 0.0f; // the difference between the current and the last frame
 GLfloat lastFrame = 0.0f;
 GLfloat currentFrame = 0.0f;
 Shader* litTexturedShaderPtr;
@@ -35,33 +48,13 @@ glm::vec3 lineShaderEndPointPos;
 GraphNode* house; // na pojedyncze domki
 GraphNode* roof; // na pojedyncze dachy
 int* meshDetailLevelPtr;
-bool* cursorDisabledPtr;
-void (*rKeyAction)();
-void (*tKeyAction)();
-void (*eKeyAction)();
-void (*qKeyAction)();
-void (*wKeyAction)();
-void (*sKeyAction)();
-void (*aKeyAction)();
-void (*dKeyAction)();
 static GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, planeVAO, planeVBO, instancedCubeVAO, instancedPyramidVAO, instanceVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
 static GLuint houseBase_diffuse, roof_diffuse, plane_diffuse, houseBase_specular, roof_specular, plane_specular, cubemapTexture;
 static const int HOUSES_ROW_LENGTH = 200;
 static const int HOUSES_COUNT = HOUSES_ROW_LENGTH * HOUSES_ROW_LENGTH; // 200 x 200 = 40000
 static const float ANDROID_SPEED = 1.5f;
 
-void ToggleCursor();
-void ToggleSceneExplorationMode();
-void MoveCameraForward();
-void MoveCameraBackward();
-void MoveCameraLeft();
-void MoveCameraRight();
-void RotateAndroidHeadLeft();
-void RotateAndroidHeadRight();
-void MoveAndroidForward();
-void MoveAndroidBackward();
-void MoveAndroidLeft();
-void MoveAndroidRight();
+
 void DrawOrbit(const float& radius, const float* color, const glm::mat4& transform);
 void DrawSphere(const float& radius, const float* color, const glm::mat4& transform);
 void DrawPlane(const glm::mat4& transform);
@@ -458,8 +451,6 @@ int main()
 	bool xRotationEnabled = false;
 	bool yRotationEnabled = false;
 	bool wireframeModeEnabled = false;
-	bool cursorDisabled = false;
-	cursorDisabledPtr = &cursorDisabled;
 	int meshDetailLevel = 3;
 	bool directionalLightEnabled = true;
 	bool spotLight1Enabled = true;
@@ -488,14 +479,14 @@ int main()
 	delete lightColors;
 
 	// Assigning keyboard actions.
-	rKeyAction = &ToggleCursor;
-	tKeyAction = &ToggleSceneExplorationMode;
-	eKeyAction = &MoveCameraRight;
-	qKeyAction = &MoveCameraLeft;
-	wKeyAction = &MoveCameraForward;
-	sKeyAction = &MoveCameraBackward;
-	aKeyAction = &MoveCameraLeft;
-	dKeyAction = &MoveCameraRight;
+	rKeyAction = &Input::ToggleCursor;
+	tKeyAction = &Input::ToggleSceneExplorationMode;
+	eKeyAction = &Input::MoveCameraRight;
+	qKeyAction = &Input::MoveCameraLeft;
+	wKeyAction = &Input::MoveCameraForward;
+	sKeyAction = &Input::MoveCameraBackward;
+	aKeyAction = &Input::MoveCameraLeft;
+	dKeyAction = &Input::MoveCameraRight;
 
 #pragma endregion
 
@@ -733,7 +724,7 @@ int main()
 		Util::DisableWireframeMode();
 		if (wireframeModeEnabled)
 			Util::EnableWireframeMode();
-		if (cursorDisabled)
+		if (!cursorEnabled)
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Blocking cursor inside a window and disabling its graphic representation.
 		else
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -836,7 +827,7 @@ int main()
 		ImGui::Checkbox("X axis rotation", &xRotationEnabled);
 		ImGui::Checkbox("Y axis rotation", &yRotationEnabled);
 		ImGui::Checkbox("Wireframe mode", &wireframeModeEnabled);
-		ImGui::Checkbox("Cursor disabled", &cursorDisabled);
+		ImGui::Checkbox("Cursor enabled", &cursorEnabled);
 		ImGui::SliderInt("Sphere detail level", &meshDetailLevel, 0, 3);
 		ImGui::Checkbox("Directional light enabled", &directionalLightEnabled);
 		ImGui::Checkbox("Point light enabled", &pointLightEnabled);
@@ -878,86 +869,6 @@ int main()
 }
 
 
-
-void ToggleCursor()
-{
-	(*cursorDisabledPtr) = !(*cursorDisabledPtr);
-	std::this_thread::sleep_for(0.25s);
-}
-
-void ToggleSceneExplorationMode()
-{
-	sceneExplorationModeEnabled = !sceneExplorationModeEnabled;
-	if (sceneExplorationModeEnabled)
-	{
-		eKeyAction = &MoveCameraRight;
-		qKeyAction = &MoveCameraLeft;
-		wKeyAction = &MoveCameraForward;
-		sKeyAction = &MoveCameraBackward;
-		aKeyAction = &MoveCameraLeft;
-		dKeyAction = &MoveCameraRight;
-	}
-	else
-	{
-		eKeyAction = &RotateAndroidHeadRight;
-		qKeyAction = &RotateAndroidHeadLeft;
-		wKeyAction = &MoveAndroidForward;
-		sKeyAction = &MoveAndroidBackward;
-		aKeyAction = &MoveAndroidLeft;
-		dKeyAction = &MoveAndroidRight;
-	}
-	std::this_thread::sleep_for(0.25s);
-}
-
-void MoveCameraForward()
-{
-	mainCamera.ProcessKeyboard(CameraDirection::Forward, deltaTime);
-}
-
-void MoveCameraBackward()
-{
-	mainCamera.ProcessKeyboard(CameraDirection::Backward, deltaTime);
-}
-
-void MoveCameraLeft()
-{
-	mainCamera.ProcessKeyboard(CameraDirection::Left, deltaTime);
-}
-
-void MoveCameraRight()
-{
-	mainCamera.ProcessKeyboard(CameraDirection::Right, deltaTime);
-}
-
-void RotateAndroidHeadLeft()
-{
-	androidHeadTransform = glm::rotate(androidHeadTransform, 1.0f * deltaTime, glm::vec3(0.0f, 1.0f, 0.0f));
-}
-
-void RotateAndroidHeadRight()
-{
-	androidHeadTransform = glm::rotate(androidHeadTransform, -1.0f * deltaTime, glm::vec3(0.0f, 1.0f, 0.0f));
-}
-
-void MoveAndroidForward()
-{
-	androidTransform = glm::translate(androidTransform, glm::vec3(0.0f, 0.0f, -1.0f) * deltaTime * ANDROID_SPEED);
-}
-
-void MoveAndroidBackward()
-{
-	androidTransform = glm::translate(androidTransform, glm::vec3(0.0f, 0.0f, 1.0f) * deltaTime * ANDROID_SPEED);
-}
-
-void MoveAndroidLeft()
-{
-	androidTransform = glm::translate(androidTransform, glm::vec3(-1.0f, 0.0f, 0.0f) * deltaTime * ANDROID_SPEED);
-}
-
-void MoveAndroidRight()
-{
-	androidTransform = glm::translate(androidTransform, glm::vec3(1.0f, 0.0f, 0.00f) * deltaTime * ANDROID_SPEED);
-}
 
 void DrawOrbit(const float& radius, const float* color, const glm::mat4& transform)
 {

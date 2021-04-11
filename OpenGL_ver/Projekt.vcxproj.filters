@@ -155,12 +155,6 @@
     <ClInclude Include="include\Rendering\PseudoMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Rendering\Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Rendering\Model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="res\shaders\vertex\UnlitV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -176,6 +170,12 @@
     <ClInclude Include="include\DataManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Rendering\deprecated\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\deprecated\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Readme.txt" />
@@ -189,6 +189,7 @@
     <None Include="openal32.dll" />
     <None Include="res\music\Intergalactic Odyssey.ogg" />
     <None Include=".gitignore" />
+    <None Include="Projekt.sln.DotSettings" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container_specular.png">

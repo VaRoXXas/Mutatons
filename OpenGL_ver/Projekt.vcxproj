@@ -274,13 +274,13 @@
     <ClInclude Include="include\Scene\GraphNode.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Input.h" />
-    <ClInclude Include="include\Rendering\Model.h" />
+    <ClInclude Include="include\Rendering\deprecated\Model.h" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\Rendering\PseudoMesh.h" />
     <ClInclude Include="include\Settings.h" />
     <ClInclude Include="include\Rendering\Shader.h" />
     <ClInclude Include="include\Util.h" />
-    <ClInclude Include="include\Rendering\Mesh.h" />
+    <ClInclude Include="include\Rendering\deprecated\Mesh.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\BasicF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\OrbitF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\SphereF.h" />
@@ -333,6 +333,7 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
+    <None Include="Projekt.sln.DotSettings" />
     <None Include="res\music\Intergalactic Odyssey.ogg" />
     <None Include="res\shaders\FragmentShaders.h" />
     <None Include="res\shaders\VertexShaders.h" />
