@@ -72,6 +72,12 @@
     <ClCompile Include="src\Rendering\CustomDrawing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\pch.h">
@@ -196,6 +202,8 @@
     <None Include="res\music\Intergalactic Odyssey.ogg" />
     <None Include=".gitignore" />
     <None Include="Projekt.sln.DotSettings" />
+    <None Include="res\models\backpack\backpack.mtl" />
+    <None Include="res\models\tank\tank1.mtl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container_specular.png">
@@ -234,5 +242,25 @@
     <Image Include="res\textures\skybox\right.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\models\backpack\ao.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\backpack\diffuse.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\backpack\normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\backpack\roughness.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\backpack\specular.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tank\tank1_texture.tga" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="res\models\backpack\backpack.obj" />
+    <Object Include="res\models\tank\tank1.obj" />
   </ItemGroup>
 </Project>
