@@ -1,21 +1,16 @@
 #pragma once
 
-//#include "pch.h"
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
 #include <Rendering/deprecated/Mesh.h>
 
-static unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
+static unsigned int TextureFromFile(const char* pathPtr, const std::string& directory, bool gamma = false);
 
 
 
 class Model
 {
 public:
-    std::vector<Texture> textures_loaded;
-    std::vector<Mesh>    meshes;
+    std::vector<Texture> texturesLoaded;
+    std::vector<Mesh> meshes;
     std::string directory;
     bool gammaCorrection;
 
@@ -25,8 +20,8 @@ public:
 
 private:
 
-    void loadModel(std::string const& path);
-    void processNode(aiNode* node, const aiScene* scene);
-    Mesh processMesh(aiMesh* mesh, const aiScene* scene);
-    std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+    void LoadModel(std::string const& path);
+    void ProcessNode(aiNode* nodePtr, const aiScene* scenePtr);
+    Mesh ProcessMesh(aiMesh* meshPtr, const aiScene* scenePtr);
+    std::vector<Texture> LoadMaterialTextures(aiMaterial* matPtr, aiTextureType type, std::string typeName);
 };
