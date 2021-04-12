@@ -25,6 +25,8 @@ void Model::CustomRender(Shader& shader, glm::mat4 transform)
     Draw(shader);
 }
 
+
+
 void Model::LoadModel(std::string const& path)
 {
     Assimp::Importer importer;
@@ -176,15 +178,13 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* matPtr, aiTextureTy
     return textures;
 }
 
-
-
 unsigned int TextureFromFile(const char* pathPtr, const std::string& directory, bool gamma)
 {
     std::string filename = std::string(pathPtr);
     filename = directory + '/' + filename;
 
-    unsigned int textureID;
-    glGenTextures(1, &textureID);
+    unsigned int textureId;
+    glGenTextures(1, &textureId);
 
     int width, height, nrComponents;
     unsigned char* dataPtr = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
@@ -198,7 +198,7 @@ unsigned int TextureFromFile(const char* pathPtr, const std::string& directory, 
         else if (nrComponents == 4)
             format = GL_RGBA;
 
-        glBindTexture(GL_TEXTURE_2D, textureID);
+        glBindTexture(GL_TEXTURE_2D, textureId);
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, dataPtr);
         glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -215,5 +215,5 @@ unsigned int TextureFromFile(const char* pathPtr, const std::string& directory, 
         stbi_image_free(dataPtr);
     }
 
-    return textureID;
+    return textureId;
 }
