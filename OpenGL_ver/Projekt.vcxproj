@@ -273,7 +273,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Util.cpp" />
-    <ClCompile Include="src\Components\StandardGraphicsComponent.cpp" />
     <ClCompile Include="src\Components\TransformComponent.cpp" />
     <ClCompile Include="src\Components\UpdateComponent.cpp" />
   </ItemGroup>
@@ -318,7 +317,6 @@
     <ClInclude Include="res\shaders\vertex\LitTexturedV.h" />
     <ClInclude Include="res\shaders\vertex\SkyboxV.h" />
     <ClInclude Include="res\shaders\vertex\UnlitV.h" />
-    <ClInclude Include="include\Components\StandardGraphicsComponent.h" />
     <ClInclude Include="include\Components\TransformComponent.h" />
     <ClInclude Include="include\Components\UpdateComponent.h" />
   </ItemGroup>
@@ -410,9 +408,11 @@
   <ItemGroup>
     <Object Include="res\models\backpack\backpack.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </Object>
     <Object Include="res\models\tank\tank1.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </Object>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

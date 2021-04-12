@@ -3,7 +3,7 @@
 #include "FileNames.h"
 #include "Rendering/deprecated/Model.h"
 
-//Model* modelPtr;
+Model* modelPtr;
 
 DataManager::DataManager()
 {
@@ -92,5 +92,5 @@ void DataManager::LoadSound(char const* path, sf::Sound& sound, sf::SoundBuffer&
 
 void DataManager::LoadAllModels()
 {
-	//modelPtr = new Model(TANK1);
+	modelPtr = new Model(TANK1);
 }

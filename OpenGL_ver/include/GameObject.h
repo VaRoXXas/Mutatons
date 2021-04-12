@@ -1,4 +1,5 @@
 #pragma once
+#include "Components/UpdateComponent.h"
 
 class GameObject 
 {
@@ -17,7 +18,7 @@ private:
 	bool m_HasCollider = false;
 public:
 	void Update(float fps);
-	void Draw(GLFWwindow& window);
+	//void Draw(GLFWwindow& window);
 	void AddComponent(std::shared_ptr<Component> component);
 	void SetActive();
 	void SetInactive();
@@ -35,3 +36,28 @@ public:
 	std::shared_ptr<TransformComponent> GetTransformComponent();
 	std::shared_ptr<UpdateComponent> GetFirstUpdateComponent();
 };
+
+/*
+GameObject declaration:
+GameObject gameobject
+gameobject.addComponent(make_shared<ComponentName>())
+e.g.
+gameObject.addComponent(make_shared<TransformComponent>(transform,scale,rotation));
+<-------->
+shared_ptr<GraphicsComponent> gc = make_shared<GraphicsComponent>();
+gameObject.addComponent(gc);
+gp->LoadModel(modelPtr);
+GraphNode modelNode(gameObjectPtr,transform);
+rootNode.AddChild(&modelNode);
+<--------->
+	DataManager dataManager;
+	dataManager.LoadAllModels();
+
+	GameObject* gameObjectPtr;
+	GameObject objekt;
+	objekt.SetTag("PierwszyGameObject");
+	std::shared_ptr<GraphicsComponent> gp = std::make_shared<GraphicsComponent>();
+	objekt.AddComponent(gp);
+
+	gameObjectPtr = &objekt;
+*/

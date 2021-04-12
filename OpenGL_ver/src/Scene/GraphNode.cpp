@@ -1,9 +1,13 @@
 // ReSharper disable CppClangTidyClangDiagnosticShadowFieldInConstructor
 // ReSharper disable CppUseAuto
 #include "pch.h"
+#include "Components/GraphicsComponent.h"
+#include "GameObject.h"
 #include "Scene/GraphNode.h"
 #include "Rendering/PseudoMesh.h"
 #include "Rendering/deprecated/Model.h"
+
+
 
 extern Shader* litTexturedShaderPtr;
 extern Shader* litTexturedInstancedShaderPtr;
@@ -22,6 +26,11 @@ GraphNode::GraphNode(Model* model, const glm::mat4& localTransform) : transform(
 	
 }
 
+GraphNode::GraphNode(GameObject* gameObject, const glm::mat4& localTransform) : transform(localTransform), gameObjectPtr(gameObject)
+{
+
+}
+
 GraphNode::GraphNode(const glm::mat4& localTransform) : transform(localTransform)
 {
 	
@@ -35,6 +44,12 @@ void GraphNode::Render(const glm::mat4& parentTransform) const
 		pseudoMeshPtr->Draw(absoluteTransform); // rendering mesh in its current position
 	else if (modelPtr)
 		modelPtr->CustomRender(*litTexturedShaderPtr, absoluteTransform);
+	else if (gameObjectPtr)
+	{
+		std::shared_ptr<GraphicsComponent> gcPtr = gameObjectPtr->GetGraphicsComponent();
+		//std::shared_ptr<TransformComponent> tPtr = gameObjectPtr->GetTransformComponent();
+		gcPtr->Draw(*litTexturedShaderPtr, absoluteTransform);
+	}
 
 	for(const GraphNode* child : children)
 	{

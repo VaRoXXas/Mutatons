@@ -2,7 +2,7 @@
 
 class PseudoMesh;
 class Model;
-
+class GameObject;
 
 
 class GraphNode
@@ -10,6 +10,7 @@ class GraphNode
 public:
 	
 	GraphNode(PseudoMesh* pseudoMesh, const glm::mat4& localTransform);
+	GraphNode(GameObject* gameObject, const glm::mat4& localTransform);
 	GraphNode(Model* model, const glm::mat4& localTransform);
 	GraphNode(const glm::mat4& localTransform);
 
@@ -25,6 +26,7 @@ private:
 	glm::mat4 transform;
 	PseudoMesh* pseudoMeshPtr = nullptr;
 	Model* modelPtr = nullptr;
+	GameObject* gameObjectPtr = nullptr;
 	
 	std::vector<const GraphNode*> children;
 };

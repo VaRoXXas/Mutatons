@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Component.h"
 #include "Components/GraphicsComponent.h"
-#include "Components/UpdateComponent.h"
 #include "Components/TransformComponent.h"
 #include "GameObject.h"
 //#include "GameObjectSharer.h"
@@ -25,16 +24,16 @@ void GameObject::Update(float fps)
 	}
 }
 
-void GameObject::Draw(GLFWwindow& window)
+/*void GameObject::Draw(GLFWwindow& window)
 {
 	if (m_Active && m_HasGraphicsComponent)
 	{
 		if (m_Components[m_GraphicsComponentLocation]->Enabled())
 		{
-			GetGraphicsComponent()->Draw(window, GetTransformComponent());
+			GetGraphicsComponent()->Draw(GetTransformComponent());
 		}
 	}
-}
+}*/
 
 std::shared_ptr<GraphicsComponent> GameObject::GetGraphicsComponent()
 {

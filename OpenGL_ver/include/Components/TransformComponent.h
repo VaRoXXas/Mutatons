@@ -1,4 +1,5 @@
 #pragma once
+#include "Component.h"
 
 class Component;
 
@@ -11,6 +12,10 @@ private:
 public:
 	TransformComponent(glm::mat4 transform, glm::mat4 scale, glm::mat4 rotation);
 	/// TODO: GetLocation();GetScale();GetRotation()
+	glm::mat4 GetLocation()
+	{
+		return transform;
+	}
 
 	std::string Component::GetType()
 	{
