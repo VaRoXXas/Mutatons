@@ -1,4 +1,4 @@
-# Blender MTL File: 'lab_tank1_export.blend'
+# Blender MTL File: 'lab_wall_corner_out_export.blend'
 # Material Count: 1
 
 newmtl Texture
@@ -10,4 +10,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd lab_tank1_texture.png
+map_Kd lab_wall_corner_out_texture.png
