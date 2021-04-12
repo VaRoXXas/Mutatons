@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "DataManager.h"
 #include "FileNames.h"
+#include "Rendering/deprecated/Model.h"
 
-
+//Model* modelPtr;
 
 DataManager::DataManager()
 {
@@ -87,4 +88,9 @@ void DataManager::LoadSound(char const* path, sf::Sound& sound, sf::SoundBuffer&
 	
 	sound.setBuffer(buffer);
 	
+}
+
+void DataManager::LoadAllModels()
+{
+	//modelPtr = new Model(TANK1);
 }
