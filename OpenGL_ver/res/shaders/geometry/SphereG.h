@@ -1,6 +1,6 @@
 #pragma once
 
-static const char* SphereG = R"(
+static const char* s_sphereGeometryPtr = R"(
 	#version 330 core
 	#extension GL_EXT_geometry_shader4: enable
 	layout(triangles) in;

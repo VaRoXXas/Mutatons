@@ -1,6 +1,6 @@
 #pragma once
 
-static const char* RefractF = R"(
+static const char* s_refractFragmentPtr = R"(
 	#version 330 core
     out vec4 FragColor;
 
@@ -17,7 +17,7 @@ static const char* RefractF = R"(
         vec3 R;
 		if(refractMode)
 		{
-			float ratio = 1.00 / 1.52; // 1.52 jest wspolczynnikiem zalamania dla szkla
+			float ratio = 1.00 / 1.52; // 1.52 is a refraction factor for glass.
 			R = refract(I, normalize(Normal), ratio);
 		}
 		else

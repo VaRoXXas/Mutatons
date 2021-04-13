@@ -1,6 +1,6 @@
 #pragma once
 
-static const char* LineG = R"(
+static const char* s_lineGeometryPtr = R"(
 	#version 330 core
 	layout(points) in;
 	layout(line_strip, max_vertices = 256) out;

@@ -1,4 +1,4 @@
-1. Komentarze po angielsku.
+1. Wszystko po angielsku.
 2. Nazwy klas, interfejsów, struktur, metod, funkcji, enumów z dużej litery np. MojaKlasa.
 3. Nazwy pól, zmiennych z małej litery np. mojaZmienna.
 4. Nazwy ustawień z #define lub innych globalnych const piszemy O_WLASNIE_TAK.
@@ -17,6 +17,8 @@
 13. Używamy static_cast'a zamiast "zwykłego" castowania z języka C.
 14. Pomiędzy #pragma once, a resztą kodu robimy jedną linię odstępu.
 15. Przed "główną" częścią danego pliku np. zbiorem definicji w pliku cpp, funkcją main, klasą w pliku .h robimy 3 linie odstępu.
+16. Nagłówki include'ujemy w plikach .cpp, a nie .h.
+17. Powyższe zasady nie dotyczą KODU shaderów.
 
 
 

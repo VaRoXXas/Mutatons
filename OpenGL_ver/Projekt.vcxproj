@@ -195,6 +195,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\Components\GraphicsComponent.cpp" />
+    <ClCompile Include="src\Components\ColliderComponent.cpp" />
+    <ClCompile Include="src\DataManager.cpp" />
+    <ClCompile Include="src\Rendering\Model.cpp" />
+    <ClCompile Include="src\Rendering\CustomDrawing.cpp" />
+    <ClCompile Include="src\Rendering\Mesh.cpp" />
+    <ClCompile Include="src\Rendering\PseudoMesh.cpp" />
     <ClCompile Include="src\Scene\GraphNode.cpp" />
     <ClCompile Include="res\lib\glad.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -265,18 +273,27 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Util.cpp" />
+    <ClCompile Include="src\Components\TransformComponent.cpp" />
+    <ClCompile Include="src\Components\UpdateComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\GameObject.h" />
+    <ClInclude Include="include\Components\GraphicsComponent.h" />
+    <ClInclude Include="include\Component.h" />
+    <ClInclude Include="include\Components\ColliderComponent.h" />
+    <ClInclude Include="include\DataManager.h" />
+    <ClInclude Include="include\FileNames.h" />
+    <ClInclude Include="include\Rendering\CustomDrawing.h" />
     <ClInclude Include="include\Scene\GraphNode.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Input.h" />
-    <ClInclude Include="include\Rendering\Model.h" />
+    <ClInclude Include="include\Rendering\deprecated\Model.h" />
     <ClInclude Include="include\pch.h" />
     <ClInclude Include="include\Rendering\PseudoMesh.h" />
     <ClInclude Include="include\Settings.h" />
     <ClInclude Include="include\Rendering\Shader.h" />
     <ClInclude Include="include\Util.h" />
-    <ClInclude Include="include\Rendering\Mesh.h" />
+    <ClInclude Include="include\Rendering\deprecated\Mesh.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\BasicF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\OrbitF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\SphereF.h" />
@@ -300,6 +317,8 @@
     <ClInclude Include="res\shaders\vertex\LitTexturedV.h" />
     <ClInclude Include="res\shaders\vertex\SkyboxV.h" />
     <ClInclude Include="res\shaders\vertex\UnlitV.h" />
+    <ClInclude Include="include\Components\TransformComponent.h" />
+    <ClInclude Include="include\Components\UpdateComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Readme.txt" />
@@ -329,11 +348,20 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
+    <None Include="Projekt.sln.DotSettings" />
+    <None Include="res\models\backpack\backpack.mtl" />
+    <None Include="res\models\tank\tank1.mtl" />
     <None Include="res\music\Intergalactic Odyssey.ogg" />
     <None Include="res\shaders\FragmentShaders.h" />
     <None Include="res\shaders\VertexShaders.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\models\backpack\ao.jpg" />
+    <Image Include="res\models\backpack\diffuse.jpg" />
+    <Image Include="res\models\backpack\normal.png" />
+    <Image Include="res\models\backpack\roughness.jpg" />
+    <Image Include="res\models\backpack\specular.jpg" />
+    <Image Include="res\models\tank\tank1_texture.tga" />
     <Image Include="res\textures\container_diffuse.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
@@ -376,6 +404,16 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="res\models\backpack\backpack.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tank\tank1.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </Object>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

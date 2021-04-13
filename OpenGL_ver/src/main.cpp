@@ -4,7 +4,8 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Rendering/Shader.h"
-#include "Rendering/Model.h"
+#include "Rendering/deprecated/Mesh.h" // TODO: Change this to new Mesh class file.
+#include "Rendering/deprecated/Model.h" // TODO: Change this to new Model class file.
 #include "Rendering/PseudoMesh.h"
 #include "Scene/GraphNode.h"
 
@@ -12,65 +13,48 @@
 #include "VertexShaders.h"
 #include "GeometryShaders.h"
 #include "FragmentShaders.h"
+#include "Rendering/CustomDrawing.h"
+
+// input externs
+extern bool cursorEnabled;
+extern void (*wKeyAction)();
+extern void (*sKeyAction)();
+extern void (*aKeyAction)();
+extern void (*dKeyAction)();
+extern void (*rKeyAction)();
+extern void (*tKeyAction)();
+extern void (*eKeyAction)();
+extern void (*qKeyAction)();
+
+// renderer externs
+extern Shader* litTexturedShaderPtr;
+extern Shader* litTexturedInstancedShaderPtr;
+extern Shader* orbitShaderPtr;
+extern Shader* sphereShaderPtr;
+extern Shader* lineShaderPtr;
+extern Shader* refractShaderPtr;
+extern Shader* skyboxShaderPtr;
+extern GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
+extern GLuint houseBase_diffuse, roof_diffuse, plane_diffuse, houseBase_specular, roof_specular, plane_specular, cubemapTexture;
+extern std::vector<GLuint*> customVAOs, customVBOs;
+extern glm::vec3 lineShaderEndPointPos;
+extern int geometryShaderPseudoMeshDetailLevel;
+
+
 
 bool sceneExplorationModeEnabled = true;
 Camera mainCamera(glm::vec3(0.0f, 0.0f, 3.0f));
-GLfloat deltaTime = 0.0f;
+GLfloat deltaTime = 0.0f; // the difference between the current and the last frame
 GLfloat lastFrame = 0.0f;
 GLfloat currentFrame = 0.0f;
-Shader* litTexturedShaderPtr;
-Shader* orbitShaderPtr;
-Shader* sphereShaderPtr;
-Shader* litTexturedInstancedShaderPtr;
-Shader* lineShaderPtr;
-Shader* refractShaderPtr;
-glm::mat4* transformPtr;
-glm::mat4* modelPtr;
-glm::mat4* viewPtr;
-glm::mat4* projectionPtr;
-glm::mat4 androidTransform = glm::mat4(1.0f);
-glm::mat4 androidHeadTransform = glm::mat4(1.0f);
-glm::vec3 lineShaderEndPointPos;
-GraphNode* house; // na pojedyncze domki
-GraphNode* roof; // na pojedyncze dachy
-int* meshDetailLevelPtr;
-bool* cursorDisabledPtr;
-void (*rKeyAction)();
-void (*tKeyAction)();
-void (*eKeyAction)();
-void (*qKeyAction)();
-void (*wKeyAction)();
-void (*sKeyAction)();
-void (*aKeyAction)();
-void (*dKeyAction)();
-static GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, planeVAO, planeVBO, instancedCubeVAO, instancedPyramidVAO, instanceVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
-static GLuint houseBase_diffuse, roof_diffuse, plane_diffuse, houseBase_specular, roof_specular, plane_specular, cubemapTexture;
-static const int HOUSES_ROW_LENGTH = 200;
-static const int HOUSES_COUNT = HOUSES_ROW_LENGTH * HOUSES_ROW_LENGTH; // 200 x 200 = 40000
-static const float ANDROID_SPEED = 1.5f;
+glm::mat4* transformMatrixPtr;
+glm::mat4* modelMatrixPtr;
+glm::mat4* viewMatrixPtr;
+glm::mat4* projectionMatrixPtr;
 
-void ToggleCursor();
-void ToggleSceneExplorationMode();
-void MoveCameraForward();
-void MoveCameraBackward();
-void MoveCameraLeft();
-void MoveCameraRight();
-void RotateAndroidHeadLeft();
-void RotateAndroidHeadRight();
-void MoveAndroidForward();
-void MoveAndroidBackward();
-void MoveAndroidLeft();
-void MoveAndroidRight();
-void DrawOrbit(const float radius, float* color, glm::mat4 transform);
-void DrawSphere(const float radius, float* color, glm::mat4 transform);
-void DrawPlane(glm::mat4 transform);
-void DrawCube(glm::mat4 transform);
-void DrawPyramid(glm::mat4 transform);
-void DrawHouses(glm::mat4 transform);
-void DrawLine(glm::mat4 transform);
-void DrawReflected(glm::mat4 transform);
-void DrawRefracted(glm::mat4 transform);
-unsigned int LoadTexture(char const* path);
+
+// TODO: Move to DataManager or delete.
+unsigned int LoadTexture(char const* pathPtr);
 unsigned int LoadCubemap(std::vector<std::string> faces);
 
 
@@ -110,19 +94,20 @@ int main()
 #pragma region shaders init
 
 	glEnable(GL_DEPTH_TEST);
-	Shader litTexturedShader(LitTexturedV, LitTexturedF);
-	Shader orbitShader(UnlitV, OrbitG, UnlitF);
-	Shader sphereShader(UnlitV, SphereG, UnlitF);
-	Shader litTexturedInstancedShader(LitTexturedInstancedV, LitTexturedF);
-	Shader lineShader(UnlitV, LineG, UnlitF);
-	Shader skyboxShader(SkyboxV, SkyboxF);
-	Shader refractShader(LitTexturedV, RefractF);
+	Shader litTexturedShader(s_litTexturedVertexPtr, s_litTexturedFragmentPtr);
+	Shader orbitShader(s_unlitVertexPtr, s_orbitGeometryPtr, s_unlitFragmentPtr);
+	Shader sphereShader(s_unlitVertexPtr, s_sphereGeometryPtr, s_unlitFragmentPtr);
+	Shader litTexturedInstancedShader(s_litTexturedInstancedVertexPtr, s_litTexturedFragmentPtr);
+	Shader lineShader(s_unlitVertexPtr, s_lineGeometryPtr, s_unlitFragmentPtr);
+	Shader skyboxShader(s_skyboxVertexPtr, s_skyboxFragmentPtr);
+	Shader refractShader(s_litTexturedVertexPtr, s_refractFragmentPtr);
 	litTexturedShaderPtr = &litTexturedShader;
 	orbitShaderPtr = &orbitShader;
 	sphereShaderPtr = &sphereShader;
 	litTexturedInstancedShaderPtr = &litTexturedInstancedShader;
 	lineShaderPtr = &lineShader;
 	refractShaderPtr = &refractShader;
+	skyboxShaderPtr = &skyboxShader;
 
 	litTexturedShader.Use();
 	litTexturedShader.SetInt("material.diffuse", 0);
@@ -136,10 +121,6 @@ int main()
 
 
 #pragma region models and textures
-
-	// loaded models
-	//Model* backpackModelPtr = new Model("res/models/backpack/backpack.obj");
-	//Model* additionalModelPtr = new Model("res/models/statue/LibertStatue.obj");
 
 	houseBase_diffuse = LoadTexture("res/textures/container_diffuse.png");
 	houseBase_specular = LoadTexture("res/textures/container_specular.png");
@@ -280,28 +261,7 @@ int main()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float)));
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	// Additional things for instanced houses.
-	glm::vec3* translations = new glm::vec3[HOUSES_COUNT];
-	int index = 0;
-	float offset = 2.0f;
-	for (int z = -HOUSES_ROW_LENGTH / 2; z < HOUSES_ROW_LENGTH / 2; z++)
-	{
-		for (int x = -HOUSES_ROW_LENGTH / 2; x < HOUSES_ROW_LENGTH / 2; x++)
-		{
-			glm::vec3* translation = new glm::vec3(1.0f);
-			*translation = glm::vec3((float)x * offset, 0.0f, (float)z * offset);
-			translations[index] = *translation;
-			index++;
-		}
-	}
-	for(int i = 0; i < HOUSES_COUNT; i++)
-	{
-			
-	}
-	glGenBuffers(1, &instanceVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * HOUSES_COUNT, &translations[0], GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
 
 	// house base (cube)
 	float cubeData[] = {
@@ -360,23 +320,6 @@ int main()
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float)));
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glGenVertexArrays(1, &instancedCubeVAO);
-	glBindVertexArray(instancedCubeVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float)));
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	// also set instance data
-	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO); // this attribute comes from a different vertex buffer
-	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, (3) * sizeof(float), (void*)0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glVertexAttribDivisor(3, 1); // tell OpenGL this is an instanced vertex attribute.
 	
 	// roof (pyramid)
 	float pyramidData[] = {
@@ -423,23 +366,6 @@ int main()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float)));
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glGenVertexArrays(1, &instancedPyramidVAO);
-	glBindVertexArray(instancedPyramidVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, pyramidVBO);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float)));
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	// also set instance data
-	glBindBuffer(GL_ARRAY_BUFFER, instanceVBO); // this attribute comes from a different vertex buffer
-	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, (3) * sizeof(float), (void*)0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glVertexAttribDivisor(3, 1); // tell OpenGL this is an instanced vertex attribute.
-
 #pragma endregion
 
 
@@ -457,8 +383,6 @@ int main()
 	bool xRotationEnabled = false;
 	bool yRotationEnabled = false;
 	bool wireframeModeEnabled = false;
-	bool cursorDisabled = false;
-	cursorDisabledPtr = &cursorDisabled;
 	int meshDetailLevel = 3;
 	bool directionalLightEnabled = true;
 	bool spotLight1Enabled = true;
@@ -471,7 +395,7 @@ int main()
 	float* spotLight2Color = new float[4];
 	float* pointLightColor = new float[4];
 
-	meshDetailLevelPtr = &meshDetailLevel;
+	geometryShaderPseudoMeshDetailLevel = meshDetailLevel;
 	std::vector<float*>* lightColors = new std::vector<float*>();
 	lightColors->push_back(directionalLightColor);
 	lightColors->push_back(spotLight1Color);
@@ -487,14 +411,14 @@ int main()
 	delete lightColors;
 
 	// Assigning keyboard actions.
-	rKeyAction = &ToggleCursor;
-	tKeyAction = &ToggleSceneExplorationMode;
-	eKeyAction = &MoveCameraRight;
-	qKeyAction = &MoveCameraLeft;
-	wKeyAction = &MoveCameraForward;
-	sKeyAction = &MoveCameraBackward;
-	aKeyAction = &MoveCameraLeft;
-	dKeyAction = &MoveCameraRight;
+	rKeyAction = &Input::ToggleCursor;
+	tKeyAction = &Input::ToggleSceneExplorationMode;
+	eKeyAction = &Input::MoveCameraRight;
+	qKeyAction = &Input::MoveCameraLeft;
+	wKeyAction = &Input::MoveCameraForward;
+	sKeyAction = &Input::MoveCameraBackward;
+	aKeyAction = &Input::MoveCameraLeft;
+	dKeyAction = &Input::MoveCameraRight;
 
 #pragma endregion
 
@@ -506,10 +430,10 @@ int main()
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
-	transformPtr = &transform;
-	modelPtr = &model;
-	viewPtr = &view;
-	projectionPtr = &projection;
+	transformMatrixPtr = &transform;
+	modelMatrixPtr = &model;
+	viewMatrixPtr = &view;
+	projectionMatrixPtr = &projection;
 
 #pragma endregion
 
@@ -531,19 +455,19 @@ int main()
 		model = glm::mat4(1.0f);
 		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		view = mainCamera.GetViewMatrix();
-		projection = glm::perspective(glm::radians(mainCamera.zoom), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(mainCamera.GetZoom()), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
 
 		if (xRotationEnabled)
 			model = glm::rotate(model, (GLfloat)glfwGetTime() * 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
 		if (yRotationEnabled)
 			model = glm::rotate(model, (GLfloat)glfwGetTime() * 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
 
-		litTexturedShader.ApplyMVPT();
-		orbitShader.ApplyMVPT();
-		sphereShader.ApplyMVPT();
-		litTexturedInstancedShader.ApplyMVPT();
-		lineShader.ApplyMVPT();
-		refractShader.ApplyMVPT();
+		litTexturedShader.ApplyMvptMatrices();
+		orbitShader.ApplyMvptMatrices();
+		sphereShader.ApplyMvptMatrices();
+		litTexturedInstancedShader.ApplyMvptMatrices();
+		lineShader.ApplyMvptMatrices();
+		refractShader.ApplyMvptMatrices();
 
 		orbitShader.Use();
 		orbitShader.SetInt("sidesCount", 64);
@@ -573,7 +497,7 @@ int main()
 		glm::vec3 ambientColor;
 
 		lt.Use();
-		lt.SetVecf3("viewPos", mainCamera.position);
+		lt.SetVecf3("viewPos", mainCamera.GetPosition());
 		lt.SetFloat("material.shininess", 16.0f);
 		lt.SetVecf3("dirLight.direction", directionalLightsDirection);
 		lt.SetVecf3("pointLight.position", pointLightPos);
@@ -649,7 +573,7 @@ int main()
 
 		
 		lti.Use();
-		lti.SetVecf3("viewPos", mainCamera.position);
+		lti.SetVecf3("viewPos", mainCamera.GetPosition());
 		lti.SetFloat("material.shininess", 16.0f);
 		lti.SetVecf3("dirLight.direction", directionalLightsDirection);
 		lti.SetVecf3("pointLight.position", pointLightPos);
@@ -727,12 +651,13 @@ int main()
 
 
 
-		// render
+		// Rendering...
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		Util::DisableWireframeMode();
 		if (wireframeModeEnabled)
 			Util::EnableWireframeMode();
-		if (cursorDisabled)
+		else
+			Util::DisableWireframeMode();
+		if (!cursorEnabled)
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Blocking cursor inside a window and disabling its graphic representation.
 		else
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -741,93 +666,37 @@ int main()
 
 		glm::mat4 planeTransform = glm::translate(transform, glm::vec3(0.0f, -0.5f * 0.2f - 0.0001f, 0.0f));
 		planeTransform = glm::scale(planeTransform, glm::vec3(100.0f, 100.0f, 100.0f));
-		glm::mat4 originPointTransform = glm::translate(transform, glm::vec3(0.0f, 1.0f, 0.0f));
 
-		// setting up scene graph
+		// Setting up scene graph...
 		GraphNode rootNode(transform);
 
-		float originPointColor[4] = { 0.45f, 0.25f, 0.45f, 1.0f };
-		PseudoMesh originPoint(DrawSphere, 0.2f, originPointColor); GraphNode originPointNode(&originPoint, glm::rotate(originPointTransform, (GLfloat)glfwGetTime() * 0.1f, glm::vec3(0.0f, 1.0f, 0.0f)));
-		PseudoMesh plane(DrawPlane); GraphNode planeNode(&plane, planeTransform);
+		PseudoMesh plane(CustomDrawing::DrawPlane); GraphNode planeNode(&plane, planeTransform);
 		lineShaderEndPointPos = directionalLightsDirection;
-		PseudoMesh directionalLightIndicator(DrawLine); GraphNode directionalLightIndicatorNode(&directionalLightIndicator, glm::translate(transform, glm::vec3(0.0f, 2.0f, 0.0f)));
-		PseudoMesh pointLightIndicator(DrawSphere, 0.2f, pointLightColor); GraphNode pointLightIndicatorNode(&pointLightIndicator, glm::translate(transform, pointLightPos));
-		PseudoMesh spotLight1Indicator(DrawSphere, 0.05f, spotLight1Color); GraphNode spotLight1IndicatorNode(&spotLight1Indicator, glm::translate(transform, spotLight1Pos));
-		PseudoMesh spotLight2Indicator(DrawSphere, 0.05f, spotLight2Color); GraphNode spotLight2IndicatorNode(&spotLight2Indicator, glm::translate(transform, spotLight2Pos));
-		PseudoMesh reflectedObj(DrawReflected); GraphNode reflectedObjNode(&reflectedObj, glm::translate(transform, glm::vec3(3.0f, 3.0f, 0.0f)));
-		PseudoMesh refractedObj(DrawRefracted); GraphNode refractedObjNode(&refractedObj, glm::translate(transform, glm::vec3(-3.0f, 3.0f, 0.0f)));
-		
-		glm::mat4 androidStartTransform = glm::translate(androidTransform, glm::vec3(-2.0f, 1.4f, 0.0f));
-		glm::mat4 androidRightArmTransform = glm::scale(glm::translate(androidStartTransform, glm::vec3(-1.0f, 0.25f, 0.0f)), glm::vec3(1.0f, 0.25f, 0.25f));
-		glm::mat4 androidLeftArmTransform = glm::translate(androidRightArmTransform, glm::vec3(2.0f, 0.0f, 0.0f));
-		glm::mat4 androidRightLegTransform = glm::scale(glm::translate(androidStartTransform, glm::vec3(0.25f, -1.0f, 0.0f)), glm::vec3(0.25f, 1.0f, 0.25f));
-		glm::mat4 androidLeftLegTransform = glm::translate(androidRightLegTransform, glm::vec3(-2.0f, 0.0f, 0.0f));
-		//glm::mat4 androidHeadTransformFinal = glm::scale(glm::translate(androidStartTransform, glm::vec3(0.0f, 0.75f, 0.0f)), glm::vec3(0.5f, 0.5f, 0.5f));
-		glm::mat4 androidHeadTransformFinal = glm::translate(androidStartTransform, glm::vec3(0.0f, 0.75f, 0.0f));
-		androidHeadTransformFinal = androidHeadTransformFinal * androidHeadTransform;
-		androidHeadTransformFinal = glm::scale(androidHeadTransformFinal, glm::vec3(0.5f, 0.5f, 0.5f));
-		
-		GraphNode androidMainNode(transform);
-		PseudoMesh androidTorso(DrawCube); GraphNode androidTorsoNode(&androidTorso, androidStartTransform);
-		PseudoMesh androidRightArm(DrawRefracted); GraphNode androidRightArmNode(&androidRightArm, androidRightArmTransform);
-		PseudoMesh androidLeftArm(DrawRefracted); GraphNode androidLeftArmNode(&androidLeftArm, androidLeftArmTransform);
-		PseudoMesh androidRightLeg(DrawRefracted); GraphNode androidRightLegNode(&androidRightLeg, androidRightLegTransform);
-		PseudoMesh androidLeftLeg(DrawRefracted); GraphNode androidLeftLegNode(&androidLeftLeg, androidLeftLegTransform);
-		PseudoMesh androidHead(DrawReflected); GraphNode androidHeadNode(&androidHead, androidHeadTransformFinal);
+		PseudoMesh directionalLightIndicator(CustomDrawing::DrawLine); GraphNode directionalLightIndicatorNode(&directionalLightIndicator, glm::translate(transform, glm::vec3(0.0f, 2.0f, 0.0f)));
 
-		if(!sceneExplorationModeEnabled)
-			mainCamera.position = glm::vec3(androidStartTransform[3]) + glm::vec3(0.0f, 1.5f, 3.0f);
+
 		
-		
-		// parenting
+		// Parenting...
 		rootNode.AddChild(&planeNode);
-		//rootNode.AddChild(&originPointNode); // Wskazuje srodek swiata.
-		rootNode.AddChild(&androidMainNode);
-		androidMainNode.AddChild(&androidTorsoNode);
-		androidMainNode.AddChild(&androidRightArmNode);
-		androidMainNode.AddChild(&androidLeftArmNode);
-		androidMainNode.AddChild(&androidRightLegNode);
-		androidMainNode.AddChild(&androidLeftLegNode);
-		androidMainNode.AddChild(&androidHeadNode);
-
-		//rootNode.AddChild(&reflectedObjNode);
-		//rootNode.AddChild(&refractedObjNode);
 		
-		// OPTIONAL
 		if(lightsPositionsDirectionsShown)
 		{
+			// Enabling/disabling all lights' displays...
 			if (directionalLightEnabled)
 				rootNode.AddChild(&directionalLightIndicatorNode);
-			if (pointLightEnabled)
-				rootNode.AddChild(&pointLightIndicatorNode);
-			if (spotLight1Enabled)
-				rootNode.AddChild(&spotLight1IndicatorNode);
-			if (spotLight2Enabled)
-				rootNode.AddChild(&spotLight2IndicatorNode);
 		}
 
 
 
-		// drawing scene
+		// Drawing the scene...
 		rootNode.Render();
 
-		// skybox
-		glDepthFunc(GL_LEQUAL);
-		skyboxShader.Use();
-		view = glm::mat4(glm::mat3(mainCamera.GetViewMatrix())); // remove translation from the view matrix
-		skyboxShader.SetMat4("view", view);
-		skyboxShader.SetMat4("projection", projection);
-		// skybox cube
-		glBindVertexArray(skyboxVAO);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
-		glDepthFunc(GL_LESS); // set depth function back to default
+		// And the skybox...
+		CustomDrawing::DrawSkybox();
 
 
 
-		// UI
+		// ImGui (UI for debugging purposes)
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
@@ -835,35 +704,27 @@ int main()
 		ImGui::Checkbox("X axis rotation", &xRotationEnabled);
 		ImGui::Checkbox("Y axis rotation", &yRotationEnabled);
 		ImGui::Checkbox("Wireframe mode", &wireframeModeEnabled);
-		ImGui::Checkbox("Cursor disabled", &cursorDisabled);
+		ImGui::Checkbox("Cursor enabled", &cursorEnabled);
 		ImGui::SliderInt("Sphere detail level", &meshDetailLevel, 0, 3);
 		ImGui::Checkbox("Directional light enabled", &directionalLightEnabled);
-		ImGui::Checkbox("Point light enabled", &pointLightEnabled);
-		ImGui::Checkbox("Spot light 1 enabled", &spotLight1Enabled);
-		ImGui::Checkbox("Spot light 2 enabled", &spotLight2Enabled);
 		ImGui::Checkbox("Lights' positions/directions shown", &lightsPositionsDirectionsShown);
-		ImGui::SliderFloat("Lights' direction vector angle offset", &lightsDirectionVectorAngleOffset, -5.0f, 5.0f);
 		ImGui::ColorEdit4("Directional light color", directionalLightColor);
-		ImGui::ColorEdit4("Spot light 1 color", spotLight1Color);
-		ImGui::ColorEdit4("Spot light 2 color", spotLight2Color);
-		ImGui::ColorEdit4("Point light color", pointLightColor);
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 
 
-		// glfw: swap buffers and poll IO events
+		// [glfw] Swapping buffers and polling IO events...
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
 	// de-allocation
-	glDeleteVertexArrays(1, &orbitVAO);
-	glDeleteBuffers(1, &orbitVBO);
-	//delete backpackModelPtr;
-	//delete additionalModelPtr;
-	delete[] translations;
+	for(const auto* vaoPtr : customVAOs)
+		glDeleteVertexArrays(1, vaoPtr);
+	for (const auto* vboPtr : customVBOs)
+		glDeleteVertexArrays(1, vboPtr);
 	delete[] directionalLightColor;
 	delete[] spotLight1Color;
 	delete[] spotLight2Color;
@@ -878,221 +739,17 @@ int main()
 
 
 
-void ToggleCursor()
-{
-	(*cursorDisabledPtr) = !(*cursorDisabledPtr);
-	std::this_thread::sleep_for(0.25s);
-}
-
-void ToggleSceneExplorationMode()
-{
-	sceneExplorationModeEnabled = !sceneExplorationModeEnabled;
-	if (sceneExplorationModeEnabled)
-	{
-		eKeyAction = &MoveCameraRight;
-		qKeyAction = &MoveCameraLeft;
-		wKeyAction = &MoveCameraForward;
-		sKeyAction = &MoveCameraBackward;
-		aKeyAction = &MoveCameraLeft;
-		dKeyAction = &MoveCameraRight;
-	}
-	else
-	{
-		eKeyAction = &RotateAndroidHeadRight;
-		qKeyAction = &RotateAndroidHeadLeft;
-		wKeyAction = &MoveAndroidForward;
-		sKeyAction = &MoveAndroidBackward;
-		aKeyAction = &MoveAndroidLeft;
-		dKeyAction = &MoveAndroidRight;
-	}
-	std::this_thread::sleep_for(0.25s);
-}
-
-void MoveCameraForward()
-{
-	mainCamera.ProcessKeyboard(CameraDirection::Forward, deltaTime);
-}
-
-void MoveCameraBackward()
-{
-	mainCamera.ProcessKeyboard(CameraDirection::Backward, deltaTime);
-}
-
-void MoveCameraLeft()
-{
-	mainCamera.ProcessKeyboard(CameraDirection::Left, deltaTime);
-}
-
-void MoveCameraRight()
-{
-	mainCamera.ProcessKeyboard(CameraDirection::Right, deltaTime);
-}
-
-void RotateAndroidHeadLeft()
-{
-	androidHeadTransform = glm::rotate(androidHeadTransform, 1.0f * deltaTime, glm::vec3(0.0f, 1.0f, 0.0f));
-}
-
-void RotateAndroidHeadRight()
-{
-	androidHeadTransform = glm::rotate(androidHeadTransform, -1.0f * deltaTime, glm::vec3(0.0f, 1.0f, 0.0f));
-}
-
-void MoveAndroidForward()
-{
-	androidTransform = glm::translate(androidTransform, glm::vec3(0.0f, 0.0f, -1.0f) * deltaTime * ANDROID_SPEED);
-}
-
-void MoveAndroidBackward()
-{
-	androidTransform = glm::translate(androidTransform, glm::vec3(0.0f, 0.0f, 1.0f) * deltaTime * ANDROID_SPEED);
-}
-
-void MoveAndroidLeft()
-{
-	androidTransform = glm::translate(androidTransform, glm::vec3(-1.0f, 0.0f, 0.0f) * deltaTime * ANDROID_SPEED);
-}
-
-void MoveAndroidRight()
-{
-	androidTransform = glm::translate(androidTransform, glm::vec3(1.0f, 0.0f, 0.00f) * deltaTime * ANDROID_SPEED);
-}
-
-void DrawOrbit(const float radius, float* color, glm::mat4 transform)
-{
-	orbitShaderPtr->Use();
-	orbitShaderPtr->SetFloat("radius", radius);
-	orbitShaderPtr->SetVecf4("color", color);
-	orbitShaderPtr->SetMat4("transform", transform);
-	glBindVertexArray(orbitVAO);
-	glDrawArrays(GL_POINTS, 0, 1);
-	glBindVertexArray(0);
-}
-
-void DrawSphere(const float radius, float* color, glm::mat4 transform)
-{
-	sphereShaderPtr->Use();
-	sphereShaderPtr->SetFloat("radius", radius);
-	sphereShaderPtr->SetVecf4("color", color);
-	sphereShaderPtr->SetMat4("transform", transform);
-	sphereShaderPtr->SetInt("meshDetailLevel", (*meshDetailLevelPtr));
-	glBindVertexArray(sphereVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3 * 8); // 3 vertices of the triangle * 8 triangles
-	glBindVertexArray(0);
-}
-
-void DrawPlane(glm::mat4 transform)
-{
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, plane_diffuse);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, plane_specular);
-	litTexturedShaderPtr->Use();
-	litTexturedShaderPtr->SetMat4("transform", transform);
-	glBindVertexArray(planeVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3 * 2); // 3 vertices of the triangle * 2 triangles
-	glBindVertexArray(0);
-}
-
-void DrawCube(glm::mat4 transform)
-{
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, houseBase_diffuse);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, houseBase_specular);
-	litTexturedShaderPtr->Use();
-	litTexturedShaderPtr->SetMat4("transform", transform);
-	glBindVertexArray(cubeVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3 * 2 * 6); // 3 vertices of the triangle * 2 triangles per side * 6 sides
-	glBindVertexArray(0);
-}
-
-void DrawPyramid(glm::mat4 transform)
-{
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, roof_diffuse);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, roof_specular);
-	litTexturedShaderPtr->Use();
-	litTexturedShaderPtr->SetMat4("transform", transform);
-	glBindVertexArray(pyramidVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3 * (2 + 4)); // 3 vertices of the triangle * (2 triangles of base + 4 triangles of sides)
-	glBindVertexArray(0);
-}
-
-void DrawHouses(glm::mat4 transform)
-{
-	litTexturedInstancedShaderPtr->Use();
-	litTexturedInstancedShaderPtr->SetMat4("transform", transform);
-	
-	// bases
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, houseBase_diffuse);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, houseBase_specular);
-	glBindVertexArray(instancedCubeVAO);
-	glDrawArraysInstanced(GL_TRIANGLES, 0, 3 * 2 * 6, HOUSES_COUNT);
-	glBindVertexArray(0);
-
-	// roofs
-	const auto roofOffset = glm::translate(transform, glm::vec3(0.0f, 1.0f, 0.0f));
-	litTexturedInstancedShaderPtr->SetMat4("transform", roofOffset);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, roof_diffuse);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, roof_specular);
-	glBindVertexArray(instancedPyramidVAO);
-	glDrawArraysInstanced(GL_TRIANGLES, 0, 3 * (2 + 4), HOUSES_COUNT);
-	glBindVertexArray(0);
-}
-
-void DrawLine(glm::mat4 transform)
-{
-	lineShaderPtr->Use();
-	lineShaderPtr->SetMat4("transform", transform);
-	lineShaderPtr->SetVecf3("endPointPos", lineShaderEndPointPos);
-	glBindVertexArray(orbitVAO); // Wykorzystujemy wczesniej uzywane VAO, poniewaz linia takze rysuje sie z punktu.
-	glDrawArrays(GL_POINTS, 0, 1);
-	glBindVertexArray(0);
-}
-
-void DrawReflected(glm::mat4 transform)
-{
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-	refractShaderPtr->Use();
-	refractShaderPtr->SetVecf3("viewPos", mainCamera.position);
-	refractShaderPtr->SetBool("refractMode", false);
-	refractShaderPtr->SetMat4("transform", transform);
-	glBindVertexArray(cubeVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3 * 2 * 6); // 3 vertices of the triangle * 2 triangles per side * 6 sides
-	glBindVertexArray(0);
-}
-
-void DrawRefracted(glm::mat4 transform)
-{
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-	refractShaderPtr->Use();
-	refractShaderPtr->SetVecf3("viewPos", mainCamera.position);
-	refractShaderPtr->SetBool("refractMode", true);
-	refractShaderPtr->SetMat4("transform", transform);
-	glBindVertexArray(cubeVAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3 * 2 * 6); // 3 vertices of the triangle * 2 triangles per side * 6 sides
-	glBindVertexArray(0);
-}
-
-unsigned int LoadTexture(char const* path)
+unsigned int LoadTexture(char const* pathPtr)
 {
 	stbi_set_flip_vertically_on_load(true);
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
 
 	int width, height, nrComponents;
-	unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
+	unsigned char* data = stbi_load(pathPtr, &width, &height, &nrComponents, 0);
 	if (data)
 	{
-		GLenum format;
+		GLenum format = 0;
 		if (nrComponents == 1)
 			format = GL_RED;
 		else if (nrComponents == 3)
@@ -1113,7 +770,7 @@ unsigned int LoadTexture(char const* path)
 	}
 	else
 	{
-		std::cout << "Texture failed to load at path: " << path << std::endl;
+		std::cout << "Texture failed to load at path: " << pathPtr << std::endl;
 		stbi_image_free(data);
 	}
 

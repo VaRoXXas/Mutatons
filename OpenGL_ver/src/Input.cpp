@@ -5,21 +5,27 @@
 
 extern Camera mainCamera;
 extern GLfloat deltaTime;
-extern void (*rKeyAction)();
-extern void (*tKeyAction)();
-extern void (*eKeyAction)();
-extern void (*qKeyAction)();
-extern void (*wKeyAction)();
-extern void (*sKeyAction)();
-extern void (*aKeyAction)();
-extern void (*dKeyAction)();
+extern bool sceneExplorationModeEnabled;
+
+bool cursorEnabled = true;
+void (*wKeyAction)();
+void (*sKeyAction)();
+void (*aKeyAction)();
+void (*dKeyAction)();
+void (*rKeyAction)();
+void (*tKeyAction)();
+void (*eKeyAction)();
+void (*qKeyAction)();
+
+// We use it to be able to write 0.25s in std::this_thread::sleep_for.
+using namespace std::chrono_literals;
 
 
 
 void Input::ProcessInput(GLFWwindow* windowPtr)
 {
 	// We use if-cascade instead of switch, because we want to be able to press multiple keys in a single frame.
-	
+
 	if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(windowPtr, true);
 
@@ -67,4 +73,53 @@ void Input::CursorPosCallback(GLFWwindow* windowPtr, const double xpos, const do
 void Input::ScrollCallback(GLFWwindow* windowPtr, const double xoffset, const double yoffset)
 {
 	mainCamera.ProcessMouseScroll(static_cast<float>(yoffset));
+}
+
+void Input::ToggleCursor()
+{
+	cursorEnabled = !cursorEnabled;
+
+	// This line is here to give player some time to release the key, before the game checks if it pressed again.
+	std::this_thread::sleep_for(0.25s);
+}
+
+void Input::ToggleSceneExplorationMode()
+{
+	sceneExplorationModeEnabled = !sceneExplorationModeEnabled;
+	if (sceneExplorationModeEnabled)
+	{
+		eKeyAction = &MoveCameraRight;
+		qKeyAction = &MoveCameraLeft;
+		wKeyAction = &MoveCameraForward;
+		sKeyAction = &MoveCameraBackward;
+		aKeyAction = &MoveCameraLeft;
+		dKeyAction = &MoveCameraRight;
+	}
+	else
+	{
+		// A place to assign new actions, which will be used in the standard game mode.
+	}
+
+	// This line is here to give player some time to release the key, before the game checks if it pressed again.
+	std::this_thread::sleep_for(0.25s);
+}
+
+void Input::MoveCameraForward()
+{
+	mainCamera.ProcessKeyboard(CameraDirection::Forward, deltaTime);
+}
+
+void Input::MoveCameraBackward()
+{
+	mainCamera.ProcessKeyboard(CameraDirection::Backward, deltaTime);
+}
+
+void Input::MoveCameraLeft()
+{
+	mainCamera.ProcessKeyboard(CameraDirection::Left, deltaTime);
+}
+
+void Input::MoveCameraRight()
+{
+	mainCamera.ProcessKeyboard(CameraDirection::Right, deltaTime);
 }

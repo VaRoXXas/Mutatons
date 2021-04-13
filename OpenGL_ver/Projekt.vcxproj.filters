@@ -63,6 +63,36 @@
     <ClCompile Include="src\Scene\GraphNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\DataManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\PseudoMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\CustomDrawing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\ColliderComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\GraphicsComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\TransformComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Components\UpdateComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\pch.h">
@@ -122,12 +152,6 @@
     <ClInclude Include="res\shaders\fragment\deprecated\OrbitF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="res\shaders\vertex\LitTexturedV.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="res\shaders\vertex\UnlitV.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="res\shaders\vertex\LitTexturedInstancedV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -143,9 +167,6 @@
     <ClInclude Include="res\shaders\fragment\SkyboxF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="res\shaders\vertex\SkyboxV.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="res\shaders\fragment\RefractF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -158,10 +179,46 @@
     <ClInclude Include="include\Rendering\PseudoMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Rendering\Mesh.h">
+    <ClInclude Include="res\shaders\vertex\UnlitV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Rendering\Model.h">
+    <ClInclude Include="res\shaders\vertex\SkyboxV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="res\shaders\vertex\LitTexturedV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\FileNames.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DataManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\deprecated\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\deprecated\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Rendering\CustomDrawing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\ColliderComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\GraphicsComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\TransformComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\UpdateComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -177,6 +234,9 @@
     <None Include="openal32.dll" />
     <None Include="res\music\Intergalactic Odyssey.ogg" />
     <None Include=".gitignore" />
+    <None Include="Projekt.sln.DotSettings" />
+    <None Include="res\models\backpack\backpack.mtl" />
+    <None Include="res\models\tank\tank1.mtl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container_specular.png">
@@ -215,5 +275,25 @@
     <Image Include="res\textures\skybox\right.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\models\backpack\ao.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\backpack\diffuse.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\backpack\normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\backpack\roughness.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\backpack\specular.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tank\tank1_texture.tga" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="res\models\backpack\backpack.obj" />
+    <Object Include="res\models\tank\tank1.obj" />
   </ItemGroup>
 </Project>

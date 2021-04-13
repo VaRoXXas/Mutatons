@@ -1,6 +1,6 @@
 #pragma once
 
-static const char* UnlitF = R"(
+static const char* s_unlitFragmentPtr = R"(
 	#version 330 core
 	out vec4 FragColor;
 

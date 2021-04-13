@@ -6,4 +6,12 @@ namespace Input
 	void ProcessInput(GLFWwindow* windowPtr);
 	void CursorPosCallback(GLFWwindow* windowPtr, const double xpos, const double ypos);
 	void ScrollCallback(GLFWwindow* windowPtr, const double xoffset, const double yoffset);
+
+	// input actions
+	void ToggleCursor();
+	void ToggleSceneExplorationMode();
+	void MoveCameraForward();
+	void MoveCameraBackward();
+	void MoveCameraLeft();
+	void MoveCameraRight();
 }

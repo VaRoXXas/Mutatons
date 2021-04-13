@@ -20,22 +20,6 @@ static const float S_ZOOM_DEFAULT = 45.0f;
 class Camera
 {
 public:
-    // attributes
-    glm::vec3 position = glm::vec3();
-    glm::vec3 front = glm::vec3();
-    glm::vec3 up = glm::vec3();
-    glm::vec3 right = glm::vec3();
-    glm::vec3 worldUp = glm::vec3();
-	
-    // Euler angles
-    float yaw = 0.0f;
-    float pitch = 0.0f;
-	
-    // options
-    float movementSpeed = 0.0f;
-    float mouseSensitivity = 0.0f;
-    float zoom = 0.0f;
-
 	
     // constructor with vectors
     Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = S_YAW_DEFAULT, float pitch = S_PITCH_DEFAULT);
@@ -54,8 +38,46 @@ public:
     // Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis.
     void ProcessMouseScroll(const float& yoffset);
 
+	// getters and setters
+    const glm::vec3& GetPosition() const;
+    void SetPosition(const glm::vec3 position);
+    const glm::vec3& GetFront() const;
+    void SetFront(const glm::vec3 front);
+    const glm::vec3& GetUp() const;
+    void SetUp(const glm::vec3 up);
+    const glm::vec3& GetRight() const;
+    void SetRight(const glm::vec3 right);
+    const glm::vec3& GetWorldUp() const;
+    void SetWorldUp(const glm::vec3 worldUp);
+    float GetYaw() const;
+    void SetYaw(const float yaw);
+    float GetPitch() const;
+    void SetPitch(const float pitch);
+    float GetMovementSpeed() const;
+    void SetMovementSpeed(const float movementSpeed);
+    float GetMouseSensitivity() const;
+    void SetMouseSensitivity(const float mouseSensitivity);
+    float GetZoom() const;
+    void SetZoom(const float zoom);
 	
 private:
+
+    // attributes
+    glm::vec3 position = glm::vec3();
+    glm::vec3 front = glm::vec3();
+    glm::vec3 up = glm::vec3();
+    glm::vec3 right = glm::vec3();
+    glm::vec3 worldUp = glm::vec3();
+
+    // Euler angles
+    float yaw = 0.0f;
+    float pitch = 0.0f;
+
+    // options
+    float movementSpeed = 0.0f;
+    float mouseSensitivity = 0.0f;
+    float zoom = 0.0f;
+	
     // Calculates the front vector from the Camera's (updated) Euler angles.
     void UpdateCameraVectors();
 };
