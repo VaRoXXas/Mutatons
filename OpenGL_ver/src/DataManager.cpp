@@ -5,6 +5,10 @@
 
 Model* modelPtr;
 unsigned int textures[2];
+std::string directory = "res/textures";
+unsigned int textureId;
+sf::Sound* soundPtr = new sf::Sound;
+sf::SoundBuffer* bufferPtr = new sf::SoundBuffer;
 
 DataManager::DataManager()
 {
@@ -13,12 +17,16 @@ DataManager::DataManager()
 
 DataManager::~DataManager()
 {
+	delete soundPtr;
+	delete bufferPtr;
 }
 
 unsigned int DataManager::LoadTexture(char const* pathPtr)
 {
+	textureId = TextureFromFile(pathPtr, directory);
+	return textureId;
 	//if you haven't done so already
-	stbi_set_flip_vertically_on_load(true);
+	/*stbi_set_flip_vertically_on_load(true);
 
 	unsigned int textureId;
 	glGenTextures(1, &textureId);
@@ -53,7 +61,7 @@ unsigned int DataManager::LoadTexture(char const* pathPtr)
 	}
 
 	return textureId;
-	
+	*/
 }
 
 unsigned int* DataManager::LoadAllTextures()
@@ -80,18 +88,53 @@ void DataManager::LoadPlayBackgroundMusic(char const* pathPtr, sf::Music &music)
 	music.play();
 }
 
-void DataManager::LoadSound(char const* pathPtr, sf::Sound& sound, sf::SoundBuffer& buffer)
+sf::Sound* DataManager::LoadSound(char const* pathPtr)
 {
-	if (!buffer.loadFromFile(pathPtr))
+	
+	if (!bufferPtr->loadFromFile(pathPtr))
 	{
 		std::cout << "Music failed to load at path: " << pathPtr << std::endl;
 	}
 	
-	sound.setBuffer(buffer);
+	soundPtr->setBuffer(*bufferPtr);
 	
+	return soundPtr;
 }
 
 void DataManager::LoadAllModels()
 {
 	modelPtr = new Model(TANK1);
+}
+
+unsigned int DataManager::LoadCubemap(std::vector<std::string> faces)
+{
+	stbi_set_flip_vertically_on_load(false);
+	unsigned int textureId;
+	glGenTextures(1, &textureId);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureId);
+
+	int width, height, nrChannels;
+	for (unsigned int i = 0; i < faces.size(); i++)
+	{
+		unsigned char* dataPtr = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+		if (dataPtr)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+				0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, dataPtr
+			);
+			stbi_image_free(dataPtr);
+		}
+		else
+		{
+			std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+			stbi_image_free(dataPtr);
+		}
+	}
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	return textureId;
 }
