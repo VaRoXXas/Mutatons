@@ -5,6 +5,7 @@ class GameObject
 {
 private:
 	std::vector<std::shared_ptr<Component>> m_Components;
+	
 	std::string m_Tag;
 	bool m_Active = false;
 	int m_NumberUpdateComponents = 0;
@@ -44,20 +45,29 @@ gameobject.addComponent(make_shared<ComponentName>())
 e.g.
 gameObject.addComponent(make_shared<TransformComponent>(transform,scale,rotation));
 <-------->
-shared_ptr<GraphicsComponent> gc = make_shared<GraphicsComponent>();
-gameObject.addComponent(gc);
+
+
+#include "Component.h"
+#include "Components/GraphicsComponent.h"
+#include "DataManager.h"
+#include "GameObject.h"
+#include "Components/UpdateComponent.h"
+#include "Components/TransformComponent.h"
+
+extern Model* modelPtr;
+
+DataManager dataManager;
+dataManager.LoadAllModels();
+
+GameObject* gameObjectPtr;
+GameObject objekt;
+objekt.SetTag("PierwszyGameObject");
+std::shared_ptr<GraphicsComponent> gp = std::make_shared<GraphicsComponent>();
+objekt.AddComponent(gp);
+
+gameObjectPtr = &objekt;
+
+
 gp->LoadModel(modelPtr);
-GraphNode modelNode(gameObjectPtr,transform);
-rootNode.AddChild(&modelNode);
-<--------->
-	DataManager dataManager;
-	dataManager.LoadAllModels();
-
-	GameObject* gameObjectPtr;
-	GameObject objekt;
-	objekt.SetTag("PierwszyGameObject");
-	std::shared_ptr<GraphicsComponent> gp = std::make_shared<GraphicsComponent>();
-	objekt.AddComponent(gp);
-
-	gameObjectPtr = &objekt;
+gp->Render(transform);
 */

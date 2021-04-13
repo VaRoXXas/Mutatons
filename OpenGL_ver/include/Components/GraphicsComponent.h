@@ -1,7 +1,8 @@
 #pragma once
 #include "TransformComponent.h"
-#include "Rendering/deprecated/Model.h"
 
+class Shader;
+class Model;
 class Component;
 
 class GraphicsComponent : public Component {
@@ -13,7 +14,8 @@ public:
 	GraphicsComponent();
 	//void Draw(std::shared_ptr<TransformComponent> t);
 	void Draw(Shader& shader, const glm::mat4& transform);
-
+	void LoadModel(Model* modelLoad);
+	void Render(const glm::mat4& parentTransform);
 	std::string Component::GetType() {
 		return m_Type;
 	}
@@ -31,7 +33,7 @@ public:
 		return m_Enabled;
 	}
 
-	void LoadModel(Model* modelLoad);
+
 
 	//void Component::start(
 	//	GameObjectSharer* gos, GameObject* self) {}
