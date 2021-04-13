@@ -129,7 +129,7 @@ int main()
 	plane_diffuse = LoadTexture("res/textures/grass_diffuse.jpg");
 	plane_specular = LoadTexture("res/textures/grass_specular.jpg");
 
-	vector<std::string> faces
+	std::vector<std::string> faces
 	{
 		"res/textures/skybox/right.jpg",
 		"res/textures/skybox/left.jpg",
