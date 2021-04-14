@@ -7,18 +7,20 @@ Model* modelPtr;
 unsigned int textures[2];
 std::string directory = "res/textures";
 unsigned int textureId;
-sf::Sound* soundPtr = new sf::Sound;
-sf::SoundBuffer* bufferPtr = new sf::SoundBuffer;
+
+
 
 DataManager::DataManager()
 {
-
+	this->soundPtr = new sf::Sound;
+	this->bufferPtr = new sf::SoundBuffer;
 }
 
 DataManager::~DataManager()
 {
-	delete soundPtr;
-	delete bufferPtr;
+	delete this->soundPtr;
+	delete this->bufferPtr;
+	delete modelPtr;
 }
 
 unsigned int DataManager::LoadTexture(char const* pathPtr)
@@ -103,7 +105,7 @@ sf::Sound* DataManager::LoadSound(char const* pathPtr)
 
 void DataManager::LoadAllModels()
 {
-	modelPtr = new Model(TANK1);
+	modelPtr = new Model(CANAL_CORNER_IN);
 }
 
 unsigned int DataManager::LoadCubemap(std::vector<std::string> faces)

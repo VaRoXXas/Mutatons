@@ -351,6 +351,44 @@
     <None Include="Projekt.sln.DotSettings" />
     <None Include="res\models\backpack\backpack.mtl" />
     <None Include="res\models\tank\tank1.mtl" />
+    <None Include="res\models\tiles\canal_corner_in.mtl" />
+    <None Include="res\models\tiles\canal_corner_out.mtl" />
+    <None Include="res\models\tiles\canal_nowall.mtl" />
+    <None Include="res\models\tiles\canal_straight.mtl" />
+    <None Include="res\models\tiles\canal_straight_w_pipe.mtl" />
+    <None Include="res\models\tiles\lab_cabin.mtl" />
+    <None Include="res\models\tiles\lab_floor_basic.mtl" />
+    <None Include="res\models\tiles\lab_floor_basic_w_props.mtl" />
+    <None Include="res\models\tiles\lab_generator.mtl" />
+    <None Include="res\models\tiles\lab_path_corner.mtl" />
+    <None Include="res\models\tiles\lab_path_crossing.mtl" />
+    <None Include="res\models\tiles\lab_path_straight.mtl" />
+    <None Include="res\models\tiles\lab_path_tjunction.mtl" />
+    <None Include="res\models\tiles\lab_platform.mtl" />
+    <None Include="res\models\tiles\lab_tank1.mtl" />
+    <None Include="res\models\tiles\lab_tank2.mtl" />
+    <None Include="res\models\tiles\lab_terminals.mtl" />
+    <None Include="res\models\tiles\lab_vat.mtl" />
+    <None Include="res\models\tiles\lab_wall_corner_in.mtl" />
+    <None Include="res\models\tiles\lab_wall_corner_out.mtl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+    </None>
+    <None Include="res\models\tiles\lab_wall_straight.mtl" />
+    <None Include="res\models\tiles\lab_windows.mtl" />
+    <None Include="res\models\tiles\nature_brush1.mtl" />
+    <None Include="res\models\tiles\nature_brush2.mtl" />
+    <None Include="res\models\tiles\nature_flower.mtl" />
+    <None Include="res\models\tiles\nature_ground1.mtl" />
+    <None Include="res\models\tiles\nature_ground2.mtl" />
+    <None Include="res\models\tiles\nature_path_corner.mtl" />
+    <None Include="res\models\tiles\nature_path_crossing.mtl" />
+    <None Include="res\models\tiles\nature_path_straight.mtl" />
+    <None Include="res\models\tiles\nature_path_tjunction.mtl" />
+    <None Include="res\models\tiles\nature_rock.mtl" />
+    <None Include="res\models\tiles\nature_trees1.mtl" />
+    <None Include="res\models\tiles\nature_trees2.mtl" />
+    <None Include="res\models\tiles\nature_trees3.mtl" />
     <None Include="res\music\Intergalactic Odyssey.ogg" />
     <None Include="res\shaders\FragmentShaders.h" />
     <None Include="res\shaders\VertexShaders.h" />
@@ -362,6 +400,41 @@
     <Image Include="res\models\backpack\roughness.jpg" />
     <Image Include="res\models\backpack\specular.jpg" />
     <Image Include="res\models\tank\tank1_texture.tga" />
+    <Image Include="res\models\tiles\canal_corner_in_texture.png" />
+    <Image Include="res\models\tiles\canal_corner_out_texture.png" />
+    <Image Include="res\models\tiles\canal_nowall_texture.png" />
+    <Image Include="res\models\tiles\canal_straight_texture.png" />
+    <Image Include="res\models\tiles\canal_straight_w_pipe_texture.png" />
+    <Image Include="res\models\tiles\lab_cabin_texture.png" />
+    <Image Include="res\models\tiles\lab_floor_basic_texture.png" />
+    <Image Include="res\models\tiles\lab_floor_basic_w_props_texture.png" />
+    <Image Include="res\models\tiles\lab_generator_texture.png" />
+    <Image Include="res\models\tiles\lab_path_corner_texture.png" />
+    <Image Include="res\models\tiles\lab_path_crossing_texture.png" />
+    <Image Include="res\models\tiles\lab_path_straight_texture.png" />
+    <Image Include="res\models\tiles\lab_path_tjunction_texture.png" />
+    <Image Include="res\models\tiles\lab_platform_texture.png" />
+    <Image Include="res\models\tiles\lab_tank1_texture.png" />
+    <Image Include="res\models\tiles\lab_tank2_texture.png" />
+    <Image Include="res\models\tiles\lab_terminals_texture.png" />
+    <Image Include="res\models\tiles\lab_vat_texture.png" />
+    <Image Include="res\models\tiles\lab_wall_corner_in_texture.png" />
+    <Image Include="res\models\tiles\lab_wall_corner_out_texture.png" />
+    <Image Include="res\models\tiles\lab_wall_straight_texture.png" />
+    <Image Include="res\models\tiles\lab_windows_texture.png" />
+    <Image Include="res\models\tiles\nature_brush1_texture.png" />
+    <Image Include="res\models\tiles\nature_brush2_texture.png" />
+    <Image Include="res\models\tiles\nature_flower_texture.png" />
+    <Image Include="res\models\tiles\nature_ground1_texture.png" />
+    <Image Include="res\models\tiles\nature_ground2_texture.png" />
+    <Image Include="res\models\tiles\nature_path_corner_texture.png" />
+    <Image Include="res\models\tiles\nature_path_crossing_texture.png" />
+    <Image Include="res\models\tiles\nature_path_straight_texture.png" />
+    <Image Include="res\models\tiles\nature_path_tjunction_texture.png" />
+    <Image Include="res\models\tiles\nature_rock_texture.png" />
+    <Image Include="res\models\tiles\nature_trees1_texture.png" />
+    <Image Include="res\models\tiles\nature_trees2_texture.png" />
+    <Image Include="res\models\tiles\nature_trees3_texture.png" />
     <Image Include="res\textures\container_diffuse.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
@@ -413,6 +486,111 @@
     <Object Include="res\models\tank\tank1.obj">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\canal_corner_in.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\canal_corner_out.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\canal_nowall.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\canal_straight.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\canal_straight_w_pipe.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_cabin.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_floor_basic.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_floor_basic_w_props.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_generator.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_path_corner.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_path_crossing.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_path_straight.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_path_tjunction.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_platform.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_tank1.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_tank2.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_terminals.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_vat.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_wall_corner_in.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_wall_corner_out.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_wall_straight.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\lab_windows.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\nature_brush1.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\nature_brush2.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\nature_flower.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\nature_ground1.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\nature_ground2.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\nature_path_corner.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\nature_path_crossing.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\nature_path_straight.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\nature_path_tjunction.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\nature_rock.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\nature_trees1.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\nature_trees2.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="res\models\tiles\nature_trees3.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </Object>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
