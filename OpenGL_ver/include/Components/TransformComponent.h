@@ -16,8 +16,8 @@ public:
 		return transform;
 	}
 	void SetLocation(glm::vec3 targetLocation);
-	void SetRotation(glm::vec3 targetRotation);
-	void SetScale(glm::vec3 targetScale);
+	void SetRotation(float degrees, char rotationDirection);
+	void SetScale(float targetScale);
 	std::string Component::GetType()
 	{
 		return m_Type;
