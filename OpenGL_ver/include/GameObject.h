@@ -5,14 +5,16 @@ class GameObject
 {
 private:
 	std::vector<std::shared_ptr<Component>> m_Components;
-	
+	std::vector<GameObject*> children;
 	std::string m_Tag;
+	glm::mat4 gameObjectTransform;
 	bool m_Active = false;
 	int m_NumberUpdateComponents = 0;
 	bool m_HasUpdateComponent = false;
 	int m_FirstUpdateComponentLocation = -1;
 	int m_GraphicsComponentLocation = -1;
 	bool m_HasGraphicsComponent = false;
+	bool m_HasTransformComponent = false;
 	int m_TransformComponentLocation = -1;
 	int m_NumberRectColliderComponents = 0;
 	int m_FirstRectColliderComponentLocation = -1;
@@ -26,9 +28,11 @@ public:
 	bool IsActive();
 	void SetTag(std::string tag);
 	std::string GetTag();
+	void AddChild(GameObject* childPtr);
+	void Render();
 	//void Start(GameObjectSharer* gos);
 	// Slow only use in init and start
-	std::shared_ptr<Component> GetComponentByTypeAndSpecificType(std::string type, std::string specificType);
+	std::shared_ptr<Component> GetComponentByType(std::string type);
 	//FloatRect& GetEncompassingRectCollider();
 	bool HasCollider();
 	bool HasUpdateComponent();
@@ -68,6 +72,6 @@ objekt.AddComponent(gp);
 gameObjectPtr = &objekt;
 
 
-gp->LoadModel(modelPtr);
-gp->Render(transform);
+gp->SetModel(modelPtr);
+gameObjectPtr->Render();
 */

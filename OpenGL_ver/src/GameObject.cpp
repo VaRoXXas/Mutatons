@@ -69,10 +69,10 @@ void GameObject::AddComponent(std::shared_ptr<Component> component)
 	}
 	else if (component->GetType() == "transform")
 	{
+		m_HasTransformComponent = true;
 		m_TransformComponentLocation = m_Components.size() - 1;
 	}
-	else if (component->GetType() == "collider" &&
-		component->GetSpecificType() == "rect")
+	else if (component->GetType() == "collider")
 	{
 		m_HasCollider = true;
 		m_NumberRectColliderComponents++;
@@ -107,6 +107,34 @@ std::string GameObject::GetTag()
 	return m_Tag;
 }
 
+void GameObject::AddChild(GameObject* childPtr)
+{
+	children.push_back(childPtr);
+}
+
+void GameObject::Render()
+{
+	const glm::mat4 zeroPointTransform = glm::mat4(1.0f);
+	if (m_HasTransformComponent)
+	{
+		gameObjectTransform = this->GetTransformComponent()->GetTransform();
+	} else
+		gameObjectTransform = zeroPointTransform;
+
+	if(m_HasGraphicsComponent)
+	{
+		this->GetGraphicsComponent()->Render(gameObjectTransform);
+
+		for(GameObject* child : children)
+		{
+			if (child->m_HasGraphicsComponent)
+			{
+				child->GetGraphicsComponent()->Render(gameObjectTransform);
+			}
+		}
+	}
+}
+
 /*void GameObject::start(GameObjectSharer* gos)
 {
 	auto it = m_Components.begin();
@@ -120,7 +148,7 @@ std::string GameObject::GetTag()
 }*/
 
 // Slow - only use in start function
-std::shared_ptr<Component> GameObject::GetComponentByTypeAndSpecificType(std::string type, std::string specificType) 
+std::shared_ptr<Component> GameObject::GetComponentByType(std::string type) 
 {
 	auto it = m_Components.begin();
 	auto end = m_Components.end();
@@ -128,10 +156,7 @@ std::shared_ptr<Component> GameObject::GetComponentByTypeAndSpecificType(std::st
 	{
 		if ((*it)->GetType() == type)
 		{
-			if ((*it)->GetSpecificType() == specificType)
-			{
-				return (*it);
-			}
+			return (*it);
 		}
 	}
 #ifdef debuggingErrors 
