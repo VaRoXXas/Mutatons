@@ -1,10 +1,35 @@
 #include "pch.h"
 #include "Rendering/Shader.h"
+#include "Camera.h"
 
+extern Camera mainCamera;
 extern glm::mat4* transformMatrixPtr;
 extern glm::mat4* modelMatrixPtr;
 extern glm::mat4* viewMatrixPtr;
 extern glm::mat4* projectionMatrixPtr;
+
+// Lit shaders' variables.
+bool directionalLightEnabled = true;
+bool pointLightEnabled = false;
+bool spotLight1Enabled = false;
+bool spotLight2Enabled = false;
+bool lightsPositionsDirectionsShown = false;
+float lightsDirectionVectorAngleOffset = 0.0f;
+float* directionalLightColorPtr = new float[4];
+float* spotLight1ColorPtr = new float[4];
+float* spotLight2ColorPtr = new float[4];
+float* pointLightColorPtr = new float[4];
+glm::vec3 directionalLightsDirection;
+glm::vec3 pointLightPos = glm::vec3(1.0f, 1.0f, 1.0f);
+glm::vec3 spotLight1Pos = glm::vec3(1.0f, 1.0f, 0.0f);
+glm::vec3 spotLight2Pos = glm::vec3(-1.0f, 0.5f, 0.5f);
+static const float s_pointLightLinearVal = 0.35f; // The smaller the value, the greater the effect on further objects.
+static const float s_pointLightQuadraticVal = 0.44f; // The smaller the value, the greater the effect on closer objects.
+static const float s_spotLightCutOffAngle = 12.5f; // In degrees.
+static const float s_darkness[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+static glm::vec3 lightColor;
+static glm::vec3 diffuseColor;
+static glm::vec3 ambientColor;
 
 
 
@@ -179,4 +204,95 @@ unsigned Shader::GetId() const
 void Shader::SetId(const unsigned newId)
 {
 	id = newId;
+}
+
+void Lighting::InitLighting(Shader& shader)
+{
+    shader.Use();
+    shader.SetInt("material.diffuse", 0);
+    shader.SetInt("material.specular", 1);
+    shader.SetFloat("material.shininess", 16.0f);
+    shader.SetFloat("pointLight.constant", 1.0f);
+    shader.SetFloat("pointLight.linear", s_pointLightLinearVal);
+    shader.SetFloat("pointLight.constant", s_pointLightQuadraticVal);
+    shader.SetFloat("spotLight1.cutOff", glm::cos(glm::radians(s_spotLightCutOffAngle)));
+    shader.SetFloat("spotLight2.cutOff", glm::cos(glm::radians(s_spotLightCutOffAngle)));
+}
+
+void Lighting::UpdateLighting(Shader& shader)
+{
+    shader.Use();
+    shader.SetVecf3("viewPos", mainCamera.GetPosition());
+	
+    if (directionalLightEnabled)
+    {
+        lightColor = glm::vec3(directionalLightColorPtr[0], directionalLightColorPtr[1], directionalLightColorPtr[2]);
+        diffuseColor = lightColor * glm::vec3(0.8f); // decrease the influence
+        ambientColor = diffuseColor * glm::vec3(0.4f); // low influence
+        shader.SetVecf3("dirLight.ambient", ambientColor);
+        shader.SetVecf3("dirLight.diffuse", diffuseColor);
+        shader.SetVecf3("dirLight.specular", glm::vec3(0.2f));
+
+        directionalLightsDirection = glm::vec3(0.2f, -1.0f, 0.3f + lightsDirectionVectorAngleOffset);
+        shader.SetVecf3("dirLight.direction", directionalLightsDirection);
+    }
+    else
+    {
+        shader.SetVecf3("dirLight.ambient", s_darkness);
+        shader.SetVecf3("dirLight.diffuse", s_darkness);
+        shader.SetVecf3("dirLight.specular", s_darkness);
+    }
+    if (pointLightEnabled)
+    {
+        lightColor = glm::vec3(pointLightColorPtr[0], pointLightColorPtr[1], pointLightColorPtr[2]);
+        diffuseColor = lightColor * glm::vec3(0.6f); // decrease the influence
+        ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
+        shader.SetVecf3("pointLight.ambient", ambientColor);
+        shader.SetVecf3("pointLight.diffuse", diffuseColor);
+        shader.SetVecf3("pointLight.specular", glm::vec3(0.6f));
+
+        shader.SetVecf3("pointLight.position", pointLightPos);
+    }
+    else
+    {
+        shader.SetVecf3("pointLight.ambient", s_darkness);
+        shader.SetVecf3("pointLight.diffuse", s_darkness);
+        shader.SetVecf3("pointLight.specular", s_darkness);
+    }
+    if (spotLight1Enabled)
+    {
+        lightColor = glm::vec3(spotLight1ColorPtr[0], spotLight1ColorPtr[1], spotLight1ColorPtr[2]);
+        diffuseColor = lightColor * glm::vec3(0.8f); // decrease the influence
+        ambientColor = diffuseColor * glm::vec3(0.1f); // low influence
+        shader.SetVecf3("spotLight1.ambient", ambientColor);
+        shader.SetVecf3("spotLight1.diffuse", diffuseColor);
+        shader.SetVecf3("spotLight1.specular", glm::vec3(1.0f));
+
+        shader.SetVecf3("spotLight1.position", spotLight1Pos);
+        shader.SetVecf3("spotLight1.direction", glm::vec3(-0.2f, -1.0f, -0.3f + lightsDirectionVectorAngleOffset));
+    }
+    else
+    {
+        shader.SetVecf3("spotLight1.ambient", s_darkness);
+        shader.SetVecf3("spotLight1.diffuse", s_darkness);
+        shader.SetVecf3("spotLight1.specular", s_darkness);
+    }
+    if (spotLight2Enabled)
+    {
+        lightColor = glm::vec3(spotLight2ColorPtr[0], spotLight2ColorPtr[1], spotLight2ColorPtr[2]);
+        diffuseColor = lightColor * glm::vec3(0.8f); // decrease the influence
+        ambientColor = diffuseColor * glm::vec3(0.1f); // low influence
+        shader.SetVecf3("spotLight2.ambient", ambientColor);
+        shader.SetVecf3("spotLight2.diffuse", diffuseColor);
+        shader.SetVecf3("spotLight2.specular", glm::vec3(1.0f));
+
+        shader.SetVecf3("spotLight2.position", spotLight2Pos);
+        shader.SetVecf3("spotLight2.direction", glm::vec3(0.3f, -0.7f, 1.3f + lightsDirectionVectorAngleOffset));
+    }
+    else
+    {
+        shader.SetVecf3("spotLight2.ambient", s_darkness);
+        shader.SetVecf3("spotLight2.diffuse", s_darkness);
+        shader.SetVecf3("spotLight2.specular", s_darkness);
+    }
 }

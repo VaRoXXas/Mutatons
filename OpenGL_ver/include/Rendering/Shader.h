@@ -33,3 +33,9 @@ private:
 
     unsigned int id;
 };
+
+namespace Lighting
+{
+    void InitLighting(Shader& shader);
+    void UpdateLighting(Shader& shader);
+}
