@@ -3,6 +3,7 @@
 #include "Util.h"
 #include "Camera.h"
 #include "Input.h"
+#include "DataManager.h"
 #include "Rendering/Shader.h"
 #include "Rendering/deprecated/Mesh.h" // TODO: Change this to new Mesh class file.
 #include "Rendering/deprecated/Model.h" // TODO: Change this to new Model class file.
@@ -35,14 +36,14 @@ extern Shader* lineShaderPtr;
 extern Shader* refractShaderPtr;
 extern Shader* skyboxShaderPtr;
 extern GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
-extern GLuint houseBase_diffuse, roof_diffuse, plane_diffuse, houseBase_specular, roof_specular, plane_specular, cubemapTexture;
-extern std::vector<GLuint*> customVAOs, customVBOs;
+extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture;
 extern glm::vec3 lineShaderEndPointPos;
 extern int geometryShaderPseudoMeshDetailLevel;
 
 
 
 bool sceneExplorationModeEnabled = true;
+DataManager dataManager = DataManager();
 Camera mainCamera(glm::vec3(0.0f, 0.0f, 3.0f));
 GLfloat deltaTime = 0.0f; // the difference between the current and the last frame
 GLfloat lastFrame = 0.0f;
@@ -51,11 +52,6 @@ glm::mat4* transformMatrixPtr;
 glm::mat4* modelMatrixPtr;
 glm::mat4* viewMatrixPtr;
 glm::mat4* projectionMatrixPtr;
-
-
-// TODO: Move to DataManager or delete.
-unsigned int LoadTexture(char const* pathPtr);
-unsigned int LoadCubemap(std::vector<std::string> faces);
 
 
 
@@ -68,26 +64,26 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// glfw window creation
-	GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME, nullptr, nullptr);
-	if (window == nullptr)
+	GLFWwindow* windowPtr = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME, nullptr, nullptr);
+	
+	if (windowPtr == nullptr)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, Util::FramebufferSizeCallback);
-	glfwSetCursorPosCallback(window, Input::CursorPosCallback);
-	glfwSetScrollCallback(window, Input::ScrollCallback);
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Blocking cursor inside a window and disabling its graphic representation.
-
-	// glad: load all OpenGL function pointers
+	glfwMakeContextCurrent(windowPtr);
+	glfwSetFramebufferSizeCallback(windowPtr, Util::FramebufferSizeCallback);
+	glfwSetCursorPosCallback(windowPtr, Input::CursorPosCallback);
+	glfwSetScrollCallback(windowPtr, Input::ScrollCallback);
+	
+	// [glad] Load all OpenGL function pointers.
 	if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Setting window's background color.
 
 
 
@@ -106,8 +102,8 @@ int main()
 	sphereShaderPtr = &sphereShader;
 	litTexturedInstancedShaderPtr = &litTexturedInstancedShader;
 	lineShaderPtr = &lineShader;
-	refractShaderPtr = &refractShader;
 	skyboxShaderPtr = &skyboxShader;
+	refractShaderPtr = &refractShader;
 
 	litTexturedShader.Use();
 	litTexturedShader.SetInt("material.diffuse", 0);
@@ -120,14 +116,14 @@ int main()
 
 
 
-#pragma region models and textures
+#pragma region models and textures loading
 
-	houseBase_diffuse = LoadTexture("res/textures/container_diffuse.png");
-	houseBase_specular = LoadTexture("res/textures/container_specular.png");
-	roof_diffuse = LoadTexture("res/textures/stone_diffuse.jpg");
-	roof_specular = LoadTexture("res/textures/stone_specular.jpg");
-	plane_diffuse = LoadTexture("res/textures/grass_diffuse.jpg");
-	plane_specular = LoadTexture("res/textures/grass_specular.jpg");
+	houseBaseDiffuseTexture = dataManager.LoadTexture("container_diffuse.png");
+	houseBaseSpecularTexture = dataManager.LoadTexture("container_specular.png");
+	roofDiffuseTexture = dataManager.LoadTexture("stone_diffuse.jpg");
+	roofSpecularTexture = dataManager.LoadTexture("stone_specular.jpg");
+	planeDiffuseTexture = dataManager.LoadTexture("grass_diffuse.jpg");
+	planeSpecularTexture = dataManager.LoadTexture("grass_specular.jpg");
 
 	std::vector<std::string> faces
 	{
@@ -138,13 +134,13 @@ int main()
 		"res/textures/skybox/front.jpg",
 		"res/textures/skybox/back.jpg"
 	};
-	cubemapTexture = LoadCubemap(faces);
+	cubemapTexture = dataManager.LoadCubemap(faces);
 
 #pragma endregion
 
 
 
-#pragma region render data
+#pragma region custom render data
 
 	float skyboxVertices[] = {
 		// positions          
@@ -195,7 +191,7 @@ int main()
 	glGenBuffers(1, &skyboxVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat))); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
@@ -211,7 +207,7 @@ int main()
 	glGenBuffers(1, &orbitVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, orbitVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat))); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -233,7 +229,7 @@ int main()
 	glGenBuffers(1, &sphereVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, sphereVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(triangles), triangles, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat))); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -254,11 +250,11 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(planeData), planeData, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float))); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float))); // Static cast surprisingly doesn't work.
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	
@@ -314,11 +310,11 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeData), cubeData, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float))); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float))); // Static cast surprisingly doesn't work.
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
 	// roof (pyramid)
@@ -359,11 +355,11 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, pyramidVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(pyramidData), pyramidData, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float))); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float))); // Static cast surprisingly doesn't work.
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 #pragma endregion
@@ -376,8 +372,8 @@ int main()
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init((char*)glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS));
+	ImGui_ImplGlfw_InitForOpenGL(windowPtr, true);
+	ImGui_ImplOpenGL3_Init((char*)(glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS))); // C++ style casting doesn' work here.
 
 	// imgui variables
 	bool xRotationEnabled = false;
@@ -396,7 +392,7 @@ int main()
 	float* pointLightColor = new float[4];
 
 	geometryShaderPseudoMeshDetailLevel = meshDetailLevel;
-	std::vector<float*>* lightColors = new std::vector<float*>();
+	auto* lightColors = new std::vector<float*>();
 	lightColors->push_back(directionalLightColor);
 	lightColors->push_back(spotLight1Color);
 	lightColors->push_back(spotLight2Color);
@@ -440,15 +436,15 @@ int main()
 
 
 	// game loop
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(windowPtr))
 	{
-		currentFrame = (GLfloat)glfwGetTime();
+		currentFrame = static_cast<GLfloat>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
 
 		// get input
-		Input::ProcessInput(window);
+		Input::ProcessInput(windowPtr);
 
 		// updating matrices, uniforms, vectors
 		transform = glm::mat4(1.0f);
@@ -658,9 +654,9 @@ int main()
 		else
 			Util::DisableWireframeMode();
 		if (!cursorEnabled)
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Blocking cursor inside a window and disabling its graphic representation.
+			glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Blocking cursor inside a window and disabling its graphic representation.
 		else
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 
 
@@ -716,15 +712,11 @@ int main()
 
 
 		// [glfw] Swapping buffers and polling IO events...
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(windowPtr);
 		glfwPollEvents();
 	}
 
 	// de-allocation
-	for(const auto* vaoPtr : customVAOs)
-		glDeleteVertexArrays(1, vaoPtr);
-	for (const auto* vboPtr : customVBOs)
-		glDeleteVertexArrays(1, vboPtr);
 	delete[] directionalLightColor;
 	delete[] spotLight1Color;
 	delete[] spotLight2Color;
@@ -734,78 +726,5 @@ int main()
 	ImGui::DestroyContext();
 	glfwTerminate();
 
-	return 0;
-}
-
-
-
-unsigned int LoadTexture(char const* pathPtr)
-{
-	stbi_set_flip_vertically_on_load(true);
-	unsigned int textureID;
-	glGenTextures(1, &textureID);
-
-	int width, height, nrComponents;
-	unsigned char* data = stbi_load(pathPtr, &width, &height, &nrComponents, 0);
-	if (data)
-	{
-		GLenum format = 0;
-		if (nrComponents == 1)
-			format = GL_RED;
-		else if (nrComponents == 3)
-			format = GL_RGB;
-		else if (nrComponents == 4)
-			format = GL_RGBA;
-
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-	}
-	else
-	{
-		std::cout << "Texture failed to load at path: " << pathPtr << std::endl;
-		stbi_image_free(data);
-	}
-
-	return textureID;
-}
-
-unsigned int LoadCubemap(std::vector<std::string> faces)
-{
-	stbi_set_flip_vertically_on_load(false);
-	unsigned int textureID;
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-
-	int width, height, nrChannels;
-	for (unsigned int i = 0; i < faces.size(); i++)
-	{
-		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
-		if (data)
-		{
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-				0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
-			);
-			stbi_image_free(data);
-		}
-		else
-		{
-			std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
-			stbi_image_free(data);
-		}
-	}
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-	return textureID;
+	return EXIT_SUCCESS;
 }

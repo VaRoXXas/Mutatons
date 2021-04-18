@@ -15,7 +15,7 @@ Shader* lineShaderPtr;
 Shader* refractShaderPtr;
 Shader* skyboxShaderPtr;
 GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
-GLuint houseBase_diffuse, roof_diffuse, plane_diffuse, houseBase_specular, roof_specular, plane_specular, cubemapTexture;
+GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture;
 std::vector<GLuint*> customVAOs, customVBOs;
 glm::vec3 lineShaderEndPointPos;
 int geometryShaderPseudoMeshDetailLevel = 3;
@@ -48,9 +48,9 @@ void CustomDrawing::DrawSphere(const float& radius, const float* color, const gl
 void CustomDrawing::DrawPlane(const glm::mat4& transform)
 {
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, plane_diffuse);
+	glBindTexture(GL_TEXTURE_2D, planeDiffuseTexture);
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, plane_specular);
+	glBindTexture(GL_TEXTURE_2D, planeSpecularTexture);
 	litTexturedShaderPtr->Use();
 	litTexturedShaderPtr->SetMat4("transform", transform);
 	glBindVertexArray(planeVAO);
@@ -61,9 +61,9 @@ void CustomDrawing::DrawPlane(const glm::mat4& transform)
 void CustomDrawing::DrawCube(const glm::mat4& transform)
 {
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, houseBase_diffuse);
+	glBindTexture(GL_TEXTURE_2D, houseBaseDiffuseTexture);
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, houseBase_specular);
+	glBindTexture(GL_TEXTURE_2D, houseBaseSpecularTexture);
 	litTexturedShaderPtr->Use();
 	litTexturedShaderPtr->SetMat4("transform", transform);
 	glBindVertexArray(cubeVAO);
@@ -74,9 +74,9 @@ void CustomDrawing::DrawCube(const glm::mat4& transform)
 void CustomDrawing::DrawPyramid(const glm::mat4& transform)
 {
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, roof_diffuse);
+	glBindTexture(GL_TEXTURE_2D, roofDiffuseTexture);
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, roof_specular);
+	glBindTexture(GL_TEXTURE_2D, roofSpecularTexture);
 	litTexturedShaderPtr->Use();
 	litTexturedShaderPtr->SetMat4("transform", transform);
 	glBindVertexArray(pyramidVAO);
