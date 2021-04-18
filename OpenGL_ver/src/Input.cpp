@@ -8,14 +8,14 @@ extern GLfloat deltaTime;
 extern bool sceneExplorationModeEnabled;
 
 bool cursorEnabled = true;
-void (*wKeyAction)();
-void (*sKeyAction)();
-void (*aKeyAction)();
-void (*dKeyAction)();
-void (*rKeyAction)();
-void (*tKeyAction)();
-void (*eKeyAction)();
-void (*qKeyAction)();
+void (*wKeyActionPtr)();
+void (*sKeyActionPtr)();
+void (*aKeyActionPtr)();
+void (*dKeyActionPtr)();
+void (*rKeyActionPtr)();
+void (*tKeyActionPtr)();
+void (*eKeyActionPtr)();
+void (*qKeyActionPtr)();
 
 // We use it to be able to write 0.25s in std::this_thread::sleep_for.
 using namespace std::chrono_literals;
@@ -30,23 +30,23 @@ void Input::ProcessInput(GLFWwindow* windowPtr)
 		glfwSetWindowShouldClose(windowPtr, true);
 
 	if (glfwGetKey(windowPtr, GLFW_KEY_W) == GLFW_PRESS)
-		wKeyAction();
+		wKeyActionPtr();
 	if (glfwGetKey(windowPtr, GLFW_KEY_S) == GLFW_PRESS)
-		sKeyAction();
+		sKeyActionPtr();
 	if (glfwGetKey(windowPtr, GLFW_KEY_A) == GLFW_PRESS)
-		aKeyAction();
+		aKeyActionPtr();
 	if (glfwGetKey(windowPtr, GLFW_KEY_D) == GLFW_PRESS)
-		dKeyAction();
+		dKeyActionPtr();
 
 	// special actions
 	if (glfwGetKey(windowPtr, GLFW_KEY_R) == GLFW_PRESS)
-		rKeyAction();
+		rKeyActionPtr();
 	if (glfwGetKey(windowPtr, GLFW_KEY_T) == GLFW_PRESS)
-		tKeyAction();
+		tKeyActionPtr();
 	if (glfwGetKey(windowPtr, GLFW_KEY_E) == GLFW_PRESS)
-		eKeyAction();
+		eKeyActionPtr();
 	if (glfwGetKey(windowPtr, GLFW_KEY_Q) == GLFW_PRESS)
-		qKeyAction();
+		qKeyActionPtr();
 }
 
 void Input::CursorPosCallback(GLFWwindow* windowPtr, const double xpos, const double ypos)
@@ -88,12 +88,12 @@ void Input::ToggleSceneExplorationMode()
 	sceneExplorationModeEnabled = !sceneExplorationModeEnabled;
 	if (sceneExplorationModeEnabled)
 	{
-		eKeyAction = &MoveCameraRight;
-		qKeyAction = &MoveCameraLeft;
-		wKeyAction = &MoveCameraForward;
-		sKeyAction = &MoveCameraBackward;
-		aKeyAction = &MoveCameraLeft;
-		dKeyAction = &MoveCameraRight;
+		eKeyActionPtr = &MoveCameraRight;
+		qKeyActionPtr = &MoveCameraLeft;
+		wKeyActionPtr = &MoveCameraForward;
+		sKeyActionPtr = &MoveCameraBackward;
+		aKeyActionPtr = &MoveCameraLeft;
+		dKeyActionPtr = &MoveCameraRight;
 	}
 	else
 	{

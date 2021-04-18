@@ -7,24 +7,24 @@
 #include "Rendering/deprecated/Mesh.h" // TODO: Change this to new Mesh class file.
 #include "Rendering/deprecated/Model.h" // TODO: Change this to new Model class file.
 #include "Rendering/PseudoMesh.h"
+#include "Rendering/CustomDrawing.h"
 #include "Scene/GraphNode.h"
 
 // Shaders
 #include "VertexShaders.h"
 #include "GeometryShaders.h"
 #include "FragmentShaders.h"
-#include "Rendering/CustomDrawing.h"
 
 // input externs
 extern bool cursorEnabled;
-extern void (*wKeyAction)();
-extern void (*sKeyAction)();
-extern void (*aKeyAction)();
-extern void (*dKeyAction)();
-extern void (*rKeyAction)();
-extern void (*tKeyAction)();
-extern void (*eKeyAction)();
-extern void (*qKeyAction)();
+extern void (*wKeyActionPtr)();
+extern void (*sKeyActionPtr)();
+extern void (*aKeyActionPtr)();
+extern void (*dKeyActionPtr)();
+extern void (*rKeyActionPtr)();
+extern void (*tKeyActionPtr)();
+extern void (*eKeyActionPtr)();
+extern void (*qKeyActionPtr)();
 
 // renderer externs
 extern Shader* litTexturedShaderPtr;
@@ -411,14 +411,14 @@ int main()
 	delete lightColors;
 
 	// Assigning keyboard actions.
-	rKeyAction = &Input::ToggleCursor;
-	tKeyAction = &Input::ToggleSceneExplorationMode;
-	eKeyAction = &Input::MoveCameraRight;
-	qKeyAction = &Input::MoveCameraLeft;
-	wKeyAction = &Input::MoveCameraForward;
-	sKeyAction = &Input::MoveCameraBackward;
-	aKeyAction = &Input::MoveCameraLeft;
-	dKeyAction = &Input::MoveCameraRight;
+	rKeyActionPtr = &Input::ToggleCursor;
+	tKeyActionPtr = &Input::ToggleSceneExplorationMode;
+	eKeyActionPtr = &Input::MoveCameraRight;
+	qKeyActionPtr = &Input::MoveCameraLeft;
+	wKeyActionPtr = &Input::MoveCameraForward;
+	sKeyActionPtr = &Input::MoveCameraBackward;
+	aKeyActionPtr = &Input::MoveCameraLeft;
+	dKeyActionPtr = &Input::MoveCameraRight;
 
 #pragma endregion
 
