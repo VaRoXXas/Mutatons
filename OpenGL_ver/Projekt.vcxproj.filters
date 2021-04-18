@@ -237,6 +237,41 @@
     <None Include="Projekt.sln.DotSettings" />
     <None Include="res\models\backpack\backpack.mtl" />
     <None Include="res\models\tank\tank1.mtl" />
+    <None Include="res\models\tiles\canal_corner_in.mtl" />
+    <None Include="res\models\tiles\canal_corner_out.mtl" />
+    <None Include="res\models\tiles\canal_nowall.mtl" />
+    <None Include="res\models\tiles\canal_straight.mtl" />
+    <None Include="res\models\tiles\canal_straight_w_pipe.mtl" />
+    <None Include="res\models\tiles\lab_cabin.mtl" />
+    <None Include="res\models\tiles\lab_floor_basic.mtl" />
+    <None Include="res\models\tiles\lab_floor_basic_w_props.mtl" />
+    <None Include="res\models\tiles\lab_generator.mtl" />
+    <None Include="res\models\tiles\lab_path_corner.mtl" />
+    <None Include="res\models\tiles\lab_path_crossing.mtl" />
+    <None Include="res\models\tiles\lab_path_straight.mtl" />
+    <None Include="res\models\tiles\lab_path_tjunction.mtl" />
+    <None Include="res\models\tiles\lab_platform.mtl" />
+    <None Include="res\models\tiles\lab_tank1.mtl" />
+    <None Include="res\models\tiles\lab_tank2.mtl" />
+    <None Include="res\models\tiles\lab_terminals.mtl" />
+    <None Include="res\models\tiles\lab_vat.mtl" />
+    <None Include="res\models\tiles\lab_wall_corner_in.mtl" />
+    <None Include="res\models\tiles\lab_wall_corner_out.mtl" />
+    <None Include="res\models\tiles\lab_wall_straight.mtl" />
+    <None Include="res\models\tiles\lab_windows.mtl" />
+    <None Include="res\models\tiles\nature_brush1.mtl" />
+    <None Include="res\models\tiles\nature_brush2.mtl" />
+    <None Include="res\models\tiles\nature_flower.mtl" />
+    <None Include="res\models\tiles\nature_ground1.mtl" />
+    <None Include="res\models\tiles\nature_ground2.mtl" />
+    <None Include="res\models\tiles\nature_path_corner.mtl" />
+    <None Include="res\models\tiles\nature_path_crossing.mtl" />
+    <None Include="res\models\tiles\nature_path_straight.mtl" />
+    <None Include="res\models\tiles\nature_path_tjunction.mtl" />
+    <None Include="res\models\tiles\nature_rock.mtl" />
+    <None Include="res\models\tiles\nature_trees1.mtl" />
+    <None Include="res\models\tiles\nature_trees2.mtl" />
+    <None Include="res\models\tiles\nature_trees3.mtl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container_specular.png">
@@ -291,9 +326,149 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\models\tank\tank1_texture.tga" />
+    <Image Include="res\models\tiles\canal_corner_in_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\canal_corner_out_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\canal_nowall_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\canal_straight_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\canal_straight_w_pipe_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_cabin_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_floor_basic_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_floor_basic_w_props_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_generator_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_path_corner_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_path_crossing_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_path_straight_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_path_tjunction_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_platform_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_tank1_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_tank2_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_terminals_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_vat_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_wall_corner_in_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_wall_corner_out_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_wall_straight_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\lab_windows_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\nature_brush1_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\nature_brush2_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\nature_flower_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\nature_ground1_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\nature_ground2_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\nature_path_corner_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\nature_path_crossing_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\nature_path_straight_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\nature_path_tjunction_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\nature_rock_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\nature_trees1_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\nature_trees2_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\models\tiles\nature_trees3_texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Object Include="res\models\backpack\backpack.obj" />
     <Object Include="res\models\tank\tank1.obj" />
+    <Object Include="res\models\tiles\canal_corner_in.obj" />
+    <Object Include="res\models\tiles\canal_corner_out.obj" />
+    <Object Include="res\models\tiles\canal_nowall.obj" />
+    <Object Include="res\models\tiles\canal_straight.obj" />
+    <Object Include="res\models\tiles\canal_straight_w_pipe.obj" />
+    <Object Include="res\models\tiles\lab_cabin.obj" />
+    <Object Include="res\models\tiles\lab_floor_basic.obj" />
+    <Object Include="res\models\tiles\lab_floor_basic_w_props.obj" />
+    <Object Include="res\models\tiles\lab_generator.obj" />
+    <Object Include="res\models\tiles\lab_path_corner.obj" />
+    <Object Include="res\models\tiles\lab_path_crossing.obj" />
+    <Object Include="res\models\tiles\lab_path_straight.obj" />
+    <Object Include="res\models\tiles\lab_path_tjunction.obj" />
+    <Object Include="res\models\tiles\lab_platform.obj" />
+    <Object Include="res\models\tiles\lab_tank1.obj" />
+    <Object Include="res\models\tiles\lab_tank2.obj" />
+    <Object Include="res\models\tiles\lab_terminals.obj" />
+    <Object Include="res\models\tiles\lab_vat.obj" />
+    <Object Include="res\models\tiles\lab_wall_corner_in.obj" />
+    <Object Include="res\models\tiles\lab_wall_corner_out.obj" />
+    <Object Include="res\models\tiles\lab_wall_straight.obj" />
+    <Object Include="res\models\tiles\lab_windows.obj" />
+    <Object Include="res\models\tiles\nature_brush1.obj" />
+    <Object Include="res\models\tiles\nature_brush2.obj" />
+    <Object Include="res\models\tiles\nature_flower.obj" />
+    <Object Include="res\models\tiles\nature_ground1.obj" />
+    <Object Include="res\models\tiles\nature_ground2.obj" />
+    <Object Include="res\models\tiles\nature_path_corner.obj" />
+    <Object Include="res\models\tiles\nature_path_crossing.obj" />
+    <Object Include="res\models\tiles\nature_path_straight.obj" />
+    <Object Include="res\models\tiles\nature_path_tjunction.obj" />
+    <Object Include="res\models\tiles\nature_rock.obj" />
+    <Object Include="res\models\tiles\nature_trees1.obj" />
+    <Object Include="res\models\tiles\nature_trees2.obj" />
+    <Object Include="res\models\tiles\nature_trees3.obj" />
   </ItemGroup>
 </Project>

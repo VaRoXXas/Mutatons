@@ -1,27 +1,24 @@
 #pragma once
 
+
+
+class TransformComponent;
 class UpdateComponent : public Component
 {
 private:
 	std::string m_Type = "update";
 	bool m_Enabled = false;
+	std::shared_ptr<TransformComponent> transformComponentPtr;
 public:
-	virtual void Update(float fps) = 0;
+	void Update(float fps, glm::mat4 *transform);
+	//void SetBehavior(std::string chooseOne);
+	//void Move();
+	std::string Component::GetType();
+	void Component::DisableComponent();
+	void Component::EnableComponent();
+	bool Component::Enabled();
 
-	std::string Component::GetType() {
-		return m_Type;
-	}
-	void Component::DisableComponent() {
-		m_Enabled = false;
-	}
-	void Component::EnableComponent() {
-		m_Enabled = true;
-	}
-	bool Component::Enabled() {
-		return m_Enabled;
-	}
 	//void Component::Start(
 	//	GameObjectSharer* gos, GameObject* self) {
 	//}
 };
-

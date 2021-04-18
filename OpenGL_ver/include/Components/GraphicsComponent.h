@@ -1,9 +1,11 @@
 #pragma once
-#include "TransformComponent.h"
+#include "Component.h"
 
+//class Component;
 class Shader;
 class Model;
-class Component;
+
+
 
 class GraphicsComponent : public Component {
 private:
@@ -14,24 +16,12 @@ public:
 	GraphicsComponent();
 	//void Draw(std::shared_ptr<TransformComponent> t);
 	void Draw(Shader& shader, const glm::mat4& transform);
-	void LoadModel(Model* modelLoad);
+	void SetModel(Model* modelLoad);
 	void Render(const glm::mat4& parentTransform);
-	std::string Component::GetType() {
-		return m_Type;
-	}
-	std::string Component::GetSpecificType()
-	{
-		return m_Type;
-	}
-	void Component::DisableComponent() {
-		m_Enabled = false;
-	}
-	void Component::EnableComponent() {
-		m_Enabled = true;
-	}
-	bool Component::Enabled() {
-		return m_Enabled;
-	}
+	std::string Component::GetType();
+	void Component::DisableComponent();
+	void Component::EnableComponent();
+	bool Component::Enabled();
 
 
 

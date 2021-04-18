@@ -18,7 +18,7 @@ GraphicsComponent::GraphicsComponent()
 
 }
 
-void GraphicsComponent::LoadModel(Model* modelLoad)
+void GraphicsComponent::SetModel(Model* modelLoad)
 {
 	modelPtr = modelLoad;
 }
@@ -35,8 +35,22 @@ void GraphicsComponent::Draw(Shader& shader, const glm::mat4& transform)
 
 void GraphicsComponent::Render(const glm::mat4& transform)
 {
-	const auto absoluteTransform = transform;
-
 	if (modelPtr)
-		modelPtr->CustomRender(*litTexturedShaderPtr, absoluteTransform);
+		modelPtr->CustomRender(*litTexturedShaderPtr, transform);
+}
+
+std::string GraphicsComponent::GetType() {
+	return m_Type;
+}
+
+void GraphicsComponent::DisableComponent() {
+	m_Enabled = false;
+}
+
+void GraphicsComponent::EnableComponent() {
+	m_Enabled = true;
+}
+
+bool GraphicsComponent::Enabled() {
+	return m_Enabled;
 }
