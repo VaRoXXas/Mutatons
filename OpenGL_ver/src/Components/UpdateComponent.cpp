@@ -7,7 +7,15 @@
 
 void UpdateComponent::Update(float fps, glm::mat4 *transform)
 {
-	*transform = glm::translate(*transform, glm::vec3(0.0f, 0.0001f, 0.0f)*fps);
+	if (objectBehavior == 1)
+		*transform = glm::translate(*transform, glm::vec3(0.0f, 0.0001f, 0.0f)*fps);
+}
+void UpdateComponent::SetBehavior(std::string chooseOne)
+{
+	if (chooseOne == "mutaton")
+	{
+		objectBehavior = 1;
+	}
 }
 std::string UpdateComponent::GetType() {
 	return m_Type;

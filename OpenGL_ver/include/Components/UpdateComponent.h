@@ -8,10 +8,11 @@ class UpdateComponent : public Component
 private:
 	std::string m_Type = "update";
 	bool m_Enabled = false;
+	int objectBehavior = 0;
 	std::shared_ptr<TransformComponent> transformComponentPtr;
 public:
 	void Update(float fps, glm::mat4 *transform);
-	//void SetBehavior(std::string chooseOne);
+	void SetBehavior(std::string chooseOne);
 	//void Move();
 	std::string Component::GetType();
 	void Component::DisableComponent();
