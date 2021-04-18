@@ -105,7 +105,11 @@ sf::Sound* DataManager::LoadSound(char const* pathPtr)
 
 void DataManager::LoadAllModels()
 {
+<<<<<<< HEAD
 	//modelPtr = new Model(CANAL_CORNER_IN);
+=======
+	modelPtr = new Model(NATURE_TREES3);
+>>>>>>> c7e45e0ac2e8387febfd809d524a07215fa1b3a8
 }
 
 unsigned int DataManager::LoadCubemap(std::vector<std::string> faces)
