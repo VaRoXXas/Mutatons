@@ -1,8 +1,10 @@
 #include "pch.h"
+#include "GameObject.h"
 #include "Component.h"
 #include "Components/GraphicsComponent.h"
 #include "Components/TransformComponent.h"
-#include "GameObject.h"
+#include "Components/UpdateComponent.h"
+
 //#include "GameObjectSharer.h"
 //#include "DevelopState.h"
 //#include "RectColliderComponent.h"
@@ -18,7 +20,7 @@ void GameObject::Update(float fps)
 			std::shared_ptr<UpdateComponent> tempUpdate = std::static_pointer_cast<UpdateComponent>(m_Components[i]);
 			if (tempUpdate->Enabled())
 			{
-				tempUpdate->Update(fps);
+				tempUpdate->Update(fps, &gameObjectTransform);
 			}
 		}
 	}

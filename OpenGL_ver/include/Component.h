@@ -3,9 +3,9 @@
 //#include "GameObjectSharer.h"
 #include "pch.h"
 
+//class GameObject;
 
 
-class GameObject;
 
 class Component 
 {

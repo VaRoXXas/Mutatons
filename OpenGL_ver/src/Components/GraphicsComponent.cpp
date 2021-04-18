@@ -38,3 +38,19 @@ void GraphicsComponent::Render(const glm::mat4& transform)
 	if (modelPtr)
 		modelPtr->CustomRender(*litTexturedShaderPtr, transform);
 }
+
+std::string GraphicsComponent::GetType() {
+	return m_Type;
+}
+
+void GraphicsComponent::DisableComponent() {
+	m_Enabled = false;
+}
+
+void GraphicsComponent::EnableComponent() {
+	m_Enabled = true;
+}
+
+bool GraphicsComponent::Enabled() {
+	return m_Enabled;
+}

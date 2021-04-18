@@ -1,5 +1,11 @@
 #pragma once
-#include "Components/UpdateComponent.h"
+
+class Component;
+class GraphicsComponent;
+class TransformComponent;
+class UpdateComponent;
+
+
 
 class GameObject 
 {
@@ -21,7 +27,6 @@ private:
 	bool m_HasCollider = false;
 public:
 	void Update(float fps);
-	//void Draw(GLFWwindow& window);
 	void AddComponent(std::shared_ptr<Component> component);
 	void SetActive();
 	void SetInactive();
