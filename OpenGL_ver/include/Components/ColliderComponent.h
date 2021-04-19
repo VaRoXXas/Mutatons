@@ -1,30 +1,33 @@
 #pragma once
 #include "Component.h"
 
+
+
+// WORK IN PROGRESS
 class ColliderComponent : public Component
 {
 private:
-	std::string m_Type = "collider";
-	bool m_Enabled = false;
+	std::string type = "collider";
+	bool enabled = false;
 
 public:
 	std::string Component::GetType()
 	{
-		return ColliderComponent::m_Type;
+		return ColliderComponent::type;
 	}
 	void Component::DisableComponent()
 	{
-		m_Enabled = false;
+		enabled = false;
 	}
 
 	void Component::EnableComponent()
 	{
-		m_Enabled = true;
+		enabled = true;
 	}
 
 	bool Component::Enabled()
 	{
-		return m_Enabled;
+		return enabled;
 	}
 
 	//void Component::start(GameObjectSharer* gos, GameObject* self)

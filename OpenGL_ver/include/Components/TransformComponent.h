@@ -6,14 +6,15 @@ class Component;
 
 class TransformComponent : public Component {
 private:
-	const std::string m_Type = "transform";
-	bool m_Enabled = false;
+	const std::string type = "transform";
 	glm::mat4 transform;
+	glm::vec3 location;
 public:
 	TransformComponent(glm::vec3 targetLocation);
 	TransformComponent();
 	/// TODO: GetLocation();GetScale();GetRotation()
 	glm::mat4 GetTransform();
+	glm::vec3 GetLocation();
 	void SetLocation(glm::vec3 &targetLocation);
 	void SetRotation(float degrees, char rotationDirection);
 	void SetScale(float targetScale);

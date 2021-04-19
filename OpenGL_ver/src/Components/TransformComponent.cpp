@@ -6,7 +6,7 @@
 
 TransformComponent::TransformComponent(glm::vec3 targetLocation)
 {
-/* set up location, rotation and scale */
+	location = targetLocation;
 	transform = glm::mat4(1.0f);
 	transform = glm::translate(transform, targetLocation);
 }
@@ -20,9 +20,13 @@ glm::mat4 TransformComponent::GetTransform()
 {
 	return transform;
 }
-
+glm::vec3 TransformComponent::GetLocation()
+{
+	return location;
+}
 void TransformComponent::SetLocation(glm::vec3 &targetLocation)
 {
+	location = targetLocation;
 	transform = glm::mat4(1.0f);
 	transform = glm::translate(transform, targetLocation);
 }
@@ -49,17 +53,17 @@ void TransformComponent::SetScale(float targetScale)
 
 std::string TransformComponent::GetType()
 {
-	return m_Type;
+	return type;
 }
 
 void TransformComponent::DisableComponent() {
-	m_Enabled = false;
+	enabled = false;
 }
 
 void TransformComponent::EnableComponent() {
-	m_Enabled = true;
+	enabled = true;
 }
 
 bool TransformComponent::Enabled() {
-	return m_Enabled;
+	return enabled;
 }

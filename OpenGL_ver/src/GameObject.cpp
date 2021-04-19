@@ -11,42 +11,41 @@
 
 
 
-void GameObject::Update(float fps)
+void GameObject::Update(glm::vec3& locationVec)
 {
-	if (m_Active && m_HasUpdateComponent)
+	//std::cout << useUpdate << std::endl;
+	if (active && useUpdate)
 	{
-		for (int i = m_FirstUpdateComponentLocation; i < m_FirstUpdateComponentLocation + m_NumberUpdateComponents; i++)
+		this->GetTransformComponent()->SetLocation(locationVec);
+		if (moveDirection == "forward")
 		{
-			std::shared_ptr<UpdateComponent> tempUpdate = std::static_pointer_cast<UpdateComponent>(m_Components[i]);
-			if (tempUpdate->Enabled())
-			{
-				tempUpdate->Update(fps, &gameObjectTransform);
-			}
+			locationVec.z = locationVec.z + 0.0001f;
+		}
+		else if (moveDirection == "back")
+		{
+			locationVec.z = locationVec.z - 0.0001f;
+		}
+		else if (moveDirection == "right")
+		{
+			locationVec.x = locationVec.x - 0.0001f;
+		}
+		else if (moveDirection == "left")
+		{
+			locationVec.x = locationVec.x + 0.0001f;
 		}
 	}
 }
 
-/*void GameObject::Draw(GLFWwindow& window)
-{
-	if (m_Active && m_HasGraphicsComponent)
-	{
-		if (m_Components[m_GraphicsComponentLocation]->Enabled())
-		{
-			GetGraphicsComponent()->Draw(GetTransformComponent());
-		}
-	}
-}*/
-
 std::shared_ptr<GraphicsComponent> GameObject::GetGraphicsComponent()
 {
 	return std::static_pointer_cast<GraphicsComponent>(
-		m_Components[m_GraphicsComponentLocation]);
+		m_Components[graphicsComponentLocation]);
 }
 
 std::shared_ptr<TransformComponent> GameObject::GetTransformComponent()
 {
 	return std::static_pointer_cast<TransformComponent>(
-		m_Components[m_TransformComponentLocation]);
+		m_Components[transformComponentLocation]);
 }
 
 void GameObject::AddComponent(std::shared_ptr<Component> component)
@@ -54,33 +53,24 @@ void GameObject::AddComponent(std::shared_ptr<Component> component)
 	m_Components.push_back(component);
 	component->EnableComponent();
 
-	if (component->GetType() == "update")
+
+	if (component->GetType() == "graphics")
 	{
-		m_HasUpdateComponent = true;
-		m_NumberUpdateComponents++;
-		if (m_NumberUpdateComponents == 1)
-		{
-			m_FirstUpdateComponentLocation =
-				m_Components.size() - 1;
-		}
-	}
-	else if (component->GetType() == "graphics")
-	{
-		m_HasGraphicsComponent = true;
-		m_GraphicsComponentLocation = m_Components.size() - 1;
+		hasGraphicsComponent = true;
+		graphicsComponentLocation = m_Components.size() - 1;
 	}
 	else if (component->GetType() == "transform")
 	{
-		m_HasTransformComponent = true;
-		m_TransformComponentLocation = m_Components.size() - 1;
+		hasTransformComponent = true;
+		transformComponentLocation = m_Components.size() - 1;
 	}
 	else if (component->GetType() == "collider")
 	{
-		m_HasCollider = true;
-		m_NumberRectColliderComponents++;
-		if (m_NumberRectColliderComponents == 1)
+		hasCollider = true;
+		numberRectColliderComponents++;
+		if (numberRectColliderComponents == 1)
 		{
-			m_FirstRectColliderComponentLocation =
+			firstRectColliderComponentLocation =
 				m_Components.size() - 1;
 		}
 	}
@@ -88,17 +78,17 @@ void GameObject::AddComponent(std::shared_ptr<Component> component)
 
 void GameObject::SetActive()
 {
-	m_Active = true;
+	active = true;
 }
 
 void GameObject::SetInactive()
 {
-	m_Active = false;
+	active = false;
 }
 
 bool GameObject::IsActive()
 {
-	return m_Active;
+	return active;
 }
 void GameObject::SetTag(std::string tag)
 {
@@ -117,24 +107,35 @@ void GameObject::AddChild(GameObject* childPtr)
 void GameObject::Render()
 {
 	const glm::mat4 zeroPointTransform = glm::mat4(1.0f);
-	if (m_HasTransformComponent)
+	if (hasTransformComponent)
 	{
 		gameObjectTransform = this->GetTransformComponent()->GetTransform();
 	} else
 		gameObjectTransform = zeroPointTransform;
 
-	if(m_HasGraphicsComponent)
+	if(hasGraphicsComponent)
 	{
 		this->GetGraphicsComponent()->Render(gameObjectTransform);
 
 		for(GameObject* child : children)
 		{
-			if (child->m_HasGraphicsComponent)
+			if (child->hasGraphicsComponent)
 			{
 				child->GetGraphicsComponent()->Render(gameObjectTransform);
 			}
 		}
 	}
+}
+
+void GameObject::SetDirection(std::string dir)
+{
+	if (dir == "forward" || dir == "back" || dir == "right" || dir == "left")
+		moveDirection = dir;
+}
+
+void GameObject::SetUpdate()
+{
+	useUpdate = !useUpdate;
 }
 
 /*void GameObject::start(GameObjectSharer* gos)
@@ -185,17 +186,11 @@ string GameObject::GetEncompassingRectColliderTag()
 }
 */
 
-std::shared_ptr<UpdateComponent> GameObject::GetFirstUpdateComponent()
-{
-	return std::static_pointer_cast<UpdateComponent>(
-		m_Components[m_FirstUpdateComponentLocation]);
-}
-
 bool GameObject::HasCollider()
 {
-	return m_HasCollider;
+	return hasCollider;
 }
-bool GameObject::HasUpdateComponent()
+bool GameObject::HasUpdate()
 {
-	return m_HasUpdateComponent;
+	return useUpdate;
 }

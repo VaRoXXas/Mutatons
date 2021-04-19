@@ -40,17 +40,17 @@ void GraphicsComponent::Render(const glm::mat4& transform)
 }
 
 std::string GraphicsComponent::GetType() {
-	return m_Type;
+	return type;
 }
 
 void GraphicsComponent::DisableComponent() {
-	m_Enabled = false;
+	enabled = false;
 }
 
 void GraphicsComponent::EnableComponent() {
-	m_Enabled = true;
+	enabled = true;
 }
 
 bool GraphicsComponent::Enabled() {
-	return m_Enabled;
+	return enabled;
 }

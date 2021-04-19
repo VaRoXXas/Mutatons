@@ -15,5 +15,6 @@ public:
 	virtual void EnableComponent() = 0;
 	virtual bool Enabled() = 0;
 	//virtual void Start(GameObjectSharer* gos, GameObject* self) = 0;
-
+protected:
+	bool enabled = false;
 };

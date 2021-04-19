@@ -14,19 +14,18 @@ private:
 	std::vector<GameObject*> children;
 	std::string m_Tag;
 	glm::mat4 gameObjectTransform;
-	bool m_Active = false;
-	int m_NumberUpdateComponents = 0;
-	bool m_HasUpdateComponent = false;
-	int m_FirstUpdateComponentLocation = -1;
-	int m_GraphicsComponentLocation = -1;
-	bool m_HasGraphicsComponent = false;
-	bool m_HasTransformComponent = false;
-	int m_TransformComponentLocation = -1;
-	int m_NumberRectColliderComponents = 0;
-	int m_FirstRectColliderComponentLocation = -1;
-	bool m_HasCollider = false;
+	std::string moveDirection = "forward";
+	bool active = false;
+	bool useUpdate = false;
+	int graphicsComponentLocation = -1;
+	bool hasGraphicsComponent = false;
+	bool hasTransformComponent = false;
+	int transformComponentLocation = -1;
+	int numberRectColliderComponents = 0;
+	int firstRectColliderComponentLocation = -1;
+	bool hasCollider = false;
 public:
-	void Update(float fps);
+	void Update(glm::vec3 &locationVec);
 	void AddComponent(std::shared_ptr<Component> component);
 	void SetActive();
 	void SetInactive();
@@ -35,12 +34,14 @@ public:
 	std::string GetTag();
 	void AddChild(GameObject* childPtr);
 	void Render();
+	void SetDirection(std::string dir);
+	void SetUpdate();
 	//void Start(GameObjectSharer* gos);
 	// Slow only use in init and start
 	std::shared_ptr<Component> GetComponentByType(std::string type);
 	//FloatRect& GetEncompassingRectCollider();
 	bool HasCollider();
-	bool HasUpdateComponent();
+	bool HasUpdate();
 	//std::string GetEncompassingRectColliderTag();
 	std::shared_ptr<GraphicsComponent> GetGraphicsComponent();
 	std::shared_ptr<TransformComponent> GetTransformComponent();
