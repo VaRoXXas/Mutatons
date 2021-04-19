@@ -3,6 +3,7 @@
 #include "Util.h"
 #include "Camera.h"
 #include "Input.h"
+#include "DataManager.h"
 #include "Rendering/Shader.h"
 #include "Rendering/deprecated/Mesh.h" // TODO: Change this to new Mesh class file.
 #include "Rendering/deprecated/Model.h" // TODO: Change this to new Model class file.
@@ -35,14 +36,29 @@ extern Shader* lineShaderPtr;
 extern Shader* refractShaderPtr;
 extern Shader* skyboxShaderPtr;
 extern GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
-extern GLuint houseBase_diffuse, roof_diffuse, plane_diffuse, houseBase_specular, roof_specular, plane_specular, cubemapTexture;
-extern std::vector<GLuint*> customVAOs, customVBOs;
+extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture;
 extern glm::vec3 lineShaderEndPointPos;
 extern int geometryShaderPseudoMeshDetailLevel;
+extern bool directionalLightEnabled;
+extern bool pointLightEnabled;
+extern bool spotLight1Enabled;
+extern bool spotLight2Enabled;
+extern bool lightsPositionsDirectionsShown;
+extern float lightsDirectionVectorAngleOffset;
+extern float* directionalLightColorPtr;
+extern float* spotLight1ColorPtr;
+extern float* spotLight2ColorPtr;
+extern float* pointLightColorPtr;
+extern glm::vec3 directionalLightsDirection;
+extern glm::vec3 pointLightPos;
+extern glm::vec3 spotLight1Pos;
+extern glm::vec3 spotLight2Pos;
 
 
 
+bool IMGUI_ENABLED = true;
 bool sceneExplorationModeEnabled = true;
+DataManager dataManager = DataManager();
 Camera mainCamera(glm::vec3(0.0f, 0.0f, 3.0f));
 GLfloat deltaTime = 0.0f; // the difference between the current and the last frame
 GLfloat lastFrame = 0.0f;
@@ -51,11 +67,6 @@ glm::mat4* transformMatrixPtr;
 glm::mat4* modelMatrixPtr;
 glm::mat4* viewMatrixPtr;
 glm::mat4* projectionMatrixPtr;
-
-
-// TODO: Move to DataManager or delete.
-unsigned int LoadTexture(char const* pathPtr);
-unsigned int LoadCubemap(std::vector<std::string> faces);
 
 
 
@@ -68,26 +79,26 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// glfw window creation
-	GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME, nullptr, nullptr);
-	if (window == nullptr)
+	GLFWwindow* windowPtr = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME, nullptr, nullptr);
+	
+	if (windowPtr == nullptr)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, Util::FramebufferSizeCallback);
-	glfwSetCursorPosCallback(window, Input::CursorPosCallback);
-	glfwSetScrollCallback(window, Input::ScrollCallback);
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Blocking cursor inside a window and disabling its graphic representation.
-
-	// glad: load all OpenGL function pointers
+	glfwMakeContextCurrent(windowPtr);
+	glfwSetFramebufferSizeCallback(windowPtr, Util::FramebufferSizeCallback);
+	glfwSetCursorPosCallback(windowPtr, Input::CursorPosCallback);
+	glfwSetScrollCallback(windowPtr, Input::ScrollCallback);
+	
+	// [glad] Load all OpenGL function pointers.
 	if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Setting window's background color.
 
 
 
@@ -106,28 +117,24 @@ int main()
 	sphereShaderPtr = &sphereShader;
 	litTexturedInstancedShaderPtr = &litTexturedInstancedShader;
 	lineShaderPtr = &lineShader;
-	refractShaderPtr = &refractShader;
 	skyboxShaderPtr = &skyboxShader;
+	refractShaderPtr = &refractShader;
 
-	litTexturedShader.Use();
-	litTexturedShader.SetInt("material.diffuse", 0);
-	litTexturedShader.SetInt("material.specular", 1);
-	litTexturedInstancedShader.Use();
-	litTexturedInstancedShader.SetInt("material.diffuse", 0);
-	litTexturedInstancedShader.SetInt("material.specular", 1);
+	Lighting::InitLighting(litTexturedShader);
+	Lighting::InitLighting(litTexturedInstancedShader);
 
 #pragma endregion
 
 
 
-#pragma region models and textures
+#pragma region models and textures loading
 
-	houseBase_diffuse = LoadTexture("res/textures/container_diffuse.png");
-	houseBase_specular = LoadTexture("res/textures/container_specular.png");
-	roof_diffuse = LoadTexture("res/textures/stone_diffuse.jpg");
-	roof_specular = LoadTexture("res/textures/stone_specular.jpg");
-	plane_diffuse = LoadTexture("res/textures/grass_diffuse.jpg");
-	plane_specular = LoadTexture("res/textures/grass_specular.jpg");
+	houseBaseDiffuseTexture = dataManager.LoadTexture("container_diffuse.png");
+	houseBaseSpecularTexture = dataManager.LoadTexture("container_specular.png");
+	roofDiffuseTexture = dataManager.LoadTexture("stone_diffuse.jpg");
+	roofSpecularTexture = dataManager.LoadTexture("stone_specular.jpg");
+	planeDiffuseTexture = dataManager.LoadTexture("grass_diffuse.jpg");
+	planeSpecularTexture = dataManager.LoadTexture("grass_specular.jpg");
 
 	std::vector<std::string> faces
 	{
@@ -138,13 +145,13 @@ int main()
 		"res/textures/skybox/front.jpg",
 		"res/textures/skybox/back.jpg"
 	};
-	cubemapTexture = LoadCubemap(faces);
+	cubemapTexture = dataManager.LoadCubemap(faces);
 
 #pragma endregion
 
 
 
-#pragma region render data
+#pragma region custom render data
 
 	float skyboxVertices[] = {
 		// positions          
@@ -195,7 +202,7 @@ int main()
 	glGenBuffers(1, &skyboxVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat))); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
@@ -211,7 +218,7 @@ int main()
 	glGenBuffers(1, &orbitVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, orbitVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat))); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -233,7 +240,7 @@ int main()
 	glGenBuffers(1, &sphereVBO);
 	glBindBuffer(GL_ARRAY_BUFFER, sphereVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(triangles), triangles, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat)));
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)(0 * sizeof(GLfloat))); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -254,11 +261,11 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(planeData), planeData, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float))); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float))); // Static cast surprisingly doesn't work.
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	
@@ -314,11 +321,11 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeData), cubeData, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float))); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float))); // Static cast surprisingly doesn't work.
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
 	// roof (pyramid)
@@ -359,11 +366,11 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, pyramidVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(pyramidData), pyramidData, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)0); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(3 * sizeof(float))); // Static cast surprisingly doesn't work.
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float))); // Static cast surprisingly doesn't work.
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 #pragma endregion
@@ -376,31 +383,21 @@ int main()
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init((char*)glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS));
+	ImGui_ImplGlfw_InitForOpenGL(windowPtr, true);
+	ImGui_ImplOpenGL3_Init((char*)(glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS))); // C++ style casting doesn' work here.
 
 	// imgui variables
 	bool xRotationEnabled = false;
 	bool yRotationEnabled = false;
 	bool wireframeModeEnabled = false;
 	int meshDetailLevel = 3;
-	bool directionalLightEnabled = true;
-	bool spotLight1Enabled = true;
-	bool spotLight2Enabled = true;
-	bool pointLightEnabled = true;
-	bool lightsPositionsDirectionsShown = true;
-	float lightsDirectionVectorAngleOffset = 0.0f;
-	float* directionalLightColor = new float[4];
-	float* spotLight1Color = new float[4];
-	float* spotLight2Color = new float[4];
-	float* pointLightColor = new float[4];
 
 	geometryShaderPseudoMeshDetailLevel = meshDetailLevel;
-	std::vector<float*>* lightColors = new std::vector<float*>();
-	lightColors->push_back(directionalLightColor);
-	lightColors->push_back(spotLight1Color);
-	lightColors->push_back(spotLight2Color);
-	lightColors->push_back(pointLightColor);
+	auto* lightColors = new std::vector<float*>();
+	lightColors->push_back(directionalLightColorPtr);
+	lightColors->push_back(spotLight1ColorPtr);
+	lightColors->push_back(spotLight2ColorPtr);
+	lightColors->push_back(pointLightColorPtr);
 	for (auto* colorPtr : (*lightColors))
 	{
 		for (unsigned short i = 0; i < 4; i++)
@@ -440,34 +437,35 @@ int main()
 
 
 	// game loop
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(windowPtr))
 	{
-		currentFrame = (GLfloat)glfwGetTime();
+		currentFrame = static_cast<GLfloat>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
 
-		// get input
-		Input::ProcessInput(window);
+		// getting input
+		Input::ProcessInput(windowPtr);
 
 		// updating matrices, uniforms, vectors
 		transform = glm::mat4(1.0f);
 		model = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		view = mainCamera.GetViewMatrix();
-		projection = glm::perspective(glm::radians(mainCamera.GetZoom()), (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(mainCamera.GetZoom()), static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT), 0.1f, 100.0f);
 
 		if (xRotationEnabled)
-			model = glm::rotate(model, (GLfloat)glfwGetTime() * 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::rotate(model, static_cast<GLfloat>(glfwGetTime()) * 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
 		if (yRotationEnabled)
-			model = glm::rotate(model, (GLfloat)glfwGetTime() * 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::rotate(model, static_cast<GLfloat>(glfwGetTime()) * 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
 
+		// updating shaders
 		litTexturedShader.ApplyMvptMatrices();
 		orbitShader.ApplyMvptMatrices();
 		sphereShader.ApplyMvptMatrices();
 		litTexturedInstancedShader.ApplyMvptMatrices();
 		lineShader.ApplyMvptMatrices();
 		refractShader.ApplyMvptMatrices();
+		// We do not apply all matrices to the skybox shader, because of its nature.
 
 		orbitShader.Use();
 		orbitShader.SetInt("sidesCount", 64);
@@ -476,178 +474,8 @@ int main()
 		lineShader.Use();
 		lineShader.SetVecf4("color", glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 
-
-
-#pragma region lights
-
-		Shader& lt = litTexturedShader;
-		Shader& lti = litTexturedInstancedShader;
-
-		const float pointLightCircleRadius = 5.0f;
-		const float pointLightLinearVal = 0.35f; // Im wartosc mniejsza, tym wiekszy wplyw na dalsze obiekty.
-		const float pointLightQuadraticVal = 0.44f; // Im wartosc mniejsza, tym wiekszy wplyw na blizsze obiekty.
-		const float spotLightCutOffAngle = 12.5f;
-		float darkness[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-		glm::vec3 pointLightPos = glm::vec3(pointLightCircleRadius * cos((GLfloat)glfwGetTime() + 1.0f), 1.0f, pointLightCircleRadius * sin((GLfloat)glfwGetTime() + 1.0f));
-		glm::vec3 spotLight1Pos = glm::vec3(1.0f, 1.0f, 0.0f);
-		glm::vec3 spotLight2Pos = glm::vec3(-1.0f, 0.5f, 0.5f);
-		glm::vec3 directionalLightsDirection = glm::vec3(0.2f, -1.0f, 0.3f + lightsDirectionVectorAngleOffset);
-		glm::vec3 lightColor;
-		glm::vec3 diffuseColor;
-		glm::vec3 ambientColor;
-
-		lt.Use();
-		lt.SetVecf3("viewPos", mainCamera.GetPosition());
-		lt.SetFloat("material.shininess", 16.0f);
-		lt.SetVecf3("dirLight.direction", directionalLightsDirection);
-		lt.SetVecf3("pointLight.position", pointLightPos);
-		lt.SetFloat("pointLight.constant", 1.0f);
-		lt.SetFloat("pointLight.linear", pointLightLinearVal);
-		lt.SetFloat("pointLight.constant", pointLightQuadraticVal);
-		lt.SetVecf3("spotLight1.position", spotLight1Pos);
-		lt.SetVecf3("spotLight2.position", spotLight2Pos);
-		lt.SetVecf3("spotLight1.direction", glm::vec3(-0.2f, -1.0f, -0.3f + lightsDirectionVectorAngleOffset));
-		lt.SetVecf3("spotLight2.direction", glm::vec3(0.3f, -0.7f, 1.3f + lightsDirectionVectorAngleOffset));
-		lt.SetFloat("spotLight1.cutOff", glm::cos(glm::radians(spotLightCutOffAngle)));
-		lt.SetFloat("spotLight2.cutOff", glm::cos(glm::radians(spotLightCutOffAngle)));
-		if (directionalLightEnabled)
-		{
-			lightColor = glm::vec3(directionalLightColor[0], directionalLightColor[1], directionalLightColor[2]);
-			diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
-			ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
-			lt.SetVecf3("dirLight.ambient", ambientColor);
-			lt.SetVecf3("dirLight.diffuse", diffuseColor);
-			lt.SetVecf3("dirLight.specular", glm::vec3(0.2f));
-		}
-		else
-		{
-			lt.SetVecf3("dirLight.ambient", darkness);
-			lt.SetVecf3("dirLight.diffuse", darkness);
-			lt.SetVecf3("dirLight.specular", darkness);
-		}
-		if(pointLightEnabled)
-		{
-			lightColor = glm::vec3(pointLightColor[0], pointLightColor[1], pointLightColor[2]);
-			diffuseColor = lightColor * glm::vec3(0.6f); // decrease the influence
-			ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
-			lt.SetVecf3("pointLight.ambient", ambientColor);
-			lt.SetVecf3("pointLight.diffuse", diffuseColor);
-			lt.SetVecf3("pointLight.specular", glm::vec3(0.6f));
-		}
-		else
-		{
-			lt.SetVecf3("pointLight.ambient", darkness);
-			lt.SetVecf3("pointLight.diffuse", darkness);
-			lt.SetVecf3("pointLight.specular", darkness);
-		}
-		if(spotLight1Enabled)
-		{
-			lightColor = glm::vec3(spotLight1Color[0], spotLight1Color[1], spotLight1Color[2]);
-			diffuseColor = lightColor * glm::vec3(0.8f); // decrease the influence
-			ambientColor = diffuseColor * glm::vec3(0.1f); // low influence
-			lt.SetVecf3("spotLight1.ambient", ambientColor);
-			lt.SetVecf3("spotLight1.diffuse", diffuseColor);
-			lt.SetVecf3("spotLight1.specular", glm::vec3(1.0f));
-		}
-		else
-		{
-			lt.SetVecf3("spotLight1.ambient", darkness);
-			lt.SetVecf3("spotLight1.diffuse", darkness);
-			lt.SetVecf3("spotLight1.specular", darkness);
-		}
-		if (spotLight2Enabled)
-		{
-			lightColor = glm::vec3(spotLight2Color[0], spotLight2Color[1], spotLight2Color[2]);
-			diffuseColor = lightColor * glm::vec3(0.8f); // decrease the influence
-			ambientColor = diffuseColor * glm::vec3(0.1f); // low influence
-			lt.SetVecf3("spotLight2.ambient", ambientColor);
-			lt.SetVecf3("spotLight2.diffuse", diffuseColor);
-			lt.SetVecf3("spotLight2.specular", glm::vec3(1.0f));
-		}						  
-		else					  
-		{						  
-			lt.SetVecf3("spotLight2.ambient", darkness);
-			lt.SetVecf3("spotLight2.diffuse", darkness);
-			lt.SetVecf3("spotLight2.specular", darkness);
-		}
-
-		
-		lti.Use();
-		lti.SetVecf3("viewPos", mainCamera.GetPosition());
-		lti.SetFloat("material.shininess", 16.0f);
-		lti.SetVecf3("dirLight.direction", directionalLightsDirection);
-		lti.SetVecf3("pointLight.position", pointLightPos);
-		lti.SetFloat("pointLight.constant", 1.0f);
-		lti.SetFloat("pointLight.linear", pointLightLinearVal);
-		lti.SetFloat("pointLight.constant", pointLightQuadraticVal);
-		lti.SetVecf3("spotLight1.position", spotLight1Pos);
-		lti.SetVecf3("spotLight2.position", spotLight2Pos);
-		lti.SetVecf3("spotLight1.direction", glm::vec3(-0.2f, -1.0f, -0.3f + lightsDirectionVectorAngleOffset));
-		lti.SetVecf3("spotLight2.direction", glm::vec3(0.3f, -0.7f, 1.3f + lightsDirectionVectorAngleOffset));
-		lti.SetFloat("spotLight1.cutOff", glm::cos(glm::radians(spotLightCutOffAngle)));
-		lti.SetFloat("spotLight2.cutOff", glm::cos(glm::radians(spotLightCutOffAngle)));
-		if(directionalLightEnabled)
-		{
-			lightColor = glm::vec3(directionalLightColor[0], directionalLightColor[1], directionalLightColor[2]);
-			diffuseColor = lightColor * glm::vec3(0.5f); // decrease the influence
-			ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
-			lti.SetVecf3("dirLight.ambient", ambientColor);
-			lti.SetVecf3("dirLight.diffuse", diffuseColor);
-			lti.SetVecf3("dirLight.specular", glm::vec3(0.2f));
-		}
-		else
-		{
-			lti.SetVecf3("dirLight.ambient", darkness);
-			lti.SetVecf3("dirLight.diffuse", darkness);
-			lti.SetVecf3("dirLight.specular", darkness);
-		}
-		if (pointLightEnabled)
-		{
-			lightColor = glm::vec3(pointLightColor[0], pointLightColor[1], pointLightColor[2]);
-			diffuseColor = lightColor * glm::vec3(0.6f); // decrease the influence
-			ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
-			lti.SetVecf3("pointLight.ambient", ambientColor);
-			lti.SetVecf3("pointLight.diffuse", diffuseColor);
-			lti.SetVecf3("pointLight.specular", glm::vec3(0.6f));
-		}
-		else
-		{
-			lti.SetVecf3("pointLight.ambient", darkness);
-			lti.SetVecf3("pointLight.diffuse", darkness);
-			lti.SetVecf3("pointLight.specular", darkness);
-		}
-		if (spotLight1Enabled)
-		{
-			lightColor = glm::vec3(spotLight1Color[0], spotLight1Color[1], spotLight1Color[2]);
-			diffuseColor = lightColor * glm::vec3(0.8f); // decrease the influence
-			ambientColor = diffuseColor * glm::vec3(0.1f); // low influence
-			lti.SetVecf3("spotLight1.ambient", ambientColor);
-			lti.SetVecf3("spotLight1.diffuse", diffuseColor);
-			lti.SetVecf3("spotLight1.specular", glm::vec3(1.0f));
-		}
-		else
-		{
-			lti.SetVecf3("spotLight1.ambient", darkness);
-			lti.SetVecf3("spotLight1.diffuse", darkness);
-			lti.SetVecf3("spotLight1.specular", darkness);
-		}
-		if (spotLight2Enabled)
-		{
-			lightColor = glm::vec3(spotLight2Color[0], spotLight2Color[1], spotLight2Color[2]);
-			diffuseColor = lightColor * glm::vec3(0.8f); // decrease the influence
-			ambientColor = diffuseColor * glm::vec3(0.1f); // low influence
-			lti.SetVecf3("spotLight2.ambient", ambientColor);
-			lti.SetVecf3("spotLight2.diffuse", diffuseColor);
-			lti.SetVecf3("spotLight2.specular", glm::vec3(1.0f));
-		}
-		else
-		{
-			lti.SetVecf3("spotLight2.ambient", darkness);
-			lti.SetVecf3("spotLight2.diffuse", darkness);
-			lti.SetVecf3("spotLight2.specular", darkness);
-		}
-
-#pragma endregion
+		Lighting::UpdateLighting(litTexturedShader);
+		Lighting::UpdateLighting(litTexturedInstancedShader);
 
 
 
@@ -658,17 +486,18 @@ int main()
 		else
 			Util::DisableWireframeMode();
 		if (!cursorEnabled)
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Blocking cursor inside a window and disabling its graphic representation.
+			glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Blocking cursor inside a window and disabling its graphic representation.
 		else
-			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 
 
-		glm::mat4 planeTransform = glm::translate(transform, glm::vec3(0.0f, -0.5f * 0.2f - 0.0001f, 0.0f));
-		planeTransform = glm::scale(planeTransform, glm::vec3(100.0f, 100.0f, 100.0f));
+		glm::mat4 planeTransform = glm::translate(transform, glm::vec3(0.0f, -0.5f * 0.2f - 0.0001f, 0.0f)); // Setting "terrain's" plane a little bit below, so it doesn't intersect with models set on the "ground".
+		planeTransform = glm::scale(planeTransform, glm::vec3(100.0f, 100.0f, 100.0f)); // Scaling our "terrain" to make it bigger.
 
 		// Setting up scene graph...
-		GraphNode rootNode(transform);
+		glm::mat4 rootNodeTransform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
+		GraphNode rootNode(rootNodeTransform);
 
 		PseudoMesh plane(CustomDrawing::DrawPlane); GraphNode planeNode(&plane, planeTransform);
 		lineShaderEndPointPos = directionalLightsDirection;
@@ -697,115 +526,41 @@ int main()
 
 
 		// ImGui (UI for debugging purposes)
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+		if(IMGUI_ENABLED)
+		{
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplGlfw_NewFrame();
+			ImGui::NewFrame();
 
-		ImGui::Checkbox("X axis rotation", &xRotationEnabled);
-		ImGui::Checkbox("Y axis rotation", &yRotationEnabled);
-		ImGui::Checkbox("Wireframe mode", &wireframeModeEnabled);
-		ImGui::Checkbox("Cursor enabled", &cursorEnabled);
-		ImGui::SliderInt("Sphere detail level", &meshDetailLevel, 0, 3);
-		ImGui::Checkbox("Directional light enabled", &directionalLightEnabled);
-		ImGui::Checkbox("Lights' positions/directions shown", &lightsPositionsDirectionsShown);
-		ImGui::ColorEdit4("Directional light color", directionalLightColor);
+			ImGui::Checkbox("X axis rotation", &xRotationEnabled);
+			ImGui::Checkbox("Y axis rotation", &yRotationEnabled);
+			ImGui::Checkbox("Wireframe mode", &wireframeModeEnabled);
+			ImGui::Checkbox("Cursor enabled", &cursorEnabled);
+			ImGui::SliderInt("Sphere detail level", &meshDetailLevel, 0, 3);
+			ImGui::Checkbox("Directional light enabled", &directionalLightEnabled);
+			ImGui::Checkbox("Lights' positions/directions shown", &lightsPositionsDirectionsShown);
+			ImGui::ColorEdit4("Directional light color", directionalLightColorPtr);
 
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		}
 
 
 
 		// [glfw] Swapping buffers and polling IO events...
-		glfwSwapBuffers(window);
+		glfwSwapBuffers(windowPtr);
 		glfwPollEvents();
 	}
 
 	// de-allocation
-	for(const auto* vaoPtr : customVAOs)
-		glDeleteVertexArrays(1, vaoPtr);
-	for (const auto* vboPtr : customVBOs)
-		glDeleteVertexArrays(1, vboPtr);
-	delete[] directionalLightColor;
-	delete[] spotLight1Color;
-	delete[] spotLight2Color;
-	delete[] pointLightColor;
+	delete[] directionalLightColorPtr;
+	delete[] spotLight1ColorPtr;
+	delete[] spotLight2ColorPtr;
+	delete[] pointLightColorPtr;
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	glfwTerminate();
 
-	return 0;
-}
-
-
-
-unsigned int LoadTexture(char const* pathPtr)
-{
-	stbi_set_flip_vertically_on_load(true);
-	unsigned int textureID;
-	glGenTextures(1, &textureID);
-
-	int width, height, nrComponents;
-	unsigned char* data = stbi_load(pathPtr, &width, &height, &nrComponents, 0);
-	if (data)
-	{
-		GLenum format = 0;
-		if (nrComponents == 1)
-			format = GL_RED;
-		else if (nrComponents == 3)
-			format = GL_RGB;
-		else if (nrComponents == 4)
-			format = GL_RGBA;
-
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-	}
-	else
-	{
-		std::cout << "Texture failed to load at path: " << pathPtr << std::endl;
-		stbi_image_free(data);
-	}
-
-	return textureID;
-}
-
-unsigned int LoadCubemap(std::vector<std::string> faces)
-{
-	stbi_set_flip_vertically_on_load(false);
-	unsigned int textureID;
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-
-	int width, height, nrChannels;
-	for (unsigned int i = 0; i < faces.size(); i++)
-	{
-		unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
-		if (data)
-		{
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-				0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
-			);
-			stbi_image_free(data);
-		}
-		else
-		{
-			std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
-			stbi_image_free(data);
-		}
-	}
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-	return textureID;
+	return EXIT_SUCCESS;
 }
