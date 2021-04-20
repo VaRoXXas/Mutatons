@@ -221,6 +221,12 @@
     <ClInclude Include="include\GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="res\shaders\fragment\UnlitTexturedF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="res\shaders\vertex\UnlitTexturedAnimatedV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Readme.txt" />

@@ -35,6 +35,7 @@ extern Shader* sphereShaderPtr;
 extern Shader* lineShaderPtr;
 extern Shader* refractShaderPtr;
 extern Shader* skyboxShaderPtr;
+extern Shader* unlitTexturedAnimatedPtr;
 extern GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
 extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture;
 extern glm::vec3 lineShaderEndPointPos;
@@ -112,6 +113,7 @@ int main()
 	Shader lineShader(s_unlitVertexPtr, s_lineGeometryPtr, s_unlitFragmentPtr);
 	Shader skyboxShader(s_skyboxVertexPtr, s_skyboxFragmentPtr);
 	Shader refractShader(s_litTexturedVertexPtr, s_refractFragmentPtr);
+	Shader unlitTexturedAnimated(s_unlitTexturedAnimatedVertexPtr, s_unlitTexturedFragmentPtr);
 	litTexturedShaderPtr = &litTexturedShader;
 	orbitShaderPtr = &orbitShader;
 	sphereShaderPtr = &sphereShader;
@@ -119,6 +121,7 @@ int main()
 	lineShaderPtr = &lineShader;
 	skyboxShaderPtr = &skyboxShader;
 	refractShaderPtr = &refractShader;
+	unlitTexturedAnimatedPtr = &unlitTexturedAnimated;
 
 	Lighting::InitLighting(litTexturedShader);
 	Lighting::InitLighting(litTexturedInstancedShader);

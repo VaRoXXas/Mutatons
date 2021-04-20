@@ -14,6 +14,7 @@ Shader* sphereShaderPtr;
 Shader* lineShaderPtr;
 Shader* refractShaderPtr;
 Shader* skyboxShaderPtr;
+Shader* unlitTexturedAnimatedPtr;
 GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
 GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture;
 std::vector<GLuint*> customVAOs, customVBOs;
