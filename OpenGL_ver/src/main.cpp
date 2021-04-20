@@ -11,6 +11,14 @@
 #include "Rendering/CustomDrawing.h"
 #include "Scene/GraphNode.h"
 
+#include "Collisions.h"
+#include "Component.h"
+#include "Components/GraphicsComponent.h"
+#include "DataManager.h"
+#include "GameObject.h"
+#include "Components/TransformComponent.h"
+#include "Components/ColliderComponent.h"
+
 // Shaders
 #include "VertexShaders.h"
 #include "GeometryShaders.h"
@@ -69,7 +77,10 @@ glm::mat4* modelMatrixPtr;
 glm::mat4* viewMatrixPtr;
 glm::mat4* projectionMatrixPtr;
 
-
+glm::vec3* modelLocationPtr;
+glm::vec3* gameObjectLocationPtr;
+glm::vec3* objectScalePtr;
+extern Model* modelPtr;
 
 int main()
 {
@@ -128,7 +139,47 @@ int main()
 
 #pragma endregion
 
+	//Data manager loads all models
+	dataManager.LoadAllModels();
+	//Location and size vectors' declaration
+	glm::vec3 objectScale = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 modelLocation = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 gameObjectLocation = glm::vec3(1.0f, 1.0f, 5.0f);
+	objectScalePtr = &objectScale;
+	modelLocationPtr = &modelLocation;
+	gameObjectLocationPtr = &gameObjectLocation;
 
+	//First GameObject declaration
+	GameObject* gameObjectPtr;
+	GameObject objekt;
+	objekt.SetTag("PierwszyGameObject");
+	objekt.SetActive();
+	//Adding components and setting up behavior
+	std::shared_ptr<TransformComponent> tc = std::make_shared<TransformComponent>(*modelLocationPtr);
+	objekt.AddComponent(tc);
+	objekt.SetUpdate();
+	objekt.SetDirection("forward");
+	std::shared_ptr<GraphicsComponent> gp = std::make_shared<GraphicsComponent>();
+	std::shared_ptr<ColliderComponent> col = std::make_shared<ColliderComponent>();
+	objekt.AddComponent(gp);
+	objekt.AddComponent(col);
+	gameObjectPtr = &objekt;
+
+	
+	//First GameObject declaration
+	GameObject* gameObjectPtr_2;
+	GameObject objekt_2;
+	objekt_2.SetActive();
+	//Adding components and setting up behavior
+	std::shared_ptr<TransformComponent> tc2 = std::make_shared<TransformComponent>(*gameObjectLocationPtr);
+	objekt_2.AddComponent(tc2);
+	objekt_2.SetUpdate();
+	objekt_2.SetDirection("back");
+	std::shared_ptr<GraphicsComponent> gp2 = std::make_shared<GraphicsComponent>();
+	std::shared_ptr<ColliderComponent> col2 = std::make_shared<ColliderComponent>();
+	objekt_2.AddComponent(gp2);
+	objekt.AddComponent(col2);
+	gameObjectPtr_2 = &objekt_2;
 
 #pragma region models and textures loading
 
@@ -497,9 +548,22 @@ int main()
 		PseudoMesh plane(CustomDrawing::DrawPlane); GraphNode planeNode(&plane, planeTransform);
 		lineShaderEndPointPos = directionalLightsDirection;
 		PseudoMesh directionalLightIndicator(CustomDrawing::DrawLine); GraphNode directionalLightIndicatorNode(&directionalLightIndicator, glm::translate(transform, glm::vec3(0.0f, 2.0f, 0.0f)));
-
-
 		
+		//Setting up GameObjects in scene
+		tc->SetScale(*objectScalePtr);
+		gp->SetModel(modelPtr);
+		gameObjectPtr->Render();
+		gameObjectPtr->Update(*modelLocationPtr);
+
+		tc2->SetScale(*objectScalePtr);
+		gp2->SetModel(modelPtr);
+		gameObjectPtr_2->Render();
+		gameObjectPtr_2->Update(*gameObjectLocationPtr);
+		
+		if (col->col.Collides(*modelLocationPtr, *objectScalePtr, *gameObjectLocationPtr, *objectScalePtr))
+			std::cout << "KOLIZJA" << std::endl;
+
+
 		// Parenting...
 		rootNode.AddChild(&planeNode);
 		

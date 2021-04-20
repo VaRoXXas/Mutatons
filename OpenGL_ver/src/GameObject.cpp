@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "GameObject.h"
 #include "Component.h"
+#include "Collisions.h"
+#include "Components/ColliderComponent.h"
 #include "Components/GraphicsComponent.h"
 #include "Components/TransformComponent.h"
 
@@ -32,6 +34,14 @@ void GameObject::Update(glm::vec3& locationVec)
 		{
 			locationVec.x = locationVec.x + 0.0001f;
 		}
+		else if (moveDirection == "up")
+		{
+			locationVec.y = locationVec.y + 0.0001f;
+		}
+		else if (moveDirection == "down")
+		{
+			locationVec.y = locationVec.y - 0.0001f;
+		}
 	}
 }
 
@@ -45,6 +55,11 @@ std::shared_ptr<TransformComponent> GameObject::GetTransformComponent()
 {
 	return std::static_pointer_cast<TransformComponent>(
 		m_Components[transformComponentLocation]);
+}
+std::shared_ptr<ColliderComponent> GameObject::GetColliderComponent()
+{
+	return std::static_pointer_cast<ColliderComponent>(
+		m_Components[colliderComponentLocation]);
 }
 
 void GameObject::AddComponent(std::shared_ptr<Component> component)
@@ -66,12 +81,8 @@ void GameObject::AddComponent(std::shared_ptr<Component> component)
 	else if (component->GetType() == "collider")
 	{
 		hasCollider = true;
-		numberRectColliderComponents++;
-		if (numberRectColliderComponents == 1)
-		{
-			firstRectColliderComponentLocation =
-				m_Components.size() - 1;
-		}
+		colliderComponentLocation = m_Components.size() - 1;
+		this->GetColliderComponent()->SetTransformPtr(this->GetTransformComponent());
 	}
 }
 
@@ -91,11 +102,11 @@ bool GameObject::IsActive()
 }
 void GameObject::SetTag(std::string tag)
 {
-	m_Tag = "" + tag;
+	tag = "" + tag;
 }
 std::string GameObject::GetTag()
 {
-	return m_Tag;
+	return tag;
 }
 
 void GameObject::AddChild(GameObject* childPtr)
@@ -128,7 +139,7 @@ void GameObject::Render()
 
 void GameObject::SetDirection(std::string dir)
 {
-	if (dir == "forward" || dir == "back" || dir == "right" || dir == "left")
+	if (dir == "forward" || dir == "back" || dir == "right" || dir == "left" || dir == "up" || dir == "down")
 		moveDirection = dir;
 }
 

@@ -21,6 +21,7 @@ void Model::Draw(Shader& shader)
 void Model::CustomRender(Shader& shader, glm::mat4 transform)
 {
     shader.Use();
+    transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 0.5f));
     shader.SetMat4("transform", transform);
     Draw(shader);
 }

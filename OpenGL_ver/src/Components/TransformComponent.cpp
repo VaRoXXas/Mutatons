@@ -24,6 +24,12 @@ glm::vec3 TransformComponent::GetLocation()
 {
 	return location;
 }
+
+glm::vec3 TransformComponent::GetScale()
+{
+	return scale;
+}
+
 void TransformComponent::SetLocation(glm::vec3 &targetLocation)
 {
 	location = targetLocation;
@@ -44,10 +50,16 @@ void TransformComponent::SetRotation(float degrees, char rotationDirection)
 	transform = glm::rotate(transform, glm::radians(degrees), direction);
 }
 
-void TransformComponent::SetScale(float targetScale)
+void TransformComponent::SetScale(float &targetScale)
 {
-	glm::vec3 scale;
 	scale = glm::vec3(targetScale, targetScale, targetScale);
+	transform = glm::scale(transform, scale);
+}
+
+void TransformComponent::SetScale(glm::vec3 &targetScale)
+{
+	scale = targetScale;
+	//transform = glm::mat4(1.0f);
 	transform = glm::scale(transform, scale);
 }
 

@@ -3,15 +3,32 @@
 
 
 
-void Collisions::PosSizeCalc(glm::mat4& mat)
+//void Collisions::PosSizeCalc(glm::mat4& mat)
+//{
+//    pos.x = mat[0][0];
+//    pos.y = mat[1][1];
+//    pos.z = mat[2][2];
+//    size.x = mat[0][0] * mat[0][3];
+//    size.y = mat[1][1] * mat[1][3];
+//    size.z = mat[2][2] * mat[2][3];
+//}
+
+glm::vec3 Collisions::PosCalc(glm::mat4& mat)
 {
+    glm::vec3 pos;
     pos.x = mat[0][0];
     pos.y = mat[1][1];
     pos.z = mat[2][2];
+    return pos;
+}
+
+glm::vec3 Collisions::SizeCalc(glm::mat4& mat)
+{
+    glm::vec3 size;
     size.x = mat[0][0] * mat[0][3];
     size.y = mat[1][1] * mat[1][3];
     size.z = mat[2][2] * mat[2][3];
-
+    return size;
 }
 
 bool Collisions::RectCol()
@@ -21,6 +38,10 @@ bool Collisions::RectCol()
 
 bool Collisions::Collides(glm::vec3& onePos, glm::vec3& oneSize, glm::vec3& twoPos, glm::vec3& twoSize)
 {
+    //glm::vec3 onePos = glm::vec3(2.0f, 2.0f, 2.0f) * oPos;
+    //glm::vec3 twoPos = glm::vec3(2.0f, 2.0f, 2.0f) * tPos;
+    //glm::vec3 oneSize = glm::vec3(2.0f, 2.0f, 2.0f) * oSize;
+    //glm::vec3 twoSize = glm::vec3(2.0f, 2.0f, 2.0f) * tSize;
     bool collisionX = onePos.x + oneSize.x >= twoPos.x &&
         twoPos.x + twoSize.x >= onePos.x;
     bool collisionY = onePos.y + oneSize.y >= twoPos.y &&

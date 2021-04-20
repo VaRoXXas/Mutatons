@@ -1,6 +1,7 @@
 #pragma once
 
 class Component;
+class ColliderComponent;
 class GraphicsComponent;
 class TransformComponent;
 class UpdateComponent;
@@ -12,7 +13,7 @@ class GameObject
 private:
 	std::vector<std::shared_ptr<Component>> m_Components;
 	std::vector<GameObject*> children;
-	std::string m_Tag;
+	std::string tag;
 	glm::mat4 gameObjectTransform;
 	std::string moveDirection = "forward";
 	bool active = false;
@@ -22,7 +23,7 @@ private:
 	bool hasTransformComponent = false;
 	int transformComponentLocation = -1;
 	int numberRectColliderComponents = 0;
-	int firstRectColliderComponentLocation = -1;
+	int colliderComponentLocation = -1;
 	bool hasCollider = false;
 public:
 	void Update(glm::vec3 &locationVec);
@@ -45,7 +46,7 @@ public:
 	//std::string GetEncompassingRectColliderTag();
 	std::shared_ptr<GraphicsComponent> GetGraphicsComponent();
 	std::shared_ptr<TransformComponent> GetTransformComponent();
-	std::shared_ptr<UpdateComponent> GetFirstUpdateComponent();
+	std::shared_ptr<ColliderComponent> GetColliderComponent();
 };
 
 /*

@@ -1,35 +1,27 @@
 #pragma once
-#include "Component.h"
 
 
-
-// WORK IN PROGRESS
 class ColliderComponent : public Component
 {
 private:
 	std::string type = "collider";
-	bool enabled = false;
-
+	std::shared_ptr<TransformComponent> transformComponentPtr = nullptr;
+	glm::mat4* transform;
+	glm::vec3 pos;
+	glm::vec3 size;
 public:
-	std::string Component::GetType()
-	{
-		return ColliderComponent::type;
-	}
-	void Component::DisableComponent()
-	{
-		enabled = false;
-	}
+	std::string Component::GetType();
+	void Component::DisableComponent();
+	void Component::EnableComponent();
+	bool Component::Enabled();
 
-	void Component::EnableComponent()
-	{
-		enabled = true;
-	}
+	glm::vec3 GetPos();
+	glm::vec3 GetSize();
 
-	bool Component::Enabled()
-	{
-		return enabled;
-	}
-
+	Collisions col;
+	
+	void SetTransformPtr(std::shared_ptr<TransformComponent> componentPtr);
+	void CollisionCalc();
 	//void Component::start(GameObjectSharer* gos, GameObject* self)
 	//{
 	//
