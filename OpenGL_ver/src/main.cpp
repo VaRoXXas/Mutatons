@@ -136,16 +136,8 @@ int main()
 	planeDiffuseTexture = dataManager.LoadTexture("grass_diffuse.jpg");
 	planeSpecularTexture = dataManager.LoadTexture("grass_specular.jpg");
 
-	std::vector<std::string> faces
-	{
-		"res/textures/skybox/right.jpg",
-		"res/textures/skybox/left.jpg",
-		"res/textures/skybox/top.jpg",
-		"res/textures/skybox/bottom.jpg",
-		"res/textures/skybox/front.jpg",
-		"res/textures/skybox/back.jpg"
-	};
-	cubemapTexture = dataManager.LoadCubemap(faces);
+	
+	cubemapTexture = dataManager.LoadCubemap();
 
 #pragma endregion
 
