@@ -7,19 +7,19 @@ Model* modelPtr;
 unsigned int textures[2];
 std::string directory = "res/textures";
 unsigned int textureId;
-
+sf::Sound* soundPtr;
+sf::SoundBuffer* bufferPtr;
 
 
 DataManager::DataManager()
 {
-	this->soundPtr = new sf::Sound;
-	this->bufferPtr = new sf::SoundBuffer;
+	
 }
 
 DataManager::~DataManager()
 {
-	delete this->soundPtr;
-	delete this->bufferPtr;
+	delete soundPtr;
+	delete bufferPtr;
 	delete modelPtr;
 }
 
@@ -90,6 +90,13 @@ void DataManager::LoadPlayBackgroundMusic(char const* pathPtr, sf::Music &music)
 	music.play();
 }
 
+void InitSound()
+{
+	soundPtr = new sf::Sound();
+	bufferPtr = new sf::SoundBuffer();
+
+}
+
 sf::Sound* DataManager::LoadSound(char const* pathPtr)
 {
 	
@@ -109,8 +116,18 @@ void DataManager::LoadAllModels()
 	modelPtr = new Model(NATURE_TREES3);
 }
 
-unsigned int DataManager::LoadCubemap(std::vector<std::string> faces)
+unsigned int DataManager::LoadCubemap()
 {
+	std::vector<std::string> faces
+	{
+		"res/textures/skybox/right.jpg",
+		"res/textures/skybox/left.jpg",
+		"res/textures/skybox/top.jpg",
+		"res/textures/skybox/bottom.jpg",
+		"res/textures/skybox/front.jpg",
+		"res/textures/skybox/back.jpg"
+	};
+
 	stbi_set_flip_vertically_on_load(false);
 	unsigned int textureId;
 	glGenTextures(1, &textureId);

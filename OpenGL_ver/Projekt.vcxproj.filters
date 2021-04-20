@@ -93,6 +93,9 @@
     <ClCompile Include="src\Rendering\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Collisions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\pch.h">
@@ -221,10 +224,14 @@
     <ClInclude Include="include\GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="res\shaders\fragment\UnlitTexturedF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="res\shaders\vertex\UnlitTexturedAnimatedV.h">
+=======
+    <ClInclude Include="include\Collisions.h">
+>>>>>>> b03ea8246b663bb806a2d7a51e8c74cecca4d788
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -13,9 +13,6 @@ public:
     void LoadPlayBackgroundMusic(char const* pathPtr, sf::Music &music);
     sf::Sound* LoadSound(char const* pathPtr);
     void LoadAllModels();
-    unsigned int LoadCubemap(std::vector<std::string> faces);
+    unsigned int LoadCubemap();
 
-private:
-    sf::Sound* soundPtr;
-    sf::SoundBuffer* bufferPtr;
 };

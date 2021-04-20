@@ -8,8 +8,7 @@ class Model;
 
 class GraphicsComponent : public Component {
 private:
-	std::string m_Type = "graphics";
-	bool m_Enabled = false;
+	std::string type = "graphics";
 	Model* modelPtr = nullptr;
 public:
 	GraphicsComponent();
@@ -21,7 +20,7 @@ public:
 	void Component::DisableComponent();
 	void Component::EnableComponent();
 	bool Component::Enabled();
-
+protected:
 
 
 	//void Component::start(
