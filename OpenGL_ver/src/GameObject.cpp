@@ -3,7 +3,6 @@
 #include "Component.h"
 #include "Components/GraphicsComponent.h"
 #include "Components/TransformComponent.h"
-#include "Components/UpdateComponent.h"
 
 //#include "GameObjectSharer.h"
 //#include "DevelopState.h"

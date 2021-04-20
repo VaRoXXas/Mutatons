@@ -12,8 +12,8 @@ unsigned int textureId;
 
 DataManager::DataManager()
 {
-	this->soundPtr = new sf::Sound;
-	this->bufferPtr = new sf::SoundBuffer;
+	//this->soundPtr = new sf::Sound;
+	//this->bufferPtr = new sf::SoundBuffer;
 }
 
 DataManager::~DataManager()
