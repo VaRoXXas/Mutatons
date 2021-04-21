@@ -25,6 +25,7 @@ private:
 	int numberRectColliderComponents = 0;
 	int colliderComponentLocation = -1;
 	bool hasCollider = false;
+	float velocity = 1.0f;
 public:
 	void Update(glm::vec3 &locationVec);
 	void AddComponent(std::shared_ptr<Component> component);
@@ -37,6 +38,7 @@ public:
 	void Render();
 	void SetDirection(std::string dir);
 	void SetUpdate();
+	void SetVelocity(float vel);
 	//void Start(GameObjectSharer* gos);
 	// Slow only use in init and start
 	std::shared_ptr<Component> GetComponentByType(std::string type);

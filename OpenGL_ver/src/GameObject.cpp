@@ -20,27 +20,27 @@ void GameObject::Update(glm::vec3& locationVec)
 		this->GetTransformComponent()->SetLocation(locationVec);
 		if (moveDirection == "forward")
 		{
-			locationVec.z = locationVec.z + 0.0001f;
+			locationVec.z = locationVec.z + 0.0001f * velocity;
 		}
 		else if (moveDirection == "back")
 		{
-			locationVec.z = locationVec.z - 0.0001f;
+			locationVec.z = locationVec.z - 0.0001f * velocity;
 		}
 		else if (moveDirection == "right")
 		{
-			locationVec.x = locationVec.x - 0.0001f;
+			locationVec.x = locationVec.x - 0.0001f * velocity;
 		}
 		else if (moveDirection == "left")
 		{
-			locationVec.x = locationVec.x + 0.0001f;
+			locationVec.x = locationVec.x + 0.0001f * velocity;
 		}
 		else if (moveDirection == "up")
 		{
-			locationVec.y = locationVec.y + 0.0001f;
+			locationVec.y = locationVec.y + 0.0001f * velocity;
 		}
 		else if (moveDirection == "down")
 		{
-			locationVec.y = locationVec.y - 0.0001f;
+			locationVec.y = locationVec.y - 0.0001f * velocity;
 		}
 	}
 }
@@ -146,6 +146,11 @@ void GameObject::SetDirection(std::string dir)
 void GameObject::SetUpdate()
 {
 	useUpdate = !useUpdate;
+}
+
+void GameObject::SetVelocity(float vel)
+{
+	velocity = vel;
 }
 
 /*void GameObject::start(GameObjectSharer* gos)

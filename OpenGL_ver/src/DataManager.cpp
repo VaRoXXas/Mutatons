@@ -3,13 +3,14 @@
 #include "FileNames.h"
 #include "Rendering/deprecated/Model.h"
 
+
 Model* modelPtr;
 unsigned int textures[2];
 std::string directory = "res/textures";
 unsigned int textureId;
 sf::Sound* soundPtr;
 sf::SoundBuffer* bufferPtr;
-
+std::vector<Model*> vecModel;
 
 DataManager::DataManager()
 {
@@ -113,7 +114,69 @@ sf::Sound* DataManager::LoadSound(char const* pathPtr)
 void DataManager::LoadAllModels()
 {
 	//modelPtr = new Model(CANAL_CORNER_IN);
+	//0
+	modelPtr = new Model(CANAL_STRAIGHT);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(CANAL_CORNER_IN);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(CANAL_STRAIGHT_W_PIPE);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(CANAL_NOWALL);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_PATH_STRAIGHT);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_PATH_CORNER);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_PATH_TJUNCTION);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_WALL_STRAIGHT);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_WALL_CORNER_OUT);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_WALL_CORNER_IN);
+	vecModel.push_back(modelPtr);
+	//10
+	modelPtr = new Model(LAB_TERMINALS);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_TANK1);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_TANK2);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_PLATFORM);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_FLOOR_PROPS);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_FLOOR_BASIC);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_CABIN);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_PATH_CROSSING);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_GENERATOR);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(NATURE_ROCK);
+	vecModel.push_back(modelPtr);
+	//20
+	modelPtr = new Model(NATURE_TREES1);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(NATURE_TREES2);
+	vecModel.push_back(modelPtr);
 	modelPtr = new Model(NATURE_TREES3);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(NATURE_BRUSH1);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(NATURE_BRUSH2);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(NATURE_FLOWER);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(NATURE_GROUND1);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(NATURE_GROUND2);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(NATURE_PATH_STRAIGHT);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(NATURE_PATH_TJUNCTION);
+	vecModel.push_back(modelPtr);
 }
 
 unsigned int DataManager::LoadCubemap()

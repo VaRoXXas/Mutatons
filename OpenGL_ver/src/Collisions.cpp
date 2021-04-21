@@ -38,10 +38,6 @@ bool Collisions::RectCol()
 
 bool Collisions::Collides(glm::vec3& onePos, glm::vec3& oneSize, glm::vec3& twoPos, glm::vec3& twoSize)
 {
-    //glm::vec3 onePos = glm::vec3(2.0f, 2.0f, 2.0f) * oPos;
-    //glm::vec3 twoPos = glm::vec3(2.0f, 2.0f, 2.0f) * tPos;
-    //glm::vec3 oneSize = glm::vec3(2.0f, 2.0f, 2.0f) * oSize;
-    //glm::vec3 twoSize = glm::vec3(2.0f, 2.0f, 2.0f) * tSize;
     bool collisionX = onePos.x + oneSize.x >= twoPos.x &&
         twoPos.x + twoSize.x >= onePos.x;
     bool collisionY = onePos.y + oneSize.y >= twoPos.y &&
