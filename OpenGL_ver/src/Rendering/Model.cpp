@@ -3,6 +3,8 @@
 #include <Rendering/deprecated/Mesh.h>
 #include <Rendering/Shader.h>
 #include <Rendering/deprecated/Model.h>
+#include <AnimData.h>
+#include <AssimpGLMHelpers.h>
 
 
 
@@ -24,6 +26,16 @@ void Model::CustomRender(Shader& shader, glm::mat4 transform)
     transform = glm::scale(transform, glm::vec3(0.5f, 0.5f, 0.5f));
     shader.SetMat4("transform", transform);
     Draw(shader);
+}
+
+/*auto& Model::GetOffsetMatMap()
+{
+    return m_OffsetMatMap;
+}*/
+
+int& Model::GetBoneCount()
+{
+    return m_BoneCount;
 }
 
 
@@ -62,6 +74,15 @@ void Model::ProcessNode(aiNode* nodePtr, const aiScene* scenePtr)
     }
 }
 
+void Model::SetVertexBoneDataToDefault(Vertex& vertex)
+{
+    for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
+    {
+        vertex.mBoneIDs[i] = -1;
+        vertex.mWeights[i] = 0.0f;
+    }
+}
+
 Mesh Model::ProcessMesh(aiMesh* meshPtr, const aiScene* scenePtr)
 {
     // data to fill
@@ -73,50 +94,25 @@ Mesh Model::ProcessMesh(aiMesh* meshPtr, const aiScene* scenePtr)
     for (unsigned int i = 0; i < meshPtr->mNumVertices; i++)
     {
         Vertex vertex;
-        glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
-        // positions
-        vector.x = meshPtr->mVertices[i].x;
-        vector.y = meshPtr->mVertices[i].y;
-        vector.z = meshPtr->mVertices[i].z;
-        vertex.position = vector;
-    // normals
-        if (meshPtr->HasNormals())
-        {
-            vector.x = meshPtr->mNormals[i].x;
-            vector.y = meshPtr->mNormals[i].y;
-            vector.z = meshPtr->mNormals[i].z;
-            vertex.normal = vector;
-        }
-        // texture coordinates
-        if (meshPtr->mTextureCoords[0]) // does the mesh contain texture coordinates?
+        SetVertexBoneDataToDefault(vertex);
+        vertex.position = AssimpGLMHelpers::GetGLMVec(meshPtr->mVertices[i]);
+        vertex.normal = AssimpGLMHelpers::GetGLMVec(meshPtr->mNormals[i]);
+
+        if (meshPtr->mTextureCoords[0])
         {
             glm::vec2 vec;
-            // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
-            // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
             vec.x = meshPtr->mTextureCoords[0][i].x;
             vec.y = meshPtr->mTextureCoords[0][i].y;
             vertex.texCoords = vec;
-            // tangent
-            vector.x = meshPtr->mTangents[i].x;
-            vector.y = meshPtr->mTangents[i].y;
-            vector.z = meshPtr->mTangents[i].z;
-            vertex.tangent = vector;
-            // bitangent
-            vector.x = meshPtr->mBitangents[i].x;
-            vector.y = meshPtr->mBitangents[i].y;
-            vector.z = meshPtr->mBitangents[i].z;
-            vertex.bitangent = vector;
         }
         else
             vertex.texCoords = glm::vec2(0.0f, 0.0f);
 
-    vertices.push_back(vertex);
+        vertices.push_back(vertex);
     }
-    // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
     for (unsigned int i = 0; i < meshPtr->mNumFaces; i++)
     {
         aiFace face = meshPtr->mFaces[i];
-        // retrieve all indices of the face and store them in the indices vector
         for (unsigned int j = 0; j < face.mNumIndices; j++)
             indices.push_back(face.mIndices[j]);
     }
@@ -142,8 +138,99 @@ Mesh Model::ProcessMesh(aiMesh* meshPtr, const aiScene* scenePtr)
     std::vector<Texture> heightMaps = LoadMaterialTextures(materialPtr, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
+    ExtractBoneWeightForVertices(vertices, meshPtr, scenePtr);
+
     // return a mesh object created from the extracted mesh data
     return Mesh(vertices, indices, textures);
+}
+
+void Model::SetVertexBoneData(Vertex& vertex, int boneID, float weight)
+{
+    for (int i = 0; i < MAX_BONE_INFLUENCE; ++i)
+    {
+        if (vertex.mBoneIDs[i] < 0)
+        {
+            vertex.mWeights[i] = weight;
+            vertex.mBoneIDs[i] = boneID;
+            break;
+        }
+    }
+}
+
+void Model::ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* meshPtr, const aiScene* scenePtr)
+{
+    auto& boneInfoMap = m_OffsetMatMap;
+    int& boneCount = m_BoneCount;
+
+    for (int boneIndex = 0; boneIndex < meshPtr->mNumBones; ++boneIndex)
+    {
+        int boneID = -1;
+        std::string boneName = meshPtr->mBones[boneIndex]->mName.C_Str();
+        if (boneInfoMap.find(boneName) == boneInfoMap.end())
+        {
+            BoneInfo newBoneInfo;
+            newBoneInfo.id = boneCount;
+            newBoneInfo.offset = AssimpGLMHelpers::ConvertMatrixToGLMFormat(meshPtr->mBones[boneIndex]->mOffsetMatrix);
+            boneInfoMap[boneName] = newBoneInfo;
+            boneID = boneCount;
+            boneCount++;
+        }
+        else
+        {
+            boneID = boneInfoMap[boneName].id;
+        }
+        assert(boneID != -1);
+        auto weights = meshPtr->mBones[boneIndex]->mWeights;
+        int numWeights = meshPtr->mBones[boneIndex]->mNumWeights;
+
+        for (int weightIndex = 0; weightIndex < numWeights; ++weightIndex)
+        {
+            int vertexId = weights[weightIndex].mVertexId;
+            float weight = weights[weightIndex].mWeight;
+            assert(vertexId <= vertices.size());
+            SetVertexBoneData(vertices[vertexId], boneID, weight);
+        }
+    }
+}
+
+unsigned int Model::TextureFromFile(const char* pathPtr, const std::string& directory, bool gamma)
+{
+    std::string filename = std::string(pathPtr);
+    filename = directory + '/' + filename;
+
+    unsigned int textureId;
+    glGenTextures(1, &textureId);
+
+    int width, height, nrComponents;
+    unsigned char* dataPtr = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+    if (dataPtr)
+    {
+        GLenum format;
+        if (nrComponents == 1)
+            format = GL_RED;
+        else if (nrComponents == 3)
+            format = GL_RGB;
+        else if (nrComponents == 4)
+            format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, textureId);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, dataPtr);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(dataPtr);
+    }
+    else
+    {
+        std::cout << "Texture failed to load at path: " << pathPtr << std::endl;
+        stbi_image_free(dataPtr);
+    }
+
+    return textureId;
 }
 
 // checks all material textures of a given type and loads the textures if they're not loaded yet.
@@ -163,7 +250,7 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial* matPtr, aiTextureTy
             {
                 textures.push_back(texturesLoaded[j]);
                 skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
-               break;
+                break;
             }
         }
         if (!skip)

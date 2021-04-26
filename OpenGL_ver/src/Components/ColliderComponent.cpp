@@ -40,7 +40,8 @@ void ColliderComponent::SetTransformPtr(std::shared_ptr<TransformComponent> comp
 }
 void ColliderComponent::CollisionCalc()
 {
-	transform = &transformComponentPtr->GetTransform();
+	//transform = &transformComponentPtr->GetTransform();
+	*transform = transformComponentPtr->GetTransform();
 	pos = col.PosCalc(*transform);
 	size = col.SizeCalc(*transform);
 }

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <Rendering/deprecated/Mesh.h>
+#include <AnimData.h>
 
-static unsigned int TextureFromFile(const char* pathPtr, const std::string& directory, bool gamma = false);
-
+//static unsigned int TextureFromFile(const char* pathPtr, const std::string& directory, bool gamma = false);
 
 
 class Model
@@ -17,16 +17,30 @@ public:
     Model(std::string const& path, bool gamma = false);
     void Draw(Shader& shader);
     void CustomRender(Shader& shader, glm::mat4 transform);
+    auto& GetOffsetMatMap() 
+    {
+        return m_OffsetMatMap;
+    };
+    int& GetBoneCount();
+    unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
 
 private:
+
+    std::map<std::string, BoneInfo> m_OffsetMatMap;
+    int m_BoneCount = 0;
 
     void LoadModel(std::string const& path);
     void ProcessNode(aiNode* nodePtr, const aiScene* scenePtr);
     Mesh ProcessMesh(aiMesh* meshPtr, const aiScene* scenePtr);
     std::vector<Texture> LoadMaterialTextures(aiMaterial* matPtr, aiTextureType type, std::string typeName);
+    void SetVertexBoneDataToDefault(Vertex& vertex);
+    void SetVertexBoneData(Vertex& vertex, int boneID, float weight);
+    void ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh, const aiScene* scene);
+    
+
 };
 
-unsigned int TextureFromFile(const char* pathPtr, const std::string& directory, bool gamma)
+/*unsigned int TextureFromFile(const char* pathPtr, const std::string& directory, bool gamma)
 {
     std::string filename = std::string(pathPtr);
     filename = directory + '/' + filename;
@@ -64,4 +78,4 @@ unsigned int TextureFromFile(const char* pathPtr, const std::string& directory, 
     }
 
     return textureId;
-}
+}*/

@@ -195,6 +195,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Animation.cpp" />
+    <ClCompile Include="src\Animator.cpp" />
+    <ClCompile Include="src\Bone.cpp" />
     <ClCompile Include="src\Collisions.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Components\GraphicsComponent.cpp" />
@@ -277,6 +280,11 @@
     <ClCompile Include="src\Components\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Animation.h" />
+    <ClInclude Include="include\Animator.h" />
+    <ClInclude Include="include\AnimData.h" />
+    <ClInclude Include="include\AssimpGLMHelpers.h" />
+    <ClInclude Include="include\Bone.h" />
     <ClInclude Include="include\Collisions.h" />
     <ClInclude Include="include\GameObject.h" />
     <ClInclude Include="include\Components\GraphicsComponent.h" />
@@ -315,10 +323,10 @@
     <ClInclude Include="res\shaders\vertex\deprecated\PlaneV.h" />
     <ClInclude Include="res\shaders\vertex\deprecated\PyramidV.h" />
     <ClInclude Include="res\shaders\vertex\deprecated\SphereV.h" />
-    <ClInclude Include="res\shaders\vertex\UnlitTexturedAnimatedV.h" />
     <ClInclude Include="res\shaders\vertex\LitTexturedInstancedV.h" />
     <ClInclude Include="res\shaders\vertex\LitTexturedV.h" />
     <ClInclude Include="res\shaders\vertex\SkyboxV.h" />
+    <ClInclude Include="res\shaders\vertex\UnlitTexturedAnimatedV.h" />
     <ClInclude Include="res\shaders\vertex\UnlitV.h" />
     <ClInclude Include="include\Components\TransformComponent.h" />
   </ItemGroup>

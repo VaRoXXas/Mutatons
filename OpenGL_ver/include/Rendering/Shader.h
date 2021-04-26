@@ -20,6 +20,7 @@ public:
     void SetInt(const char* namePtr, const int& value) const;
     void SetFloat(const char* namePtr, const float& value) const;
     void SetMat4(const char* namePtr, const glm::mat4& value) const;
+    void SetMat4(const std::string& name, const glm::mat4& value) const;
     void SetVecf3(const char* namePtr, const float* valuePtr) const;
     void SetVecf3(const char* namePtr, const glm::vec3& value) const;
     void SetVecf4(const char* namePtr, const float* valuePtr) const;

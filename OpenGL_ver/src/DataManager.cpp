@@ -26,7 +26,7 @@ DataManager::~DataManager()
 
 unsigned int DataManager::LoadTexture(char const* pathPtr)
 {
-	textureId = TextureFromFile(pathPtr, directory);
+	textureId = modelPtr->TextureFromFile(pathPtr, directory);
 	return textureId;
 	//if you haven't done so already
 	/*stbi_set_flip_vertically_on_load(true);
