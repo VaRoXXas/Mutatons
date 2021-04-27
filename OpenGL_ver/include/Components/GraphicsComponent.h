@@ -11,9 +11,6 @@ private:
 	std::string type = "graphics";
 	Model* modelPtr = nullptr;
 public:
-	GraphicsComponent();
-	//void Draw(std::shared_ptr<TransformComponent> t);
-	void Draw(Shader& shader, const glm::mat4& transform);
 	void SetModel(Model* modelLoad);
 	void Render(const glm::mat4& parentTransform);
 	std::string Component::GetType();

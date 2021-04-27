@@ -4,6 +4,7 @@
 
 
 
+//using this constructor you can set GameObject's location when you declare it
 TransformComponent::TransformComponent(glm::vec3 targetLocation)
 {
 	location = targetLocation;
@@ -11,15 +12,18 @@ TransformComponent::TransformComponent(glm::vec3 targetLocation)
 	transform = glm::translate(transform, targetLocation);
 }
 
+//default GameObject's location is center of the scene
 TransformComponent::TransformComponent()
 {
 	transform = glm::mat4(1.0f);
 }
 
+//transform, location and scale getters
 glm::mat4 TransformComponent::GetTransform()
 {
 	return transform;
 }
+
 glm::vec3 TransformComponent::GetLocation()
 {
 	return location;
@@ -30,6 +34,7 @@ glm::vec3 TransformComponent::GetScale()
 	return scale;
 }
 
+//location, rotation and scale setters
 void TransformComponent::SetLocation(glm::vec3 &targetLocation)
 {
 	location = targetLocation;
@@ -50,6 +55,7 @@ void TransformComponent::SetRotation(float degrees, char rotationDirection)
 	transform = glm::rotate(transform, glm::radians(degrees), direction);
 }
 
+//you can set scale using only float or directly using vec3
 void TransformComponent::SetScale(float &targetScale)
 {
 	scale = glm::vec3(targetScale, targetScale, targetScale);
@@ -63,11 +69,13 @@ void TransformComponent::SetScale(glm::vec3 &targetScale)
 	transform = glm::scale(transform, scale);
 }
 
+//returns component's type
 std::string TransformComponent::GetType()
 {
 	return type;
 }
 
+//used to enable and disable component
 void TransformComponent::DisableComponent() {
 	enabled = false;
 }
@@ -76,6 +84,7 @@ void TransformComponent::EnableComponent() {
 	enabled = true;
 }
 
+//returns if component is enabled
 bool TransformComponent::Enabled() {
 	return enabled;
 }

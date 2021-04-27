@@ -195,6 +195,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameObjectFactory.cpp" />
+    <ClCompile Include="src\GameObjectLoader.cpp" />
+    <ClCompile Include="src\BlueprintObjectParser.cpp" />
+    <ClCompile Include="src\ObjectTags.cpp" />
+    <ClCompile Include="src\GameObjectBlueprint.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Animator.cpp" />
     <ClCompile Include="src\Bone.cpp" />
@@ -280,6 +285,10 @@
     <ClCompile Include="src\Components\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\GameObjectFactory.h" />
+    <ClInclude Include="include\GameObjectLoader.h" />
+    <ClInclude Include="include\BlueprintObjectParser.h" />
+    <ClInclude Include="include\GameObjectBlueprint.h" />
     <ClInclude Include="include\Animation.h" />
     <ClInclude Include="include\Animator.h" />
     <ClInclude Include="include\AnimData.h" />
@@ -303,6 +312,7 @@
     <ClInclude Include="include\Rendering\Shader.h" />
     <ClInclude Include="include\Util.h" />
     <ClInclude Include="include\Rendering\deprecated\Mesh.h" />
+    <ClInclude Include="include\ObjectTags.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\BasicF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\OrbitF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\SphereF.h" />
@@ -332,6 +342,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Readme.txt" />
+    <Text Include="res\level.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

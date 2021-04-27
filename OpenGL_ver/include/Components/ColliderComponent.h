@@ -9,6 +9,7 @@ private:
 	glm::mat4* transform;
 	glm::vec3 pos;
 	glm::vec3 size;
+	Collisions col;
 public:
 	std::string Component::GetType();
 	void Component::DisableComponent();
@@ -17,11 +18,9 @@ public:
 
 	glm::vec3 GetPos();
 	glm::vec3 GetSize();
-
-	Collisions col;
 	
-	void SetTransformPtr(std::shared_ptr<TransformComponent> componentPtr);
-	void CollisionCalc();
+	void Initialize(std::shared_ptr<TransformComponent> componentPtr);
+	void Collides(glm::vec3 &collidingObjectLocation, glm::vec3 &collidingObjectSize);
 	//void Component::start(GameObjectSharer* gos, GameObject* self)
 	//{
 	//

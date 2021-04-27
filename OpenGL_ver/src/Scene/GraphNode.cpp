@@ -48,7 +48,7 @@ void GraphNode::Render(const glm::mat4& parentTransform) const
 	{
 		std::shared_ptr<GraphicsComponent> gcPtr = gameObjectPtr->GetGraphicsComponent();
 		//std::shared_ptr<TransformComponent> tPtr = gameObjectPtr->GetTransformComponent();
-		gcPtr->Draw(*litTexturedShaderPtr, absoluteTransform);
+		gcPtr->Render(absoluteTransform);
 	}
 
 	for(const GraphNode* child : children)

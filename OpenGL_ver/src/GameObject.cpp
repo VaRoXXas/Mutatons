@@ -12,9 +12,9 @@
 
 
 
+//Allows GameObject to move in four directions
 void GameObject::Update(glm::vec3& locationVec)
 {
-	//std::cout << useUpdate << std::endl;
 	if (active && useUpdate)
 	{
 		this->GetTransformComponent()->SetLocation(locationVec);
@@ -45,6 +45,7 @@ void GameObject::Update(glm::vec3& locationVec)
 	}
 }
 
+//GameObject's Components' getters
 std::shared_ptr<GraphicsComponent> GameObject::GetGraphicsComponent()
 {
 	return std::static_pointer_cast<GraphicsComponent>(
@@ -62,6 +63,7 @@ std::shared_ptr<ColliderComponent> GameObject::GetColliderComponent()
 		m_Components[colliderComponentLocation]);
 }
 
+//Used to add components to the GameObject
 void GameObject::AddComponent(std::shared_ptr<Component> component)
 {
 	m_Components.push_back(component);
@@ -82,10 +84,11 @@ void GameObject::AddComponent(std::shared_ptr<Component> component)
 	{
 		hasCollider = true;
 		colliderComponentLocation = m_Components.size() - 1;
-		this->GetColliderComponent()->SetTransformPtr(this->GetTransformComponent());
+		this->GetColliderComponent()->Initialize(this->GetTransformComponent());
 	}
 }
 
+//various setters & getters
 void GameObject::SetActive()
 {
 	active = true;
@@ -109,40 +112,6 @@ std::string GameObject::GetTag()
 	return tag;
 }
 
-void GameObject::AddChild(GameObject* childPtr)
-{
-	children.push_back(childPtr);
-}
-
-void GameObject::Render()
-{
-	const glm::mat4 zeroPointTransform = glm::mat4(1.0f);
-	if (hasTransformComponent)
-	{
-		gameObjectTransform = this->GetTransformComponent()->GetTransform();
-	} else
-		gameObjectTransform = zeroPointTransform;
-
-	if(hasGraphicsComponent)
-	{
-		this->GetGraphicsComponent()->Render(gameObjectTransform);
-
-		for(GameObject* child : children)
-		{
-			if (child->hasGraphicsComponent)
-			{
-				child->GetGraphicsComponent()->Render(gameObjectTransform);
-			}
-		}
-	}
-}
-
-void GameObject::SetDirection(std::string dir)
-{
-	if (dir == "forward" || dir == "back" || dir == "right" || dir == "left" || dir == "up" || dir == "down")
-		moveDirection = dir;
-}
-
 void GameObject::SetUpdate()
 {
 	useUpdate = !useUpdate;
@@ -153,19 +122,55 @@ void GameObject::SetVelocity(float vel)
 	velocity = vel;
 }
 
-/*void GameObject::start(GameObjectSharer* gos)
+bool GameObject::HasCollider()
 {
-	auto it = m_Components.begin();
-	auto end = m_Components.end();
-	for (it;
-		it != end;
-		++it)
-	{
-		(*it)->start(gos, this);
-	}
-}*/
+	return hasCollider;
+}
+bool GameObject::HasUpdate()
+{
+	return useUpdate;
+}
 
-// Slow - only use in start function
+//Using this you can add GameObject as a child to the parent GameObject
+void GameObject::AddChild(GameObject* childPtr)
+{
+	children.push_back(childPtr);
+}
+
+//Renders GameObject and its children to the scene
+void GameObject::Render()
+{
+	
+	const glm::mat4 zeroPointTransform = glm::mat4(1.0f);
+	if (hasTransformComponent)
+	{
+		gameObjectTransform = this->GetTransformComponent()->GetTransform();
+	} else
+		gameObjectTransform = zeroPointTransform;
+
+	if(hasGraphicsComponent)
+	{
+		this->GetGraphicsComponent()->Render(gameObjectTransform);
+	}
+	for (GameObject* child : children)
+	{
+		if (child->hasGraphicsComponent)
+		{
+			const auto absoluteTransform = gameObjectTransform * child->GetTransformComponent()->GetTransform();
+			//child->GetGraphicsComponent()->Render(gameObjectTransform);
+			child->GetGraphicsComponent()->Render(absoluteTransform);
+		}
+	}
+}
+
+//Sets move direction of GameObject
+void GameObject::SetDirection(std::string dir)
+{
+	if (dir == "forward" || dir == "back" || dir == "right" || dir == "left" || dir == "up" || dir == "down")
+		moveDirection = dir;
+}
+
+//Returns specific component from the GameObject's components list
 std::shared_ptr<Component> GameObject::GetComponentByType(std::string type) 
 {
 	auto it = m_Components.begin();
@@ -183,29 +188,3 @@ std::shared_ptr<Component> GameObject::GetComponentByType(std::string type)
 	return m_Components[0];
 }
 
-/*
-FloatRect& GameObject::GetEncompassingRectCollider()
-{
- if (m_HasCollider)
- {
- return (static_pointer_cast<RectColliderComponent>(
- m_Components[m_FirstRectColliderComponentLocation]))
- ->getColliderRectF();
- }
-}
-string GameObject::GetEncompassingRectColliderTag()
-{
- return static_pointer_cast<RectColliderComponent>(
- m_Components[m_FirstRectColliderComponentLocation])->
- getColliderTag();
-}
-*/
-
-bool GameObject::HasCollider()
-{
-	return hasCollider;
-}
-bool GameObject::HasUpdate()
-{
-	return useUpdate;
-}

@@ -13,36 +13,25 @@ extern Shader* sphereShaderPtr;
 
 
 
-GraphicsComponent::GraphicsComponent()
-{
-
-}
-
+//assigns model to the gameobject
 void GraphicsComponent::SetModel(Model* modelLoad)
 {
 	modelPtr = modelLoad;
 }
 
-//void GraphicsComponent::Draw(std::shared_ptr<TransformComponent> t)
-//{
-//	modelPtr->CustomRender(*litTexturedShaderPtr, t->GetLocation());
-//}
-
-void GraphicsComponent::Draw(Shader& shader, const glm::mat4& transform)
-{
-	modelPtr->CustomRender(shader, transform);
-}
-
+//renders assigned model to the scene
 void GraphicsComponent::Render(const glm::mat4& transform)
 {
 	if (modelPtr)
 		modelPtr->CustomRender(*litTexturedShaderPtr, transform);
 }
 
+//returns component's type
 std::string GraphicsComponent::GetType() {
 	return type;
 }
 
+//functions used to disable and enable component
 void GraphicsComponent::DisableComponent() {
 	enabled = false;
 }
@@ -51,6 +40,7 @@ void GraphicsComponent::EnableComponent() {
 	enabled = true;
 }
 
+//returns if component is enabled
 bool GraphicsComponent::Enabled() {
 	return enabled;
 }

@@ -1,12 +1,10 @@
 #pragma once
 
-//#include "GameObjectSharer.h"
 #include "pch.h"
 
-//class GameObject;
 
 
-
+//Interface for components
 class Component 
 {
 public:
@@ -14,7 +12,6 @@ public:
 	virtual void DisableComponent() = 0;
 	virtual void EnableComponent() = 0;
 	virtual bool Enabled() = 0;
-	//virtual void Start(GameObjectSharer* gos, GameObject* self) = 0;
 protected:
 	bool enabled = false;
 };

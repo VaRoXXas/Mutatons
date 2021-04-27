@@ -6,11 +6,13 @@
 
 
 
-
+//returns component type
 std::string ColliderComponent::GetType()
 {
 	return ColliderComponent::type;
 }
+
+//for disabling and enabling component
 void ColliderComponent::DisableComponent()
 {
 	enabled = false;
@@ -19,29 +21,38 @@ void ColliderComponent::EnableComponent()
 {
 	enabled = true;
 }
+
+//returns if component is enabled
 bool ColliderComponent::Enabled()
 {
 	return enabled;
 }
 
+//returns collider position
 glm::vec3 ColliderComponent::GetPos()
 {
 	return pos;
 }
 
+//returns colllider size
 glm::vec3 ColliderComponent::GetSize()
 {
 	return size;
 }
 
-void ColliderComponent::SetTransformPtr(std::shared_ptr<TransformComponent> componentPtr)
+//function used to set pointer to GameObject's transform component and initialize Collider's propeties
+void ColliderComponent::Initialize(std::shared_ptr<TransformComponent> componentPtr)
 {
 	transformComponentPtr = componentPtr;
+	pos = transformComponentPtr->GetLocation();
+	size = transformComponentPtr->GetScale();
 }
-void ColliderComponent::CollisionCalc()
+
+//This function is used to check if two gameobjects collide
+void ColliderComponent::Collides(glm::vec3 &collidingObjectLocation, glm::vec3 &collidingObjectSize)
 {
-	//transform = &transformComponentPtr->GetTransform();
-	*transform = transformComponentPtr->GetTransform();
-	pos = col.PosCalc(*transform);
-	size = col.SizeCalc(*transform);
+	if (col.Collides(pos, size, collidingObjectLocation, collidingObjectSize))
+	{
+		std::cout << "kolizja" << std::endl;
+	}
 }
