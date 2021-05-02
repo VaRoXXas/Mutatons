@@ -1,7 +1,9 @@
 #pragma once
 
-#include <Bone.h>
-#include <Rendering/deprecated/Model.h>
+#include <Rendering/animation/Bone.h>
+#include <Rendering/Model.h>
+
+//This class is designed to set up animation
 
 struct AssimpNodeData
 {

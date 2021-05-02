@@ -1,10 +1,11 @@
 #pragma once
 
-#include <Rendering/deprecated/Mesh.h>
-#include <AnimData.h>
+#include <Rendering/Mesh.h>
+#include <Rendering/animation/AnimData.h>
 
 //static unsigned int TextureFromFile(const char* pathPtr, const std::string& directory, bool gamma = false);
 
+//This class is designed to store model informations
 
 class Model
 {

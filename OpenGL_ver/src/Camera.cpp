@@ -5,17 +5,26 @@
 
 
 
-Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-: position(position), front(glm::vec3(0.0f, 0.0f, -1.0f)), worldUp(up), yaw(yaw), pitch(pitch), movementSpeed(S_SPEED_DEFAULT), mouseSensitivity(S_SENSITIVITY_DEFAULT), zoom(S_ZOOM_DEFAULT)
+Camera::Camera(bool isometric, float yaw, float pitch)
+: isometric(isometric), position(glm::vec3(10.0f, 10.0f, 10.0f)), front(glm::vec3(-2.0f, -2.0f, -2.0f)), worldUp(glm::vec3(0.0f, 1.0f, 0.0f)), yaw(yaw), pitch(pitch), movementSpeed(S_SPEED_DEFAULT), mouseSensitivity(S_SENSITIVITY_DEFAULT), zoom(S_ZOOM_DEFAULT)
 {
-    UpdateCameraVectors();
+    if (isometric == false)
+    {
+        UpdateCameraVectors();
+    }
+    if (isometric == true)
+    {
+        up = glm::vec3(0.0f, 1.0f, 0.0f);
+    }
+
+    
 }
 
-Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
+/*Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
 : position(glm::vec3(posX, posY, posZ)), front(glm::vec3(0.0f, 0.0f, -1.0f)), worldUp(glm::vec3(upX, upY, upZ)), yaw(yaw), pitch(pitch), movementSpeed(S_SPEED_DEFAULT), mouseSensitivity(S_SENSITIVITY_DEFAULT), zoom(S_ZOOM_DEFAULT)
 {
     UpdateCameraVectors();
-}
+}*/
 
 glm::mat4 Camera::GetViewMatrix() const
 {
@@ -26,9 +35,11 @@ void Camera::ProcessKeyboard(const CameraDirection& direction, const float& delt
 {
     const float velocity = movementSpeed * deltaTime;
     
-    switch(direction)
+    if (isometric == 0)
     {
-		case CameraDirection::Forward:
+        switch (direction)
+        {
+        case CameraDirection::Forward:
             position += front * velocity;
             break;
         case CameraDirection::Backward:
@@ -40,30 +51,55 @@ void Camera::ProcessKeyboard(const CameraDirection& direction, const float& delt
         case CameraDirection::Right:
             position += right * velocity;
             break;
-	    default:
-	        break;
+        default:
+            break;
+        }
+    }
+    if (isometric == 1)
+    {
+        switch (direction)
+        {
+        case CameraDirection::Forward:
+            position -= glm::vec3(1.0f, 0.0f, 1.0f) * velocity;
+            break;
+        case CameraDirection::Backward:
+            position += glm::vec3(1.0f, 0.0f, 1.0f) * velocity;
+            break;
+        case CameraDirection::Left:
+            position -= glm::vec3(1.0f, 0.0f, -1.0f) * velocity;
+            break;
+        case CameraDirection::Right:
+            position += glm::vec3(1.0f, 0.0f, -1.0f) * velocity;
+            break;
+        default:
+            break;
+        }
     }
 }
 
 void Camera::ProcessMouseMovement(float& xoffset, float& yoffset, const bool constrainPitch)
 {
-    xoffset *= mouseSensitivity;
-    yoffset *= mouseSensitivity;
-
-    yaw += xoffset;
-    pitch += yoffset;
-
-    // Make sure that when pitch is out of bounds, screen doesn't get flipped.
-    if (constrainPitch)
+    if (isometric == 0)
     {
-        if (pitch > 89.0f)
-            pitch = 89.0f;
-        if (pitch < -89.0f)
-            pitch = -89.0f;
-    }
+        xoffset *= mouseSensitivity;
+        yoffset *= mouseSensitivity;
 
-    // Update front, right and up vectors using the updated Euler angles.
-    UpdateCameraVectors();
+        yaw += xoffset;
+        pitch += yoffset;
+
+        // Make sure that when pitch is out of bounds, screen doesn't get flipped.
+        if (constrainPitch)
+        {
+            if (pitch > 89.0f)
+                pitch = 89.0f;
+            if (pitch < -89.0f)
+                pitch = -89.0f;
+        }
+
+        // Update front, right and up vectors using the updated Euler angles.
+        UpdateCameraVectors();
+    }
+    
 }
 
 void Camera::ProcessMouseScroll(const float& yoffset)
@@ -174,6 +210,16 @@ float Camera::GetZoom() const
 void Camera::SetZoom(const float zoom)
 {
 	this->zoom = zoom;
+}
+
+bool Camera::GetIsometric()
+{
+    return isometric;
+}
+
+void Camera::SetIsometric(bool isometric)
+{
+    this->isometric = isometric;
 }
 
 void Camera::UpdateCameraVectors()

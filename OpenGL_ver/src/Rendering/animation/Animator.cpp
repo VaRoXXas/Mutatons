@@ -1,8 +1,8 @@
 #include "pch.h"
 
-#include <Animation.h>
-#include <Bone.h>
-#include <Animator.h>
+#include <Rendering/animation/Animation.h>
+#include <Rendering/animation/Bone.h>
+#include <Rendering/animation/Animator.h>
 
 
 

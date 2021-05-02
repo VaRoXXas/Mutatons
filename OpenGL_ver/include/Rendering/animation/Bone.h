@@ -1,5 +1,5 @@
 #pragma once
-#include <AssimpGLMHelpers.h>
+#include <Rendering/animation/AssimpGLMHelpers.h>
 /* Container for bone data */
 
 

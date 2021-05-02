@@ -1,9 +1,9 @@
 #include "pch.h"
 
 
-#include <AnimData.h>
-#include <Rendering/deprecated/Model.h>
-#include <Animation.h>
+#include <Rendering/animation/AnimData.h>
+#include <Rendering/Model.h>
+#include <Rendering/animation/Animation.h>
 
 
 

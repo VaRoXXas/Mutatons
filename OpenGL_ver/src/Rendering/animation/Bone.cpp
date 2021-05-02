@@ -1,5 +1,5 @@
 #include "pch.h"
-#include <Bone.h>
+#include <Rendering/animation/Bone.h>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
