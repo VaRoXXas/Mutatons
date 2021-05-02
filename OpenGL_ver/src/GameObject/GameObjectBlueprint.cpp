@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "GameObjectBlueprint.h"
+#include "GameObject/GameObjectBlueprint.h"
 
 
 

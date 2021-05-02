@@ -1,10 +1,10 @@
 #include "pch.h"
-#include "GameObject.h"
+#include "GameObject/GameObject.h"
 #include "ObjectTags.h"
-#include "GameObjectBlueprint.h"
-#include "BlueprintObjectParser.h"
-#include "GameObjectFactory.h"
-#include "GameObjectLoader.h"
+#include "GameObject/GameObjectBlueprint.h"
+#include "GameObject/BlueprintObjectParser.h"
+#include "GameObject/GameObjectFactory.h"
+#include "GameObject/GameObjectLoader.h"
 
 
 

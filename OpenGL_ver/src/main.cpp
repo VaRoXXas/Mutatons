@@ -15,15 +15,15 @@
 #include "Component.h"
 #include "Components/GraphicsComponent.h"
 #include "DataManager.h"
-#include "GameObject.h"
+#include "GameObject/GameObject.h"
 #include "Components/TransformComponent.h"
 #include "Components/ColliderComponent.h"
 
 #include "ObjectTags.h"
-#include "GameObjectBlueprint.h"
-#include "BlueprintObjectParser.h"
-#include "GameObjectFactory.h"
-#include "GameObjectLoader.h"
+#include "GameObject/GameObjectBlueprint.h"
+#include "GameObject/BlueprintObjectParser.h"
+#include "GameObject/GameObjectFactory.h"
+#include "GameObject/GameObjectLoader.h"
 
 // Shaders
 #include "VertexShaders.h"
@@ -162,6 +162,14 @@ int main()
 	GameObjectLoader loader;
 	loader.LoadGameObjects("res/level.txt", gameObjectVector, *gameObjectVector[0]);
 
+	gameObjectPtr = new GameObject;
+	gameObjectPtr->SetActive();
+	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
+	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
+	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[4]);
+	gameObjectVector.push_back(gameObjectPtr);
+	gameObjectVector[0]->AddChild(gameObjectPtr);
 
 #pragma region models and textures loading
 
@@ -462,7 +470,13 @@ int main()
 
 #pragma endregion
 
-
+	float posFloat[] = { 1.0,1.0,1.0 };
+	bool update = gameObjectVector.back()->HasUpdate();
+	glm::vec3 pos = gameObjectVector.back()->GetTransformComponent()->GetLocation();
+	bool once = false;
+	static const char * items[] = { "forward", "back", "right", "left" };
+	static int selectedItem = 0;
+	int modelID = 0;
 
 	// game loop
 	while (!glfwWindowShouldClose(windowPtr))
@@ -481,15 +495,9 @@ int main()
 		view = mainCamera.GetViewMatrix();
 		projection = glm::perspective(glm::radians(mainCamera.GetZoom()), static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT), 0.1f, 100.0f);
 
-		if (xRotationEnabled)
-			model = glm::rotate(model, static_cast<GLfloat>(glfwGetTime()) * 0.5f, glm::vec3(1.0f, 0.0f, 0.0f));
-		if (yRotationEnabled)
-			model = glm::rotate(model, static_cast<GLfloat>(glfwGetTime()) * 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
-
 		// updating shaders
 		litTexturedShader.ApplyMvptMatrices();
 		orbitShader.ApplyMvptMatrices();
-		sphereShader.ApplyMvptMatrices();
 		litTexturedInstancedShader.ApplyMvptMatrices();
 		lineShader.ApplyMvptMatrices();
 		refractShader.ApplyMvptMatrices();
@@ -497,8 +505,6 @@ int main()
 
 		orbitShader.Use();
 		orbitShader.SetInt("sidesCount", 64);
-		sphereShader.Use();
-		sphereShader.SetInt("meshDetailLevel", meshDetailLevel);
 		lineShader.Use();
 		lineShader.SetVecf4("color", glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 
@@ -540,11 +546,6 @@ int main()
 		//	gameObjectPtr_2->SetVelocity(0.0f);
 		//}
 			
-
-
-		// Parenting...
-		//rootNode.AddChild(&planeNode);
-		
 		if(lightsPositionsDirectionsShown)
 		{
 			// Enabling/disabling all lights' displays...
@@ -559,8 +560,37 @@ int main()
 
 		// And the skybox...
 		CustomDrawing::DrawSkybox();
+		
+		
 
+		if(update && !once)
+		{
+			gameObjectVector.back()->SetUpdate();
+			once = true;
+		}
+		else if(!update && once)
+		{
+			posFloat[0] = pos.x;
+			posFloat[1] = pos.y;
+			posFloat[2] = pos.z;
+			gameObjectVector.back()->SetUpdate();
+			once = false;
+		} else if (!update)
+		{
+			pos = glm::vec3(posFloat[0], posFloat[1], posFloat[2]);
+		}
 
+		if (selectedItem == 0)
+			gameObjectVector.back()->SetDirection("forward");
+		else if (selectedItem == 1)
+			gameObjectVector.back()->SetDirection("back");
+		else if (selectedItem == 2)
+			gameObjectVector.back()->SetDirection("right");
+		else if (selectedItem == 3)
+			gameObjectVector.back()->SetDirection("left");
+
+		gameObjectVector.back()->Update(pos);
+		gameObjectVector.back()->GetGraphicsComponent()->SetModel(vecModel[modelID]);
 
 		// ImGui (UI for debugging purposes)
 		if(IMGUI_ENABLED)
@@ -569,14 +599,16 @@ int main()
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
 
-			ImGui::Checkbox("X axis rotation", &xRotationEnabled);
-			ImGui::Checkbox("Y axis rotation", &yRotationEnabled);
 			ImGui::Checkbox("Wireframe mode", &wireframeModeEnabled);
 			ImGui::Checkbox("Cursor enabled", &cursorEnabled);
-			ImGui::SliderInt("Sphere detail level", &meshDetailLevel, 0, 3);
 			ImGui::Checkbox("Directional light enabled", &directionalLightEnabled);
 			ImGui::Checkbox("Lights' positions/directions shown", &lightsPositionsDirectionsShown);
 			ImGui::ColorEdit4("Directional light color", directionalLightColorPtr);
+			
+			ImGui::Checkbox("GameObject Update", &update);
+			ImGui::SliderFloat3("GameObject position", posFloat , -10.0f, 10.0f);
+			ImGui::Combo("MoveDirection", &selectedItem, items, IM_ARRAYSIZE(items));
+			ImGui::SliderInt("GameObject model", &modelID, 0, 29);
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

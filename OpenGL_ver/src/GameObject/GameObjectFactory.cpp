@@ -1,13 +1,13 @@
 #include "pch.h"
-#include "GameObject.h"
-#include "GameObjectBlueprint.h"
+#include "GameObject/GameObject.h"
+#include "GameObject/GameObjectBlueprint.h"
 #include "Component.h"
 #include "Components/TransformComponent.h"
 #include "Components/GraphicsComponent.h"
 #include "Collisions.h"
 #include "Components/ColliderComponent.h"
 #include "Rendering/deprecated/Model.h"
-#include "GameObjectFactory.h"
+#include "GameObject/GameObjectFactory.h"
 
 extern std::vector<Model*> vecModel;
 

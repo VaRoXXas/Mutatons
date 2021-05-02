@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "GameObjectBlueprint.h"
+#include "GameObject/GameObjectBlueprint.h"
 #include "ObjectTags.h"
-#include "BlueprintObjectParser.h"
+#include "GameObject/BlueprintObjectParser.h"
 
 
 

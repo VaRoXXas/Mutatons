@@ -2,7 +2,7 @@
 // ReSharper disable CppUseAuto
 #include "pch.h"
 #include "Components/GraphicsComponent.h"
-#include "GameObject.h"
+#include "GameObject/GameObject.h"
 #include "Scene/GraphNode.h"
 #include "Rendering/PseudoMesh.h"
 #include "Rendering/deprecated/Model.h"

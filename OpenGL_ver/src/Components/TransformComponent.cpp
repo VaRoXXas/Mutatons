@@ -16,6 +16,7 @@ TransformComponent::TransformComponent(glm::vec3 targetLocation)
 TransformComponent::TransformComponent()
 {
 	transform = glm::mat4(1.0f);
+	location = glm::vec3(1.0f);
 }
 
 //transform, location and scale getters

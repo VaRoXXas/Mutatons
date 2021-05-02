@@ -195,16 +195,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\GameObjectFactory.cpp" />
-    <ClCompile Include="src\GameObjectLoader.cpp" />
-    <ClCompile Include="src\BlueprintObjectParser.cpp" />
+    <ClCompile Include="src\GameObject\GameObjectFactory.cpp" />
+    <ClCompile Include="src\GameObject\GameObjectLoader.cpp" />
+    <ClCompile Include="src\GameObject\BlueprintObjectParser.cpp" />
     <ClCompile Include="src\ObjectTags.cpp" />
-    <ClCompile Include="src\GameObjectBlueprint.cpp" />
+    <ClCompile Include="src\GameObject\GameObjectBlueprint.cpp" />
     <ClCompile Include="src\Animation.cpp" />
     <ClCompile Include="src\Animator.cpp" />
     <ClCompile Include="src\Bone.cpp" />
     <ClCompile Include="src\Collisions.cpp" />
-    <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\GameObject\GameObject.cpp" />
     <ClCompile Include="src\Components\GraphicsComponent.cpp" />
     <ClCompile Include="src\Components\ColliderComponent.cpp" />
     <ClCompile Include="src\DataManager.cpp" />
@@ -285,17 +285,17 @@
     <ClCompile Include="src\Components\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\GameObjectFactory.h" />
-    <ClInclude Include="include\GameObjectLoader.h" />
-    <ClInclude Include="include\BlueprintObjectParser.h" />
-    <ClInclude Include="include\GameObjectBlueprint.h" />
+    <ClInclude Include="include\GameObject\GameObjectFactory.h" />
+    <ClInclude Include="include\GameObject\GameObjectLoader.h" />
+    <ClInclude Include="include\GameObject\BlueprintObjectParser.h" />
+    <ClInclude Include="include\GameObject\GameObjectBlueprint.h" />
     <ClInclude Include="include\Animation.h" />
     <ClInclude Include="include\Animator.h" />
     <ClInclude Include="include\AnimData.h" />
     <ClInclude Include="include\AssimpGLMHelpers.h" />
     <ClInclude Include="include\Bone.h" />
     <ClInclude Include="include\Collisions.h" />
-    <ClInclude Include="include\GameObject.h" />
+    <ClInclude Include="include\GameObject\GameObject.h" />
     <ClInclude Include="include\Components\GraphicsComponent.h" />
     <ClInclude Include="include\Component.h" />
     <ClInclude Include="include\Components\ColliderComponent.h" />
