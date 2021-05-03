@@ -95,6 +95,7 @@ glm::vec3* objectScalePtr;
 extern Model* modelPtr;
 
 std::vector<GameObject*> gameObjectVector;
+std::vector<GameObject*> modifiableGameObjectVector;
 GameObject* gameObjectPtr;
 
 void RenderScene();
@@ -164,30 +165,12 @@ int main()
 
 #pragma endregion
 
-	//Data manager loads all models
-	dataManager.LoadAllModels();
-	//Location and size vectors' declaration
-	glm::vec3 objectScale = glm::vec3(1.0f, 1.0f, 1.0f);
-	objectScalePtr = &objectScale;
-
-	gameObjectPtr = new GameObject;
-	gameObjectPtr->SetActive();
-	gameObjectPtr->SetTag("Parent");
-	gameObjectVector.push_back(gameObjectPtr);
-
-	GameObjectLoader loader;
-	loader.LoadGameObjects("res/level.txt", gameObjectVector, *gameObjectVector[0]);
-
-	gameObjectPtr = new GameObject;
-	gameObjectPtr->SetActive();
-	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
-	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
-	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[4]);
-	gameObjectVector.push_back(gameObjectPtr);
-	gameObjectVector[0]->AddChild(gameObjectPtr);
+	
 
 #pragma region models and textures loading
+
+	//Data manager loads all models
+	dataManager.LoadAllModels();
 
 	houseBaseDiffuseTexture = dataManager.LoadTexture("container_diffuse.png");
 	houseBaseSpecularTexture = dataManager.LoadTexture("container_specular.png");
@@ -198,6 +181,36 @@ int main()
 
 	
 	cubemapTexture = dataManager.LoadCubemap();
+
+#pragma endregion
+
+
+
+#pragma region game objects declarations
+
+	//Location and size vectors' declaration
+	glm::vec3 objectScale = glm::vec3(1.0f, 1.0f, 1.0f);
+	objectScalePtr = &objectScale;
+
+	//Parent GameObject declaration
+	gameObjectPtr = new GameObject;
+	gameObjectPtr->SetActive();
+	gameObjectPtr->SetTag("Parent");
+	gameObjectVector.push_back(gameObjectPtr);
+
+	//Loading gameobjects from file
+	GameObjectLoader loader;
+	loader.LoadGameObjects("res/level.txt", gameObjectVector, *gameObjectVector[0]);
+
+
+	gameObjectPtr = new GameObject;
+	gameObjectPtr->SetActive();
+	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
+	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
+	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[4]);
+	gameObjectVector.push_back(gameObjectPtr);
+	gameObjectVector[0]->AddChild(gameObjectPtr);
 
 #pragma endregion
 
@@ -520,6 +533,7 @@ int main()
 
 #pragma endregion
 
+	//
 	float posFloat[] = { 1.0,1.0,1.0 };
 	bool update = gameObjectVector.back()->HasUpdate();
 	glm::vec3 pos = gameObjectVector.back()->GetTransformComponent()->GetLocation();
@@ -553,15 +567,11 @@ int main()
 		refractShader.ApplyMvptMatrices();
 		// We do not apply all matrices to the skybox shader, because of its nature.
 
-		orbitShader.Use();
-		orbitShader.SetInt("sidesCount", 64);
 		lineShader.Use();
 		lineShader.SetVecf4("color", glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
 
 		Lighting::UpdateLighting(litTexturedShader);
 		Lighting::UpdateLighting(litTexturedInstancedShader);
-
-
 
 		// Rendering...
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -580,18 +590,8 @@ int main()
 			glfwSetCursorPosCallback(windowPtr, nullptr);
 		}
 
-
-
-		glm::mat4 planeTransform = glm::translate(transform, glm::vec3(0.0f, -0.5f * 0.2f - 0.0001f, 0.0f)); // Setting "terrain's" plane a little bit below, so it doesn't intersect with models set on the "ground".
-		planeTransform = glm::scale(planeTransform, glm::vec3(100.0f, 100.0f, 100.0f)); // Scaling our "terrain" to make it bigger.
-
-		// Setting up scene graph...
-		glm::mat4 rootNodeTransform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
-		GraphNode rootNode(rootNodeTransform);
-
-		PseudoMesh plane(CustomDrawing::DrawPlane); GraphNode planeNode(&plane, planeTransform);
 		lineShaderEndPointPos = directionalLightsDirection;
-		PseudoMesh directionalLightIndicator(CustomDrawing::DrawLine); GraphNode directionalLightIndicatorNode(&directionalLightIndicator, glm::translate(transform, directionalLightPos));
+		PseudoMesh directionalLightIndicator(CustomDrawing::DrawLine);
 		
 		//Setting up GameObjects in scene
 		
@@ -601,13 +601,6 @@ int main()
 		//	gameObjectPtr->SetVelocity(0.0f);
 		//	gameObjectPtr_2->SetVelocity(0.0f);
 		//}
-			
-		if(lightsPositionsDirectionsShown)
-		{
-			// Enabling/disabling all lights' displays...
-			if (directionalLightEnabled)
-				rootNode.AddChild(&directionalLightIndicatorNode);
-		}
 
 		// 1. render depth of scene to texture (from light's perspective)
 		// --------------------------------------------------------------
@@ -622,7 +615,6 @@ int main()
 			glClear(GL_DEPTH_BUFFER_BIT);
 			glCullFace(GL_FRONT);
 			DepthRenderScene();
-			//rootNode.Render();
 			glCullFace(GL_BACK); // don't forget to reset original culling face
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -639,13 +631,8 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		RenderScene();
 
-		// Drawing the scene...
-		rootNode.Render();
-
 		// And the skybox...
 		CustomDrawing::DrawSkybox();
-
-
 
 		// render Depth map to quad for visual debugging
 		// ---------------------------------------------
@@ -657,7 +644,7 @@ int main()
 		//CustomDrawing::DrawQuad();
 		
 		
-
+		//GameObject editor options, first one determines if gameobject has Update
 		if(update && !once)
 		{
 			gameObjectVector.back()->SetUpdate();
@@ -675,6 +662,7 @@ int main()
 			pos = glm::vec3(posFloat[0], posFloat[1], posFloat[2]);
 		}
 
+		//Setting up movedirection of gameobject
 		if (selectedItem == 0)
 			gameObjectVector.back()->SetDirection("forward");
 		else if (selectedItem == 1)
@@ -685,6 +673,8 @@ int main()
 			gameObjectVector.back()->SetDirection("left");
 
 		gameObjectVector.back()->Update(pos);
+
+		//Choosing model for the gameobject
 		gameObjectVector.back()->GetGraphicsComponent()->SetModel(vecModel[modelID]);
 
 		// ImGui (UI for debugging purposes)
@@ -700,6 +690,7 @@ int main()
 			ImGui::Checkbox("Lights' positions/directions shown", &lightsPositionsDirectionsShown);
 			ImGui::ColorEdit4("Directional light color", directionalLightColorPtr);
 			
+			//gameobject editor
 			ImGui::Checkbox("GameObject Update", &update);
 			ImGui::SliderFloat3("GameObject position", posFloat , -10.0f, 10.0f);
 			ImGui::SliderFloat("lightsDirectionVectorAngleOffset", &lightsDirectionVectorAngleOffset, -10.0f, 10.0f);
