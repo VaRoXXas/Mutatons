@@ -13,6 +13,7 @@ private:
 public:
 	void SetModel(Model* modelLoad);
 	void Render(const glm::mat4& parentTransform);
+	void DepthRender(const glm::mat4& parentTransform);
 	std::string Component::GetType();
 	void Component::DisableComponent();
 	void Component::EnableComponent();

@@ -36,6 +36,7 @@ public:
 	std::string GetTag();
 	void AddChild(GameObject* childPtr);
 	void Render();
+	void DepthRender();
 	void SetDirection(std::string dir);
 	void SetUpdate();
 	void SetVelocity(float vel);

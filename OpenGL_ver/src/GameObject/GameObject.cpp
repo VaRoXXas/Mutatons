@@ -165,6 +165,32 @@ void GameObject::Render()
 	}
 }
 
+void GameObject::DepthRender()
+{
+
+	const glm::mat4 zeroPointTransform = glm::mat4(1.0f);
+	if (hasTransformComponent)
+	{
+		gameObjectTransform = this->GetTransformComponent()->GetTransform();
+	}
+	else
+		gameObjectTransform = zeroPointTransform;
+
+	if (hasGraphicsComponent)
+	{
+		this->GetGraphicsComponent()->DepthRender(gameObjectTransform);
+	}
+	for (GameObject* child : children)
+	{
+		if (child->hasGraphicsComponent)
+		{
+			const auto absoluteTransform = gameObjectTransform * child->GetTransformComponent()->GetTransform();
+			//child->GetGraphicsComponent()->Render(gameObjectTransform);
+			child->GetGraphicsComponent()->DepthRender(absoluteTransform);
+		}
+	}
+}
+
 //Sets move direction of GameObject
 void GameObject::SetDirection(std::string dir)
 {

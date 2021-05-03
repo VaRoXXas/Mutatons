@@ -316,6 +316,8 @@
     <ClInclude Include="res\shaders\fragment\deprecated\BasicF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\OrbitF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\SphereF.h" />
+    <ClInclude Include="res\shaders\fragment\DepthMapDebugF.h" />
+    <ClInclude Include="res\shaders\fragment\EmptyF.h" />
     <ClInclude Include="res\shaders\fragment\LitTexturedF.h" />
     <ClInclude Include="res\shaders\fragment\RefractF.h" />
     <ClInclude Include="res\shaders\fragment\SkyboxF.h" />
@@ -333,8 +335,10 @@
     <ClInclude Include="res\shaders\vertex\deprecated\PlaneV.h" />
     <ClInclude Include="res\shaders\vertex\deprecated\PyramidV.h" />
     <ClInclude Include="res\shaders\vertex\deprecated\SphereV.h" />
+    <ClInclude Include="res\shaders\vertex\DepthMapDebugV.h" />
     <ClInclude Include="res\shaders\vertex\LitTexturedInstancedV.h" />
     <ClInclude Include="res\shaders\vertex\LitTexturedV.h" />
+    <ClInclude Include="res\shaders\vertex\SimpleDepthV.h" />
     <ClInclude Include="res\shaders\vertex\SkyboxV.h" />
     <ClInclude Include="res\shaders\vertex\UnlitTexturedAnimatedV.h" />
     <ClInclude Include="res\shaders\vertex\UnlitV.h" />

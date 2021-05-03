@@ -8,6 +8,7 @@
 //#include "GameObjectSharer.h"
 extern Shader* litTexturedShaderPtr;
 extern Shader* litTexturedInstancedShaderPtr;
+extern Shader* simpleDepthShaderPtr;
 extern Shader* orbitShaderPtr;
 extern Shader* sphereShaderPtr;
 
@@ -24,6 +25,12 @@ void GraphicsComponent::Render(const glm::mat4& transform)
 {
 	if (modelPtr)
 		modelPtr->CustomRender(*litTexturedShaderPtr, transform);
+}
+
+void GraphicsComponent::DepthRender(const glm::mat4& transform)
+{
+	if (modelPtr)
+		modelPtr->CustomRender(*simpleDepthShaderPtr, transform);
 }
 
 //returns component's type

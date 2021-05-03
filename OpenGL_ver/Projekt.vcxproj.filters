@@ -281,6 +281,18 @@
     <ClInclude Include="include\GameObject\BlueprintObjectParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="res\shaders\fragment\EmptyF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="res\shaders\vertex\SimpleDepthV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="res\shaders\fragment\DepthMapDebugF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="res\shaders\vertex\DepthMapDebugV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Readme.txt" />

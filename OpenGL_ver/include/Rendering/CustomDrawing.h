@@ -11,6 +11,8 @@ namespace CustomDrawing
 	void DrawLine(const glm::mat4& transform);
 	void DrawReflected(const glm::mat4& transform);
 	void DrawRefracted(const glm::mat4& transform);
+	// for debugging depth map (used in shadow mapping)
+	void DrawQuad();
 
 	// Used once in main.
 	void DrawSkybox();

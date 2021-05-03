@@ -14,11 +14,14 @@ bool pointLightEnabled = false;
 bool spotLight1Enabled = false;
 bool spotLight2Enabled = false;
 bool lightsPositionsDirectionsShown = false;
+const float depthMapNearPlane = 1.0f, depthMapFarPlane = 20.0f;
 float lightsDirectionVectorAngleOffset = 0.0f;
 float* directionalLightColorPtr = new float[4];
 float* spotLight1ColorPtr = new float[4];
 float* spotLight2ColorPtr = new float[4];
 float* pointLightColorPtr = new float[4];
+glm::mat4 directionalLightSpaceMatrix;
+glm::vec3 directionalLightPos = glm::vec3(-5.0f, 10.0f, -6.0f);
 glm::vec3 directionalLightsDirection;
 glm::vec3 pointLightPos = glm::vec3(1.0f, 1.0f, 1.0f);
 glm::vec3 spotLight1Pos = glm::vec3(1.0f, 1.0f, 0.0f);
@@ -30,6 +33,7 @@ static const float s_darkness[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 static glm::vec3 lightColor;
 static glm::vec3 diffuseColor;
 static glm::vec3 ambientColor;
+
 
 
 
@@ -226,8 +230,17 @@ void Lighting::InitLighting(Shader& shader)
 
 void Lighting::UpdateLighting(Shader& shader)
 {
+    // for shadow mapping
+    const glm::mat4 lightProjection = glm::ortho(-12.0f, 12.0f, -12.0f, 12.0f, depthMapNearPlane, depthMapFarPlane);;
+    const glm::mat4 lightView = glm::lookAt(directionalLightPos, directionalLightsDirection, glm::vec3(0.0, 1.0, 0.0));
+    directionalLightSpaceMatrix = lightProjection * lightView;
+	
     shader.Use();
     shader.SetVecf3("viewPos", mainCamera.GetPosition());
+    shader.SetVecf3("lightPos", directionalLightPos);
+    shader.SetMat4("lightSpaceMatrix", directionalLightSpaceMatrix);
+
+	
 	
     if (directionalLightEnabled)
     {
@@ -238,7 +251,7 @@ void Lighting::UpdateLighting(Shader& shader)
         shader.SetVecf3("dirLight.diffuse", diffuseColor);
         shader.SetVecf3("dirLight.specular", glm::vec3(0.2f));
 
-        directionalLightsDirection = glm::vec3(0.2f, -1.0f, 0.3f + lightsDirectionVectorAngleOffset);
+        directionalLightsDirection = glm::vec3(0.2f + lightsDirectionVectorAngleOffset, -1.0f, 0.8f);
         shader.SetVecf3("dirLight.direction", directionalLightsDirection);
     }
     else

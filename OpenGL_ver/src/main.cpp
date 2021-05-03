@@ -49,7 +49,9 @@ extern Shader* sphereShaderPtr;
 extern Shader* lineShaderPtr;
 extern Shader* refractShaderPtr;
 extern Shader* skyboxShaderPtr;
-extern Shader* unlitTexturedAnimatedPtr;
+extern Shader* unlitTexturedAnimatedShaderPtr;
+extern Shader* simpleDepthShaderPtr;
+extern Shader* depthMapDebugShaderPtr;
 extern GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
 extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture;
 extern glm::vec3 lineShaderEndPointPos;
@@ -59,11 +61,14 @@ extern bool pointLightEnabled;
 extern bool spotLight1Enabled;
 extern bool spotLight2Enabled;
 extern bool lightsPositionsDirectionsShown;
+extern const float depthMapNearPlane = 1.0f, depthMapFarPlane = 7.5f;
 extern float lightsDirectionVectorAngleOffset;
 extern float* directionalLightColorPtr;
 extern float* spotLight1ColorPtr;
 extern float* spotLight2ColorPtr;
 extern float* pointLightColorPtr;
+extern glm::mat4 directionalLightSpaceMatrix;
+extern glm::vec3 directionalLightPos;
 extern glm::vec3 directionalLightsDirection;
 extern glm::vec3 pointLightPos;
 extern glm::vec3 spotLight1Pos;
@@ -90,6 +95,11 @@ extern Model* modelPtr;
 
 std::vector<GameObject*> gameObjectVector;
 GameObject* gameObjectPtr;
+
+void RenderScene();
+void DepthRenderScene();
+
+
 
 int main()
 {
@@ -134,6 +144,8 @@ int main()
 	Shader skyboxShader(s_skyboxVertexPtr, s_skyboxFragmentPtr);
 	Shader refractShader(s_litTexturedVertexPtr, s_refractFragmentPtr);
 	Shader unlitTexturedAnimated(s_unlitTexturedAnimatedVertexPtr, s_unlitTexturedFragmentPtr);
+	Shader simpleDepthShader(s_simpleDepthVertexPtr, s_emptyFragmentPtr);
+	Shader depthMapDebugShader(s_depthMapDebugVertexPtr, s_depthMapDebugFragmentPtr);
 	litTexturedShaderPtr = &litTexturedShader;
 	orbitShaderPtr = &orbitShader;
 	sphereShaderPtr = &sphereShader;
@@ -141,7 +153,10 @@ int main()
 	lineShaderPtr = &lineShader;
 	skyboxShaderPtr = &skyboxShader;
 	refractShaderPtr = &refractShader;
-	unlitTexturedAnimatedPtr = &unlitTexturedAnimated;
+	unlitTexturedAnimatedShaderPtr = &unlitTexturedAnimated;
+	simpleDepthShaderPtr = &simpleDepthShader;
+	depthMapDebugShaderPtr = &depthMapDebugShader;
+	
 
 	Lighting::InitLighting(litTexturedShader);
 	Lighting::InitLighting(litTexturedInstancedShader);
@@ -409,6 +424,40 @@ int main()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, (3 + 3 + 2) * sizeof(float), (void*)(6 * sizeof(float))); // Static cast surprisingly doesn't work.
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+	// for shadowmapping
+
+	// configure depth map FBO
+	// -----------------------
+	const unsigned int SHADOW_WIDTH = 16384, SHADOW_HEIGHT = 16384;
+	unsigned int depthMapFBO;
+	glGenFramebuffers(1, &depthMapFBO);
+	// create depth texture
+	unsigned int depthMap;
+	glGenTextures(1, &depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+	// attach depth texture as FBO's depth buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	// configuring shader for shadows
+	litTexturedShader.Use();
+	litTexturedShader.SetInt("diffuseTexture", 0);
+	litTexturedShader.SetInt("shadowMap", 1);
+	litTexturedInstancedShader.Use();
+	litTexturedInstancedShader.SetInt("diffuseTexture", 0);
+	litTexturedInstancedShader.SetInt("shadowMap", 1);
+	depthMapDebugShader.Use();
+	depthMapDebugShader.SetInt("depthMap", 0);
+
 #pragma endregion
 
 
@@ -520,9 +569,15 @@ int main()
 		else
 			Util::DisableWireframeMode();
 		if (!cursorEnabled)
+		{
 			glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Blocking cursor inside a window and disabling its graphic representation.
+			glfwSetCursorPosCallback(windowPtr, Input::CursorPosCallback);
+		}
 		else
+		{
 			glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwSetCursorPosCallback(windowPtr, nullptr);
+		}
 
 
 
@@ -535,7 +590,7 @@ int main()
 
 		PseudoMesh plane(CustomDrawing::DrawPlane); GraphNode planeNode(&plane, planeTransform);
 		lineShaderEndPointPos = directionalLightsDirection;
-		PseudoMesh directionalLightIndicator(CustomDrawing::DrawLine); GraphNode directionalLightIndicatorNode(&directionalLightIndicator, glm::translate(transform, glm::vec3(0.0f, 2.0f, 0.0f)));
+		PseudoMesh directionalLightIndicator(CustomDrawing::DrawLine); GraphNode directionalLightIndicatorNode(&directionalLightIndicator, glm::translate(transform, directionalLightPos));
 		
 		//Setting up GameObjects in scene
 		
@@ -553,13 +608,52 @@ int main()
 				rootNode.AddChild(&directionalLightIndicatorNode);
 		}
 
-		gameObjectVector[0]->Render();
+		// 1. render depth of scene to texture (from light's perspective)
+		// --------------------------------------------------------------
+		// render scene from light's point of view
+		simpleDepthShader.Use();
+		simpleDepthShader.SetMat4("model", model);
+		simpleDepthShader.SetMat4("transform", transform);
+		simpleDepthShader.SetMat4("lightSpaceMatrix", directionalLightSpaceMatrix);
+		
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+			glClear(GL_DEPTH_BUFFER_BIT);
+			glCullFace(GL_FRONT);
+			DepthRenderScene();
+			//rootNode.Render();
+			glCullFace(GL_BACK); // don't forget to reset original culling face
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// reset viewport
+		glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		// 2. render scene as normal using the generated depth/shadow map  
+		// --------------------------------------------------------------
+		glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		litTexturedShader.Use();
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, depthMap);
+		RenderScene();
 
 		// Drawing the scene...
 		rootNode.Render();
 
 		// And the skybox...
 		CustomDrawing::DrawSkybox();
+
+
+
+		// render Depth map to quad for visual debugging
+		// ---------------------------------------------
+		depthMapDebugShader.Use();
+		depthMapDebugShader.SetFloat("near_plane", depthMapNearPlane);
+		depthMapDebugShader.SetFloat("far_plane", depthMapFarPlane);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, depthMap);
+		//CustomDrawing::DrawQuad();
 		
 		
 
@@ -607,6 +701,7 @@ int main()
 			
 			ImGui::Checkbox("GameObject Update", &update);
 			ImGui::SliderFloat3("GameObject position", posFloat , -10.0f, 10.0f);
+			ImGui::SliderFloat("lightsDirectionVectorAngleOffset", &lightsDirectionVectorAngleOffset, -10.0f, 10.0f);
 			ImGui::Combo("MoveDirection", &selectedItem, items, IM_ARRAYSIZE(items));
 			ImGui::SliderInt("GameObject model", &modelID, 0, 29);
 
@@ -632,4 +727,16 @@ int main()
 	glfwTerminate();
 
 	return EXIT_SUCCESS;
+}
+
+
+
+void RenderScene()
+{
+	gameObjectVector[0]->Render();
+}
+
+void DepthRenderScene()
+{
+	gameObjectVector[0]->DepthRender();
 }
