@@ -1,6 +1,7 @@
 #pragma once
 
 
+
 class ColliderComponent : public Component
 {
 private:
@@ -20,11 +21,10 @@ public:
 	glm::vec3 GetSize();
 	
 	void Initialize(std::shared_ptr<TransformComponent> componentPtr);
-	void Collides(glm::vec3 &collidingObjectLocation, glm::vec3 &collidingObjectSize);
-	//void Component::start(GameObjectSharer* gos, GameObject* self)
-	//{
-	//
-	//}
+	void Initialize(glm::vec3& targetLocation, glm::vec3& targetSize);
+	void Initialize(glm::vec3 targetLocation, glm::vec3 targetSize);
+	bool Collides(glm::vec3 &collidingObjectLocation, glm::vec3 &collidingObjectSize);
+	void Update();
 
 };
 

@@ -17,6 +17,7 @@ TransformComponent::TransformComponent()
 {
 	transform = glm::mat4(1.0f);
 	location = glm::vec3(1.0f);
+	transform = glm::translate(transform, location);
 }
 
 //transform, location and scale getters

@@ -97,6 +97,9 @@ extern Model* modelPtr;
 std::vector<GameObject*> gameObjectVector;
 std::vector<GameObject*> modifiableGameObjectVector;
 GameObject* gameObjectPtr;
+glm::vec3* posPtr;
+glm::vec3* sizePtr;
+
 
 void RenderScene();
 void DepthRenderScene();
@@ -203,15 +206,33 @@ int main()
 	loader.LoadGameObjects("res/level.txt", gameObjectVector, *gameObjectVector[0]);
 
 
+	//Testing gameobjects' declaration
+	gameObjectPtr = new GameObject;
+	gameObjectPtr->SetActive();
+	gameObjectPtr->SetVelocity(10.0f);
+	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
+	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
+	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
+	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[7]);
+	gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
+	modifiableGameObjectVector.push_back(gameObjectPtr);
+	gameObjectVector[0]->AddChild(gameObjectPtr);
+
+
 	gameObjectPtr = new GameObject;
 	gameObjectPtr->SetActive();
 	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
-	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
+	//gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
+	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
 	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[4]);
-	gameObjectVector.push_back(gameObjectPtr);
+	//gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[16]);
+	gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
+	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
 
+	posPtr = &modifiableGameObjectVector.back()->GetColliderComponent()->GetPos();
+	sizePtr = &modifiableGameObjectVector.back()->GetColliderComponent()->GetSize();
 #pragma endregion
 
 
@@ -533,15 +554,16 @@ int main()
 
 #pragma endregion
 
-	//
+	//editor propeties
 	float posFloat[] = { 1.0,1.0,1.0 };
-	bool update = gameObjectVector.back()->HasUpdate();
-	glm::vec3 pos = gameObjectVector.back()->GetTransformComponent()->GetLocation();
+	bool update = modifiableGameObjectVector.front()->HasUpdate();
+	glm::vec3 pos = modifiableGameObjectVector.front()->GetTransformComponent()->GetLocation();
 	bool once = false;
+	bool reset = true;
 	static const char * items[] = { "forward", "back", "right", "left" };
 	static int selectedItem = 0;
 	int modelID = 0;
-
+	
 	// game loop
 	while (!glfwWindowShouldClose(windowPtr))
 	{
@@ -592,15 +614,6 @@ int main()
 
 		lineShaderEndPointPos = directionalLightsDirection;
 		PseudoMesh directionalLightIndicator(CustomDrawing::DrawLine);
-		
-		//Setting up GameObjects in scene
-		
-		//if (col->col.Collides(*modelLocationPtr, *objectScalePtr, *gameObjectLocationPtr, *objectScalePtr))
-		//{
-		//	std::cout << "KOLIZJA" << std::endl;
-		//	gameObjectPtr->SetVelocity(0.0f);
-		//	gameObjectPtr_2->SetVelocity(0.0f);
-		//}
 
 		// 1. render depth of scene to texture (from light's perspective)
 		// --------------------------------------------------------------
@@ -609,19 +622,19 @@ int main()
 		simpleDepthShader.SetMat4("model", model);
 		simpleDepthShader.SetMat4("transform", transform);
 		simpleDepthShader.SetMat4("lightSpaceMatrix", directionalLightSpaceMatrix);
-		
+
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-			glClear(GL_DEPTH_BUFFER_BIT);
-			glCullFace(GL_FRONT);
-			DepthRenderScene();
-			glCullFace(GL_BACK); // don't forget to reset original culling face
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glCullFace(GL_FRONT);
+		DepthRenderScene();
+		glCullFace(GL_BACK); // don't forget to reset original culling face
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		// reset viewport
 		glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+
 		// 2. render scene as normal using the generated depth/shadow map  
 		// --------------------------------------------------------------
 		glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -642,41 +655,55 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		//CustomDrawing::DrawQuad();
-		
-		
+
+
 		//GameObject editor options, first one determines if gameobject has Update
-		if(update && !once)
+		if (update && !once)
 		{
-			gameObjectVector.back()->SetUpdate();
+			modifiableGameObjectVector.front()->SetUpdate();
 			once = true;
 		}
-		else if(!update && once)
+		else if (!update && once)
 		{
 			posFloat[0] = pos.x;
 			posFloat[1] = pos.y;
 			posFloat[2] = pos.z;
-			gameObjectVector.back()->SetUpdate();
+			modifiableGameObjectVector.front()->SetUpdate();
 			once = false;
-		} else if (!update)
+		}
+		else if (!update)
 		{
 			pos = glm::vec3(posFloat[0], posFloat[1], posFloat[2]);
 		}
 
 		//Setting up movedirection of gameobject
-		if (selectedItem == 0)
-			gameObjectVector.back()->SetDirection("forward");
-		else if (selectedItem == 1)
-			gameObjectVector.back()->SetDirection("back");
-		else if (selectedItem == 2)
-			gameObjectVector.back()->SetDirection("right");
-		else if (selectedItem == 3)
-			gameObjectVector.back()->SetDirection("left");
+		if (reset)
+		{
+			switch (selectedItem)
+			{
+			case 0:
+				modifiableGameObjectVector.front()->SetDirection("forward");
+				reset = false;
+				break;
+			case 1:
+				modifiableGameObjectVector.front()->SetDirection("back");
+				reset = false;
+				break;
+			case 2:
+				modifiableGameObjectVector.front()->SetDirection("right");
+				reset = false;
+				break;
+			case 3:
+				modifiableGameObjectVector.front()->SetDirection("left");
+				reset = false;
+				break;
+			}
+		}
 
-		gameObjectVector.back()->Update(pos);
-
+		//GameObject's updates
+		modifiableGameObjectVector.front()->Update(pos);
 		//Choosing model for the gameobject
-		gameObjectVector.back()->GetGraphicsComponent()->SetModel(vecModel[modelID]);
-
+		modifiableGameObjectVector.front()->GetGraphicsComponent()->SetModel(vecModel[modelID]);
 		// ImGui (UI for debugging purposes)
 		if(IMGUI_ENABLED)
 		{
@@ -695,13 +722,18 @@ int main()
 			ImGui::SliderFloat3("GameObject position", posFloat , -10.0f, 10.0f);
 			ImGui::SliderFloat("lightsDirectionVectorAngleOffset", &lightsDirectionVectorAngleOffset, -10.0f, 10.0f);
 			ImGui::Combo("MoveDirection", &selectedItem, items, IM_ARRAYSIZE(items));
+			ImGui::Checkbox("MoveDirection reset", &reset);
 			ImGui::SliderInt("GameObject model", &modelID, 0, 29);
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		}
 
-
+		//Collisions testing
+		if (modifiableGameObjectVector.front()->GetColliderComponent()->Collides(*posPtr, *sizePtr))
+		{
+			modifiableGameObjectVector.front()->SetDirection("right");
+		}
 
 		// [glfw] Swapping buffers and polling IO events...
 		glfwSwapBuffers(windowPtr);

@@ -48,11 +48,33 @@ void ColliderComponent::Initialize(std::shared_ptr<TransformComponent> component
 	size = transformComponentPtr->GetScale();
 }
 
+void ColliderComponent::Initialize(glm::vec3& targetLocation, glm::vec3& targetSize)
+{
+	pos = targetLocation;
+	size = targetSize;
+}
+
+void ColliderComponent::Initialize(glm::vec3 targetLocation, glm::vec3 targetSize)
+{
+	pos = targetLocation;
+	size = targetSize;
+}
+
 //This function is used to check if two gameobjects collide
-void ColliderComponent::Collides(glm::vec3 &collidingObjectLocation, glm::vec3 &collidingObjectSize)
+bool ColliderComponent::Collides(glm::vec3 &collidingObjectLocation, glm::vec3 &collidingObjectSize)
 {
 	if (col.Collides(pos, size, collidingObjectLocation, collidingObjectSize))
+		return true;
+	else
+		return false;
+}
+
+//Updates collider's location
+void ColliderComponent::Update()
+{
+	if (transformComponentPtr != nullptr)
 	{
-		std::cout << "kolizja" << std::endl;
+		pos = transformComponentPtr->GetLocation();
+		size = transformComponentPtr->GetScale();
 	}
 }

@@ -26,6 +26,7 @@ private:
 	int colliderComponentLocation = -1;
 	bool hasCollider = false;
 	float velocity = 0.0f;
+	float tempVel = 0.0f;
 public:
 	void Update(glm::vec3& locationVec);
 	void AddComponent(std::shared_ptr<Component> component);

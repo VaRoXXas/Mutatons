@@ -17,34 +17,39 @@ void GameObject::Update(glm::vec3& locationVec)
 {
 	if (active && useUpdate)
 	{
-		velocity = 1.0f;
+		velocity = tempVel;
 		if (moveDirection == "forward")
 		{
-			locationVec.z = (locationVec.z + 0.001f) * velocity;
+			locationVec.z = locationVec.z + (0.001f * velocity);
 		}
 		else if (moveDirection == "back")
 		{
-			locationVec.z = locationVec.z - 0.001f * velocity;
+			locationVec.z = locationVec.z - (0.001f * velocity);
 		}
 		else if (moveDirection == "right")
 		{
-			locationVec.x = locationVec.x - 0.001f * velocity;
+			locationVec.x = locationVec.x - (0.001f * velocity);
 		}
 		else if (moveDirection == "left")
 		{
-			locationVec.x = locationVec.x + 0.001f * velocity;
+			locationVec.x = locationVec.x + (0.001f * velocity);
 		}
 		else if (moveDirection == "up")
 		{
-			locationVec.y = locationVec.y + 0.001f * velocity;
+			locationVec.y = locationVec.y + (0.001f * velocity);
 		}
 		else if (moveDirection == "down")
 		{
-			locationVec.y = locationVec.y - 0.001f * velocity;
+			locationVec.y = locationVec.y - (0.001f * velocity);
 		}
 	} else 
 		velocity = 0.0f;
 	this->GetTransformComponent()->SetLocation(locationVec);
+
+	if (active && hasCollider)
+	{
+		this->GetColliderComponent()->Update();
+	}
 }
 
 //GameObject's Components' getters
@@ -121,7 +126,7 @@ void GameObject::SetUpdate()
 
 void GameObject::SetVelocity(float vel)
 {
-	velocity = vel;
+	tempVel = vel;
 }
 
 bool GameObject::HasCollider()
