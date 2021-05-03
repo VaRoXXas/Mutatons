@@ -195,6 +195,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\FrustumCulling\AABox.cpp" />
+    <ClCompile Include="src\FrustumCulling\Frustum.cpp" />
+    <ClCompile Include="src\FrustumCulling\Plane.cpp" />
+    <ClCompile Include="src\FrustumCulling\Vec3.cpp" />
     <ClCompile Include="src\GameObject\GameObjectFactory.cpp" />
     <ClCompile Include="src\GameObject\GameObjectLoader.cpp" />
     <ClCompile Include="src\GameObject\BlueprintObjectParser.cpp" />
@@ -285,6 +289,10 @@
     <ClCompile Include="src\Components\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\FrustumCulling\AABox.h" />
+    <ClInclude Include="include\FrustumCulling\Frustum.h" />
+    <ClInclude Include="include\FrustumCulling\Plane.h" />
+    <ClInclude Include="include\FrustumCulling\Vec3.h" />
     <ClInclude Include="include\GameObject\GameObjectFactory.h" />
     <ClInclude Include="include\GameObject\GameObjectLoader.h" />
     <ClInclude Include="include\GameObject\BlueprintObjectParser.h" />

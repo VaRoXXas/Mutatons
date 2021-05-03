@@ -15,7 +15,6 @@ static const float S_SENSITIVITY_DEFAULT = 0.05f;
 static const float S_ZOOM_DEFAULT = 45.0f;
 
 
-
 // An abstract camera class that processes input and calculates the corresponding Euler angles, vectors and matrices for use in OpenGL.
 class Camera
 {

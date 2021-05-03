@@ -2,11 +2,12 @@
 // ReSharper disable CppRedundantQualifier
 #include "pch.h"
 #include "Camera.h"
+#include "FrustumCulling/Frustum.h"
 
-
+Frustum frustum;
 
 Camera::Camera(bool isometric, float yaw, float pitch)
-: isometric(isometric), position(glm::vec3(10.0f, 10.0f, 10.0f)), front(glm::vec3(-2.0f, -2.0f, -2.0f)), worldUp(glm::vec3(0.0f, 1.0f, 0.0f)), yaw(yaw), pitch(pitch), movementSpeed(S_SPEED_DEFAULT), mouseSensitivity(S_SENSITIVITY_DEFAULT), zoom(S_ZOOM_DEFAULT)
+: isometric(isometric), position(glm::vec3(10.0f, 10.0f, 10.0f)), front(glm::vec3(-1.0f, -3.0f, -1.0f)), worldUp(glm::vec3(0.0f, 1.0f, 0.0f)), yaw(yaw), pitch(pitch), movementSpeed(S_SPEED_DEFAULT), mouseSensitivity(S_SENSITIVITY_DEFAULT), zoom(S_ZOOM_DEFAULT)
 {
     if (isometric == false)
     {
@@ -28,6 +29,20 @@ Camera::Camera(bool isometric, float yaw, float pitch)
 
 glm::mat4 Camera::GetViewMatrix() const
 {
+    //frustum culling
+    Vec3 p, f, u, pf;
+    p.x = position.x;
+    p.y = position.y;
+    p.z = position.z;
+    f.x = front.x;
+    f.y = front.y;
+    f.z = front.z;
+    u.x = up.x;
+    u.y = up.y;
+    u.z = up.z;
+    pf = p + f;
+    frustum.SetCamDef(p, pf, u);
+
     return glm::lookAt(position, position + front, up);
 }
 

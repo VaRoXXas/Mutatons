@@ -10,6 +10,7 @@
 #include "Rendering/PseudoMesh.h"
 #include "Rendering/CustomDrawing.h"
 #include "Scene/GraphNode.h"
+#include "FrustumCulling/Frustum.h"
 
 #include "Collisions.h"
 #include "Component.h"
@@ -74,9 +75,10 @@ extern glm::vec3 pointLightPos;
 extern glm::vec3 spotLight1Pos;
 extern glm::vec3 spotLight2Pos;
 extern std::vector<Model*> vecModel;
+extern Frustum frustum;
 
 //variable representing camera mode
-bool isometric = false;
+bool isometric = true;
 
 bool IMGUI_ENABLED = true;
 bool sceneExplorationModeEnabled = true;
@@ -97,8 +99,8 @@ extern Model* modelPtr;
 std::vector<GameObject*> gameObjectVector;
 std::vector<GameObject*> modifiableGameObjectVector;
 GameObject* gameObjectPtr;
-glm::vec3* posPtr;
-glm::vec3* sizePtr;
+glm::vec3 pos;
+glm::vec3 size;
 
 
 void RenderScene();
@@ -231,8 +233,8 @@ int main()
 	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
 
-	posPtr = &modifiableGameObjectVector.back()->GetColliderComponent()->GetPos();
-	sizePtr = &modifiableGameObjectVector.back()->GetColliderComponent()->GetSize();
+	pos = modifiableGameObjectVector.back()->GetColliderComponent()->GetPos();
+	size = modifiableGameObjectVector.back()->GetColliderComponent()->GetSize();
 #pragma endregion
 
 
@@ -580,6 +582,8 @@ int main()
 		model = glm::mat4(1.0f);
 		view = mainCamera.GetViewMatrix();
 		projection = glm::perspective(glm::radians(mainCamera.GetZoom()), static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT), 0.1f, 100.0f);
+		//frustum culling
+		frustum.SetCamInternals(glm::radians(mainCamera.GetZoom()), static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT), 0.1f, 100.0f);
 
 		// updating shaders
 		litTexturedShader.ApplyMvptMatrices();
@@ -730,7 +734,7 @@ int main()
 		}
 
 		//Collisions testing
-		if (modifiableGameObjectVector.front()->GetColliderComponent()->Collides(*posPtr, *sizePtr))
+		if (modifiableGameObjectVector.front()->GetColliderComponent()->Collides(pos, size))
 		{
 			modifiableGameObjectVector.front()->SetDirection("right");
 		}

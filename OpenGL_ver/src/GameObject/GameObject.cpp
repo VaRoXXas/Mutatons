@@ -6,6 +6,10 @@
 #include "Components/GraphicsComponent.h"
 #include "Components/TransformComponent.h"
 
+#include "FrustumCulling/Frustum.h"
+
+extern Frustum frustum;
+
 //#include "GameObjectSharer.h"
 //#include "DevelopState.h"
 //#include "RectColliderComponent.h"
@@ -163,9 +167,18 @@ void GameObject::Render()
 	{
 		if (child->hasGraphicsComponent)
 		{
-			const auto absoluteTransform = gameObjectTransform * child->GetTransformComponent()->GetTransform();
-			//child->GetGraphicsComponent()->Render(gameObjectTransform);
-			child->GetGraphicsComponent()->Render(absoluteTransform);
+			Vec3 corner;
+			corner.x = child->GetTransformComponent()->GetLocation().x;
+			corner.y = child->GetTransformComponent()->GetLocation().y;
+			corner.z = child->GetTransformComponent()->GetLocation().z;
+			//frustum culling
+			if (frustum.SphereInFrustum(corner, 10) != Frustum::OUTSIDE)
+			{
+				const auto absoluteTransform = gameObjectTransform * child->GetTransformComponent()->GetTransform();
+				//child->GetGraphicsComponent()->Render(gameObjectTransform);
+				child->GetGraphicsComponent()->Render(absoluteTransform);
+			}
+			
 		}
 	}
 }
