@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "DataManager.h"
 #include "FileNames.h"
-#include "Rendering/deprecated/Model.h"
+#include "Rendering/Model.h"
 
 
 Model* modelPtr;

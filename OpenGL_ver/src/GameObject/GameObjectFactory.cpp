@@ -6,7 +6,7 @@
 #include "Components/GraphicsComponent.h"
 #include "Collisions.h"
 #include "Components/ColliderComponent.h"
-#include "Rendering/deprecated/Model.h"
+#include "Rendering/Model.h"
 #include "GameObject/GameObjectFactory.h"
 
 extern std::vector<Model*> vecModel;
