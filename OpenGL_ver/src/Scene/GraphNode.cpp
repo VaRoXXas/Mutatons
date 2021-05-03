@@ -5,7 +5,7 @@
 #include "GameObject/GameObject.h"
 #include "Scene/GraphNode.h"
 #include "Rendering/PseudoMesh.h"
-#include "Rendering/deprecated/Model.h"
+#include "Rendering/Model.h"
 
 
 

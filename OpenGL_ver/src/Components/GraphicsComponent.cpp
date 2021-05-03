@@ -3,7 +3,7 @@
 #include "Components/GraphicsComponent.h"
 #include "Components/TransformComponent.h"
 #include "Rendering/Shader.h"
-#include "Rendering/deprecated/Model.h"
+#include "Rendering/Model.h"
 
 //#include "GameObjectSharer.h"
 extern Shader* litTexturedShaderPtr;
