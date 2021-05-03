@@ -99,8 +99,8 @@ extern Model* modelPtr;
 std::vector<GameObject*> gameObjectVector;
 std::vector<GameObject*> modifiableGameObjectVector;
 GameObject* gameObjectPtr;
-glm::vec3 pos;
-glm::vec3 size;
+glm::vec3 posCol;
+glm::vec3 sizeCol;
 
 
 void RenderScene();
@@ -233,8 +233,8 @@ int main()
 	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
 
-	pos = modifiableGameObjectVector.back()->GetColliderComponent()->GetPos();
-	size = modifiableGameObjectVector.back()->GetColliderComponent()->GetSize();
+	posCol = modifiableGameObjectVector.back()->GetColliderComponent()->GetPos();
+	sizeCol = modifiableGameObjectVector.back()->GetColliderComponent()->GetSize();
 #pragma endregion
 
 
@@ -734,7 +734,7 @@ int main()
 		}
 
 		//Collisions testing
-		if (modifiableGameObjectVector.front()->GetColliderComponent()->Collides(pos, size))
+		if (modifiableGameObjectVector.front()->GetColliderComponent()->Collides(posCol, sizeCol))
 		{
 			modifiableGameObjectVector.front()->SetDirection("right");
 		}
