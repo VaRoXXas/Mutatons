@@ -90,13 +90,13 @@
     <ClCompile Include="src\Collisions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Animation.cpp">
+    <ClCompile Include="src\Rendering\animation\Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Animator.cpp">
+    <ClCompile Include="src\Rendering\animation\Animator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Bone.cpp">
+    <ClCompile Include="src\Rendering\animation\Bone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ObjectTags.cpp">
@@ -218,10 +218,10 @@
     <ClInclude Include="include\DataManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Rendering\deprecated\Mesh.h">
+    <ClInclude Include="include\Rendering\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Rendering\deprecated\Model.h">
+    <ClInclude Include="include\Rendering\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Rendering\CustomDrawing.h">
@@ -242,19 +242,19 @@
     <ClInclude Include="include\Collisions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\AssimpGLMHelpers.h">
+    <ClInclude Include="include\Rendering\animation\AssimpGLMHelpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\AnimData.h">
+    <ClInclude Include="include\Rendering\animation\AnimData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Animator.h">
+    <ClInclude Include="include\Rendering\animation\Animator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Animation.h">
+    <ClInclude Include="include\Rendering\animation\Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Bone.h">
+    <ClInclude Include="include\Rendering\animation\Bone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="res\shaders\fragment\UnlitTexturedF.h">

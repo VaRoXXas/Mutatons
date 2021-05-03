@@ -1,10 +1,10 @@
 #include "pch.h"
 
-#include <Rendering/deprecated/Mesh.h>
+#include <Rendering/Mesh.h>
 #include <Rendering/Shader.h>
-#include <Rendering/deprecated/Model.h>
-#include <AnimData.h>
-#include <AssimpGLMHelpers.h>
+#include <Rendering/Model.h>
+#include <Rendering/animation/AnimData.h>
+#include <Rendering/animation/AssimpGLMHelpers.h>
 
 
 

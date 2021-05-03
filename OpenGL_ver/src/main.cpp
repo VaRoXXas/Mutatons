@@ -5,8 +5,8 @@
 #include "Input.h"
 #include "DataManager.h"
 #include "Rendering/Shader.h"
-#include "Rendering/deprecated/Mesh.h" // TODO: Change this to new Mesh class file.
-#include "Rendering/deprecated/Model.h" // TODO: Change this to new Model class file.
+#include "Rendering/Mesh.h"
+#include "Rendering/Model.h"
 #include "Rendering/PseudoMesh.h"
 #include "Rendering/CustomDrawing.h"
 #include "Scene/GraphNode.h"
@@ -75,12 +75,13 @@ extern glm::vec3 spotLight1Pos;
 extern glm::vec3 spotLight2Pos;
 extern std::vector<Model*> vecModel;
 
-
+//variable representing camera mode
+bool isometric = false;
 
 bool IMGUI_ENABLED = true;
 bool sceneExplorationModeEnabled = true;
 DataManager dataManager = DataManager();
-Camera mainCamera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera mainCamera(isometric);
 GLfloat deltaTime = 0.0f; // the difference between the current and the last frame
 GLfloat lastFrame = 0.0f;
 GLfloat currentFrame = 0.0f;

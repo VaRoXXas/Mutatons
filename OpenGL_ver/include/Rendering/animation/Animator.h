@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Animation.h>
+#include <Rendering/animation/Animation.h>
 
-
+//Animation manager
 
 class Animator
 {

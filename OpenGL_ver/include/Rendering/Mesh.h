@@ -4,6 +4,7 @@
 
 #define MAX_BONE_INFLUENCE 4
 
+// This class is designed to store mesh informations
 
 
 struct Vertex {

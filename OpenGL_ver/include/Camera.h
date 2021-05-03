@@ -22,7 +22,7 @@ class Camera
 public:
 	
     // constructor with vectors
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = S_YAW_DEFAULT, float pitch = S_PITCH_DEFAULT);
+    Camera(bool isometric, float yaw = S_YAW_DEFAULT, float pitch = S_PITCH_DEFAULT);
     // constructor with scalar values
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
@@ -59,6 +59,8 @@ public:
     void SetMouseSensitivity(const float mouseSensitivity);
     float GetZoom() const;
     void SetZoom(const float zoom);
+    bool GetIsometric();
+    void SetIsometric(bool isometric);
 	
 private:
 
@@ -77,6 +79,8 @@ private:
     float movementSpeed = 0.0f;
     float mouseSensitivity = 0.0f;
     float zoom = 0.0f;
+    //variable representing camera mode
+    bool isometric = false;
 	
     // Calculates the front vector from the Camera's (updated) Euler angles.
     void UpdateCameraVectors();

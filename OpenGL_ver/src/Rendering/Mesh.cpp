@@ -1,6 +1,6 @@
 #include "pch.h"
 #include <Rendering/Shader.h>
-#include <Rendering/deprecated/Mesh.h>
+#include <Rendering/Mesh.h>
 
 
 
