@@ -195,6 +195,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameObject\Crossing.cpp" />
     <ClCompile Include="src\FrustumCulling\AABox.cpp" />
     <ClCompile Include="src\FrustumCulling\Frustum.cpp" />
     <ClCompile Include="src\FrustumCulling\Plane.cpp" />
@@ -289,6 +290,7 @@
     <ClCompile Include="src\Components\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\GameObject\Crossing.h" />
     <ClInclude Include="include\FrustumCulling\AABox.h" />
     <ClInclude Include="include\FrustumCulling\Frustum.h" />
     <ClInclude Include="include\FrustumCulling\Plane.h" />
