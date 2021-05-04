@@ -10,6 +10,7 @@ static const char* s_refractFragmentPtr = R"(
     uniform vec3 viewPos;
     uniform samplerCube skybox;
 	uniform bool refractMode;
+	uniform float refractValue;
 
     void main()
     {             
@@ -17,7 +18,8 @@ static const char* s_refractFragmentPtr = R"(
         vec3 R;
 		if(refractMode)
 		{
-			float ratio = 1.00 / 1.52; // 1.52 is a refraction factor for glass.
+			//float ratio = 1.00 / 1.52; // 1.52 is a refraction factor for glass.
+			float ratio = refractValue;
 			R = refract(I, normalize(Normal), ratio);
 		}
 		else

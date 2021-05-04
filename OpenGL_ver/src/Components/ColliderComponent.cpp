@@ -40,6 +40,17 @@ glm::vec3 ColliderComponent::GetSize()
 	return size;
 }
 
+glm::vec3* ColliderComponent::GetPosRef()
+{
+	return &pos;
+}
+
+//returns colllider size
+glm::vec3* ColliderComponent::GetSizeRef()
+{
+	return &size;
+}
+
 //function used to set pointer to GameObject's transform component and initialize Collider's propeties
 void ColliderComponent::Initialize(std::shared_ptr<TransformComponent> componentPtr)
 {

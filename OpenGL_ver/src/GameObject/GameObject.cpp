@@ -7,8 +7,10 @@
 #include "Components/TransformComponent.h"
 
 #include "FrustumCulling/Frustum.h"
+#include "Rendering/CustomDrawing.h"
 
 extern Frustum frustum;
+GLuint queryName;
 
 //#include "GameObjectSharer.h"
 //#include "DevelopState.h"
@@ -167,16 +169,33 @@ void GameObject::Render()
 	{
 		if (child->hasGraphicsComponent)
 		{
+			const auto absoluteTransform = gameObjectTransform * child->GetTransformComponent()->GetTransform();
+
+			//Occlusion culling
+			//glDisable(GL_CULL_FACE);
+			glDepthMask(GL_FALSE);
+			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+			glGenQueries(1, &queryName);
+			glBeginQuery(GL_SAMPLES_PASSED, queryName);
+			CustomDrawing::DrawRefracted(absoluteTransform);
+			glEndQuery(GL_SAMPLES_PASSED);
+
+			//glEnable(GL_CULL_FACE);
+			glDepthMask(GL_TRUE);
+			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+			
 			Vec3 corner;
 			corner.x = child->GetTransformComponent()->GetLocation().x;
 			corner.y = child->GetTransformComponent()->GetLocation().y;
 			corner.z = child->GetTransformComponent()->GetLocation().z;
+			
 			//frustum culling
 			if (frustum.SphereInFrustum(corner, 10) != Frustum::OUTSIDE)
 			{
-				const auto absoluteTransform = gameObjectTransform * child->GetTransformComponent()->GetTransform();
+				glBeginConditionalRender(queryName, GL_QUERY_WAIT);
 				//child->GetGraphicsComponent()->Render(gameObjectTransform);
 				child->GetGraphicsComponent()->Render(absoluteTransform);
+				glEndConditionalRender();
 			}
 			
 		}

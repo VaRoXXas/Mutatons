@@ -19,6 +19,8 @@ public:
 
 	glm::vec3 GetPos();
 	glm::vec3 GetSize();
+	glm::vec3* GetPosRef();
+	glm::vec3* GetSizeRef();
 	
 	void Initialize(std::shared_ptr<TransformComponent> componentPtr);
 	void Initialize(glm::vec3& targetLocation, glm::vec3& targetSize);

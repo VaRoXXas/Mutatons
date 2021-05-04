@@ -17,7 +17,7 @@ Shader* skyboxShaderPtr;
 Shader* unlitTexturedAnimatedShaderPtr;
 Shader* simpleDepthShaderPtr;
 Shader* depthMapDebugShaderPtr;
-GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
+GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
 GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture;
 std::vector<GLuint*> customVAOs, customVBOs;
 glm::vec3 lineShaderEndPointPos;
@@ -118,7 +118,8 @@ void CustomDrawing::DrawRefracted(const glm::mat4& transform)
 	refractShaderPtr->SetVecf3("viewPos", mainCamera.GetPosition());
 	refractShaderPtr->SetBool("refractMode", true);
 	refractShaderPtr->SetMat4("transform", transform);
-	glBindVertexArray(cubeVAO);
+	refractShaderPtr->SetFloat("refractValue", 1.0f);
+	glBindVertexArray(boxVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 3 * 2 * 6); // 3 vertices of the triangle * 2 triangles per side * 6 sides
 	glBindVertexArray(0);
 }

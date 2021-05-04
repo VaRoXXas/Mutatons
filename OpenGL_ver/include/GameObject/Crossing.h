@@ -8,6 +8,7 @@ class Crossing : public GameObject
 private:
 	std::string dir = "right";
 public:
+	~Crossing();
 	void ChangeDirection(GameObject *gameObject);
 	void InputDirection();
 	void SetDir(std::string str);
