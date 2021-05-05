@@ -175,7 +175,7 @@ void GameObject::Render()
 			//glDisable(GL_CULL_FACE);
 			glDepthMask(GL_FALSE);
 			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-			glGenQueries(1, &queryName);
+			
 			glBeginQuery(GL_SAMPLES_PASSED, queryName);
 			CustomDrawing::DrawRefracted(absoluteTransform);
 			glEndQuery(GL_SAMPLES_PASSED);

@@ -77,9 +77,10 @@ extern glm::vec3 spotLight1Pos;
 extern glm::vec3 spotLight2Pos;
 extern std::vector<Model*> vecModel;
 extern Frustum frustum;
-
+extern GLuint queryName;
 //variable representing camera mode
 bool isometric = true;
+
 
 bool IMGUI_ENABLED = true;
 bool sceneExplorationModeEnabled = true;
@@ -171,7 +172,7 @@ int main()
 
 #pragma endregion
 
-	
+	glGenQueries(1, &queryName);
 
 #pragma region models and textures loading
 
