@@ -78,9 +78,11 @@ extern glm::vec3 spotLight2Pos;
 extern std::vector<Model*> vecModel;
 extern Frustum frustum;
 extern GLuint queryName;
-//variable representing camera mode
-bool isometric = true;
 
+//variable representing camera mode
+bool isometric = false;
+//variables used in cullings
+int queryNumber = 0, frustumNumber = 0;
 
 bool IMGUI_ENABLED = true;
 bool sceneExplorationModeEnabled = true;
@@ -172,7 +174,7 @@ int main()
 
 #pragma endregion
 
-	glGenQueries(1, &queryName);
+	
 
 #pragma region models and textures loading
 
@@ -672,6 +674,9 @@ int main()
 	static const char * items[] = { "forward", "back", "right", "left" };
 	static int selectedItem = 0;
 	int modelID = 0;
+
+	//generate queries to occlusion culling
+	glGenQueries(1, &queryName);
 	
 	// game loop
 	while (!glfwWindowShouldClose(windowPtr))
@@ -755,6 +760,8 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		RenderScene();
 
+
+
 		// And the skybox...
 		CustomDrawing::DrawSkybox();
 
@@ -835,6 +842,8 @@ int main()
 			ImGui::Combo("MoveDirection", &selectedItem, items, IM_ARRAYSIZE(items));
 			ImGui::Checkbox("MoveDirection reset", &reset);
 			ImGui::SliderInt("GameObject model", &modelID, 0, 29);
+			ImGui::Text("Number of hidden object due to occlusion culling: %i", queryNumber);
+			ImGui::Text("Number of object rendered with frustum culling: %i", frustumNumber);
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -853,6 +862,8 @@ int main()
 		glfwPollEvents();
 		
 	}
+
+	glDeleteQueries(1, &queryName);
 
 	// de-allocation
 	delete[] directionalLightColorPtr;

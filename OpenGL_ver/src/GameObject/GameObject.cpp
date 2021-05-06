@@ -10,7 +10,10 @@
 #include "Rendering/CustomDrawing.h"
 
 extern Frustum frustum;
-GLuint queryName;
+GLuint queryName, numSamplesRendered;
+int queryCount = 0, frustumCount = 0;
+extern int queryNumber, frustumNumber;
+
 
 //#include "GameObjectSharer.h"
 //#include "DevelopState.h"
@@ -188,11 +191,19 @@ void GameObject::Render()
 			corner.x = child->GetTransformComponent()->GetLocation().x;
 			corner.y = child->GetTransformComponent()->GetLocation().y;
 			corner.z = child->GetTransformComponent()->GetLocation().z;
-			
+
+
+			glGetQueryObjectuiv(queryName, GL_QUERY_RESULT, &numSamplesRendered);
+			if (numSamplesRendered == 0)
+			{
+				queryCount++;
+			}
 			//frustum culling
 			if (frustum.SphereInFrustum(corner, 10) != Frustum::OUTSIDE)
 			{
+				frustumCount = frustumCount + 1;
 				glBeginConditionalRender(queryName, GL_QUERY_WAIT);
+				
 				//child->GetGraphicsComponent()->Render(gameObjectTransform);
 				child->GetGraphicsComponent()->Render(absoluteTransform);
 				glEndConditionalRender();
@@ -200,6 +211,13 @@ void GameObject::Render()
 			
 		}
 	}
+	
+	frustumNumber = frustumCount;
+	queryNumber = queryCount;
+	std::cout << "frustumCount:" << frustumCount << std::endl;
+	std::cout << "queryCount:" << queryCount << std::endl;
+	frustumCount = 0;
+	queryCount = 0;
 }
 
 void GameObject::DepthRender()
