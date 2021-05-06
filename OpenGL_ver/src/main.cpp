@@ -80,7 +80,7 @@ extern Frustum frustum;
 extern GLuint queryName;
 
 //variable representing camera mode
-bool isometric = false;
+bool isometric = true;
 //variables used in cullings
 int queryNumber = 0, frustumNumber = 0;
 
