@@ -2,6 +2,8 @@
 #include "GameObject/GameObject.h"
 #include "Component.h"
 #include "Collisions.h"
+#include "Rendering/animation/Animation.h"
+#include "Rendering/animation/Animator.h"
 #include "Components/ColliderComponent.h"
 #include "Components/GraphicsComponent.h"
 #include "Components/TransformComponent.h"

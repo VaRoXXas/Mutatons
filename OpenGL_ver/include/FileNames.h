@@ -1,5 +1,6 @@
 #pragma once
 
+//Environment models
 #define CONTAINER_DIFFUSE "container_diffuse.png"
 #define GRASS_DIFFUSE "grass_diffuse.jpg"
 #define FAJNA_MUZYCZKA "res/music/Intergalactic Odyssey.ogg"
@@ -36,3 +37,6 @@
 #define NATURE_GROUND2 "res/models/tiles/nature_ground2.obj"
 #define NATURE_PATH_STRAIGHT "res/models/tiles/nature_path_straight.obj"
 #define NATURE_PATH_TJUNCTION "res/models/tiles/nature_path_tjunction.obj"
+
+//Animated models
+#define ANIM "res/models/vampire/dancing_vampire.dae"

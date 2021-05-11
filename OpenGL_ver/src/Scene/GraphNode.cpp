@@ -1,6 +1,8 @@
 // ReSharper disable CppClangTidyClangDiagnosticShadowFieldInConstructor
 // ReSharper disable CppUseAuto
 #include "pch.h"
+#include "Rendering/animation/Animation.h"
+#include "Rendering/animation/Animator.h"
 #include "Components/GraphicsComponent.h"
 #include "GameObject/GameObject.h"
 #include "Scene/GraphNode.h"

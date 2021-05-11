@@ -28,7 +28,7 @@ private:
 	float velocity = 0.0f;
 	float tempVel = 0.0f;
 public:
-	void Update(glm::vec3& locationVec);
+	void Update(glm::vec3& locationVec, GLfloat time);
 	void AddComponent(std::shared_ptr<Component> component);
 	void SetActive();
 	void SetInactive();
@@ -47,5 +47,6 @@ public:
 	std::shared_ptr<GraphicsComponent> GetGraphicsComponent();
 	std::shared_ptr<TransformComponent> GetTransformComponent();
 	std::shared_ptr<ColliderComponent> GetColliderComponent();
+
 };
 

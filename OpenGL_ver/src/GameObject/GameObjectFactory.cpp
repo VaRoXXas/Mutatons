@@ -3,6 +3,8 @@
 #include "GameObject/GameObjectBlueprint.h"
 #include "Component.h"
 #include "Components/TransformComponent.h"
+#include "Rendering/animation/Animation.h"
+#include "Rendering/animation/Animator.h"
 #include "Components/GraphicsComponent.h"
 #include "Collisions.h"
 #include "Components/ColliderComponent.h"

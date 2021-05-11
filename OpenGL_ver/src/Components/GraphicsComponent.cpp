@@ -1,9 +1,12 @@
 #include "pch.h"
 #include "Component.h"
+#include "Rendering/animation/Animation.h"
+#include "Rendering/animation/Animator.h"
 #include "Components/GraphicsComponent.h"
 #include "Components/TransformComponent.h"
 #include "Rendering/Shader.h"
 #include "Rendering/Model.h"
+
 
 //#include "GameObjectSharer.h"
 extern Shader* litTexturedShaderPtr;
@@ -11,7 +14,7 @@ extern Shader* litTexturedInstancedShaderPtr;
 extern Shader* simpleDepthShaderPtr;
 extern Shader* orbitShaderPtr;
 extern Shader* sphereShaderPtr;
-
+extern Shader* unlitTexturedAnimatedShaderPtr;
 
 
 //assigns model to the gameobject
@@ -23,8 +26,10 @@ void GraphicsComponent::SetModel(Model* modelLoad)
 //renders assigned model to the scene
 void GraphicsComponent::Render(const glm::mat4& transform)
 {
-	if (modelPtr)
+	if (modelPtr && !animated)
 		modelPtr->CustomRender(*litTexturedShaderPtr, transform);
+	else if (modelPtr && animated)
+		modelPtr->CustomRender(*unlitTexturedAnimatedShaderPtr, transform);
 }
 
 void GraphicsComponent::DepthRender(const glm::mat4& transform)
@@ -50,4 +55,22 @@ void GraphicsComponent::EnableComponent() {
 //returns if component is enabled
 bool GraphicsComponent::Enabled() {
 	return enabled;
+}
+
+//sets if object will be animated
+void GraphicsComponent::InitializeAnimation(const std::string &path)
+{
+	animated = true;
+	animPtr = new Animation(path, modelPtr);
+	animatorPtr = new Animator(animPtr);
+}
+
+Animator GraphicsComponent::GetAnimator()
+{
+	return *animatorPtr;
+}
+
+bool GraphicsComponent::GetAnimated()
+{
+	return animated;
 }

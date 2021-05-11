@@ -3,17 +3,20 @@
 #include "Component.h"
 #include "Collisions.h"
 #include "Components/ColliderComponent.h"
+#include "Rendering/animation/Animation.h"
+#include "Rendering/animation/Animator.h"
 #include "Components/GraphicsComponent.h"
 #include "Components/TransformComponent.h"
 
 #include "FrustumCulling/Frustum.h"
 #include "Rendering/CustomDrawing.h"
 
+
 extern Frustum frustum;
 GLuint queryName, numSamplesRendered;
 int queryCount = 0, frustumCount = 0;
 extern int queryNumber, frustumNumber;
-
+extern Shader* unlitTexturedAnimatedShaderPtr;
 
 //#include "GameObjectSharer.h"
 //#include "DevelopState.h"
@@ -22,7 +25,7 @@ extern int queryNumber, frustumNumber;
 
 
 //Allows GameObject to move in four directions
-void GameObject::Update(glm::vec3& locationVec)
+void GameObject::Update(glm::vec3& locationVec, GLfloat time)
 {
 	if (active && useUpdate)
 	{
@@ -58,6 +61,17 @@ void GameObject::Update(glm::vec3& locationVec)
 	if (active && hasCollider)
 	{
 		this->GetColliderComponent()->Update();
+	}
+
+	if (this->GetGraphicsComponent()->GetAnimated())
+	{
+		this->GetGraphicsComponent()->GetAnimator().UpdateAnimation(time);
+		//animator.UpdateAnimation(deltaTime);
+		auto transforms = this->GetGraphicsComponent()->GetAnimator().GetPoseTransforms();
+		//auto transforms = this->GetTransformComponent()->GetTransform();
+		//auto transforms = animator.GetPoseTransforms();
+		for (int i = 0; i < transforms.size(); ++i)
+			unlitTexturedAnimatedShaderPtr->SetMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
 	}
 }
 
@@ -204,7 +218,6 @@ void GameObject::Render()
 				frustumCount = frustumCount + 1;
 				glBeginConditionalRender(queryName, GL_QUERY_WAIT);
 				
-				//child->GetGraphicsComponent()->Render(gameObjectTransform);
 				child->GetGraphicsComponent()->Render(absoluteTransform);
 				glEndConditionalRender();
 			}

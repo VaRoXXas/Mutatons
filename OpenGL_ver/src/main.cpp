@@ -3,12 +3,15 @@
 #include "Util.h"
 #include "Camera.h"
 #include "Input.h"
+#include "FileNames.h"
 #include "DataManager.h"
 #include "Rendering/Shader.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/Model.h"
 #include "Rendering/PseudoMesh.h"
 #include "Rendering/CustomDrawing.h"
+#include "Rendering/animation/Animation.h"
+#include "Rendering/animation/Animator.h"
 #include "Scene/GraphNode.h"
 #include "FrustumCulling/Frustum.h"
 
@@ -76,11 +79,12 @@ extern glm::vec3 pointLightPos;
 extern glm::vec3 spotLight1Pos;
 extern glm::vec3 spotLight2Pos;
 extern std::vector<Model*> vecModel;
+extern std::vector<Model*> vecAnimModel;
 extern Frustum frustum;
 extern GLuint queryName;
 
 //variable representing camera mode
-bool isometric = true;
+bool isometric = false;
 //variables used in cullings
 int queryNumber = 0, frustumNumber = 0;
 
@@ -210,21 +214,22 @@ int main()
 	//Loading gameobjects from file
 	GameObjectLoader loader;
 	loader.LoadGameObjects("res/level.txt", gameObjectVector, *gameObjectVector[0]);
-
-
+	//objectScalePtr = new glm::vec3(0.01f, 0.01f, 0.01f);
 	//Testing gameobjects' declaration
 	gameObjectPtr = new GameObject;
 	gameObjectPtr->SetActive();
-	gameObjectPtr->SetVelocity(1.0f);
+	gameObjectPtr->SetVelocity(15.0f);
 	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
 	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[7]);
+	gameObjectPtr->GetGraphicsComponent()->SetModel(vecAnimModel[0]);
+	gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM);
 	gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
 	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
 
+	objectScalePtr = &objectScale;
 	//Crossings declaration
 	//TODO: parser interprets crossings in file
 	crossingPtr = new Crossing;
@@ -703,6 +708,7 @@ int main()
 		litTexturedInstancedShader.ApplyMvptMatrices();
 		lineShader.ApplyMvptMatrices();
 		refractShader.ApplyMvptMatrices();
+		unlitTexturedAnimated.ApplyMvptMatrices();
 		// We do not apply all matrices to the skybox shader, because of its nature.
 
 		lineShader.Use();
@@ -819,9 +825,9 @@ int main()
 		}
 
 		//GameObject's updates
-		modifiableGameObjectVector.front()->Update(pos);
+		modifiableGameObjectVector.front()->Update(pos,deltaTime);
 		//Choosing model for the gameobject
-		modifiableGameObjectVector.front()->GetGraphicsComponent()->SetModel(vecModel[modelID]);
+		//modifiableGameObjectVector.front()->GetGraphicsComponent()->SetModel(vecModel[modelID]);
 		// ImGui (UI for debugging purposes)
 		if(IMGUI_ENABLED)
 		{

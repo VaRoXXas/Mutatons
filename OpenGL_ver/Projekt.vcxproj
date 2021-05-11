@@ -136,6 +136,8 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)include;C:\OpenGL\include;$(SolutionDir)res\shaders;$(SolutionDir)res\shaders\fragment;$(SolutionDir)res\shaders\geometry;$(SolutionDir)res\shaders\vertex;C:\SFML-2.5.1\include\</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalOptions>
+      </AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

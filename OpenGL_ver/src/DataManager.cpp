@@ -11,6 +11,7 @@ unsigned int textureId;
 sf::Sound* soundPtr;
 sf::SoundBuffer* bufferPtr;
 std::vector<Model*> vecModel;
+std::vector<Model*> vecAnimModel;
 
 DataManager::DataManager()
 {
@@ -177,6 +178,10 @@ void DataManager::LoadAllModels()
 	vecModel.push_back(modelPtr);
 	modelPtr = new Model(NATURE_PATH_TJUNCTION);
 	vecModel.push_back(modelPtr);
+
+	//Animated
+	modelPtr = new Model(ANIM);
+	vecAnimModel.push_back(modelPtr);
 }
 
 unsigned int DataManager::LoadCubemap()
