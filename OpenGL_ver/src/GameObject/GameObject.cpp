@@ -17,7 +17,7 @@ GLuint queryName, numSamplesRendered;
 int queryCount = 0, frustumCount = 0;
 extern int queryNumber, frustumNumber;
 extern Shader* unlitTexturedAnimatedShaderPtr;
-float sc = 0.05f;
+
 //#include "GameObjectSharer.h"
 //#include "DevelopState.h"
 //#include "RectColliderComponent.h"
@@ -66,16 +66,10 @@ void GameObject::Update(glm::vec3& locationVec, GLfloat time)
 	if (active && this->GetGraphicsComponent()->GetAnimated())
 	{
 		unlitTexturedAnimatedShaderPtr->Use();
-		this->GetGraphicsComponent()->GetAnimator().UpdateAnimation(time);
-		//animator.UpdateAnimation(deltaTime);
-		auto transforms = this->GetGraphicsComponent()->GetAnimator().GetPoseTransforms();
+		this->GetGraphicsComponent()->GetAnimator()->UpdateAnimation(time);
+		auto transforms = this->GetGraphicsComponent()->GetAnimator()->GetPoseTransforms();
 		for (int i = 0; i < transforms.size(); ++i)
-		{
 			unlitTexturedAnimatedShaderPtr->SetMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
-			//std::cout << std::to_string(i) << std::endl;
-		}
-		
-		this->GetTransformComponent()->SetScale(sc);
 	}
 }
 
@@ -242,8 +236,8 @@ void GameObject::Render()
 	
 	frustumNumber = frustumCount;
 	queryNumber = queryCount;
-	std::cout << "frustumCount:" << frustumCount << std::endl;
-	std::cout << "queryCount:" << queryCount << std::endl;
+	//std::cout << "frustumCount:" << frustumCount << std::endl;
+	//std::cout << "queryCount:" << queryCount << std::endl;
 	frustumCount = 0;
 	queryCount = 0;
 }
