@@ -17,7 +17,7 @@ GLuint queryName, numSamplesRendered;
 int queryCount = 0, frustumCount = 0;
 extern int queryNumber, frustumNumber;
 extern Shader* unlitTexturedAnimatedShaderPtr;
-
+float sc = 0.05f;
 //#include "GameObjectSharer.h"
 //#include "DevelopState.h"
 //#include "RectColliderComponent.h"
@@ -63,15 +63,19 @@ void GameObject::Update(glm::vec3& locationVec, GLfloat time)
 		this->GetColliderComponent()->Update();
 	}
 
-	if (this->GetGraphicsComponent()->GetAnimated())
+	if (active && this->GetGraphicsComponent()->GetAnimated())
 	{
+		unlitTexturedAnimatedShaderPtr->Use();
 		this->GetGraphicsComponent()->GetAnimator().UpdateAnimation(time);
 		//animator.UpdateAnimation(deltaTime);
 		auto transforms = this->GetGraphicsComponent()->GetAnimator().GetPoseTransforms();
-		//auto transforms = this->GetTransformComponent()->GetTransform();
-		//auto transforms = animator.GetPoseTransforms();
 		for (int i = 0; i < transforms.size(); ++i)
+		{
 			unlitTexturedAnimatedShaderPtr->SetMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+			//std::cout << std::to_string(i) << std::endl;
+		}
+		
+		this->GetTransformComponent()->SetScale(sc);
 	}
 }
 
@@ -150,6 +154,17 @@ void GameObject::SetUpdate()
 void GameObject::SetVelocity(float vel)
 {
 	tempVel = vel;
+}
+
+//sets Mutaton's element
+void GameObject::SetElement(int elem)
+{
+	element = elem;
+}
+
+int GameObject::GetElement()
+{
+	return element;
 }
 
 bool GameObject::HasCollider()

@@ -18,12 +18,14 @@ Crossing::~Crossing()
 //refers to the game object which crossing is colliding with, and changes its move direction based on private "dir" propety
 void Crossing::ChangeDirection(GameObject *gameObject)
 {
-	
-	glm::vec3* posPtr = gameObject->GetColliderComponent()->GetPosRef();
-	glm::vec3* sizePtr = gameObject->GetColliderComponent()->GetSizeRef();
-	if (this->GetColliderComponent()->Collides(*posPtr, *sizePtr))
+	if (this->IsActive())
 	{
-		gameObject->SetDirection(dir);
+		glm::vec3* posPtr = gameObject->GetColliderComponent()->GetPosRef();
+		glm::vec3* sizePtr = gameObject->GetColliderComponent()->GetSizeRef();
+		if (this->GetColliderComponent()->Collides(*posPtr, *sizePtr))
+		{
+			gameObject->SetDirection(dir);
+		}
 	}
 }
 

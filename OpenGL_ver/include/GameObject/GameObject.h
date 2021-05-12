@@ -27,6 +27,8 @@ private:
 	bool hasCollider = false;
 	float velocity = 0.0f;
 	float tempVel = 0.0f;
+
+	int element = 0;
 public:
 	void Update(glm::vec3& locationVec, GLfloat time);
 	void AddComponent(std::shared_ptr<Component> component);
@@ -41,6 +43,8 @@ public:
 	void SetDirection(std::string dir);
 	void SetUpdate();
 	void SetVelocity(float vel);
+	void SetElement(int elem);
+	int GetElement();
 	std::shared_ptr<Component> GetComponentByType(std::string type);
 	bool HasCollider();
 	bool HasUpdate();
