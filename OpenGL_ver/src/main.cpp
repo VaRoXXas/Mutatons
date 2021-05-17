@@ -227,8 +227,8 @@ int main()
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
 	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[0]);
-	//gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM);
+	gameObjectPtr->GetGraphicsComponent()->SetModel(vecAnimModel[0]);
+	gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM);
 	gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
 	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
@@ -838,7 +838,7 @@ int main()
 		modifiableGameObjectVector.front()->Update(pos,deltaTime);
 
 		//Choosing model for the gameobject
-		modifiableGameObjectVector.front()->GetGraphicsComponent()->SetModel(vecModel[modelID]);
+		//modifiableGameObjectVector.front()->GetGraphicsComponent()->SetModel(vecModel[modelID]);
 		// ImGui (UI for debugging purposes)
 		if(IMGUI_ENABLED)
 		{

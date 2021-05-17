@@ -7,7 +7,6 @@
 #include "Rendering/Shader.h"
 #include "Rendering/Model.h"
 
-
 //#include "GameObjectSharer.h"
 extern Shader* litTexturedShaderPtr;
 extern Shader* litTexturedInstancedShaderPtr;
@@ -15,6 +14,7 @@ extern Shader* simpleDepthShaderPtr;
 extern Shader* orbitShaderPtr;
 extern Shader* sphereShaderPtr;
 extern Shader* unlitTexturedAnimatedShaderPtr;
+
 
 
 //assigns model to the gameobject
@@ -63,12 +63,14 @@ void GraphicsComponent::InitializeAnimation(const std::string &path)
 	animated = true;
 	animPtr = new Animation(path, modelPtr);
 	animatorPtr = new Animator(animPtr);
+	
 }
 
-Animator GraphicsComponent::GetAnimator()
+Animator* GraphicsComponent::GetAnimator()
 {
-	return *animatorPtr;
+	return animatorPtr;
 }
+
 
 bool GraphicsComponent::GetAnimated()
 {
