@@ -17,7 +17,8 @@ Shader* skyboxShaderPtr;
 Shader* unlitTexturedAnimatedShaderPtr;
 Shader* simpleDepthShaderPtr;
 Shader* depthMapDebugShaderPtr;
-GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
+Shader* hud1ShaderPtr;
+GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO, hud1VAO, hud1VBO;
 GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture;
 std::vector<GLuint*> customVAOs, customVBOs;
 glm::vec3 lineShaderEndPointPos;
@@ -168,4 +169,19 @@ void CustomDrawing::DrawSkybox()
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 	glDepthFunc(GL_LESS); // set depth function back to default
+}
+
+void CustomDrawing::DrawHud1()
+{
+	glUseProgram(hud1ShaderPtr->GetId());
+	//hud1ShaderPtr->setMat4("model", (view));
+	hud1ShaderPtr->SetMat4("view", (*viewMatrixPtr));
+	std::cout << "kod:" << hud1VAO;
+	hud1ShaderPtr->SetMat4("projection", (*projectionMatrixPtr));
+	
+	glBindVertexArray(hud1VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	//glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0); // no need to unbind it every time 
+
 }

@@ -135,6 +135,12 @@
     <ClCompile Include="src\GameObject\Building.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Raycasting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GeometryCreation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\pch.h">
@@ -327,6 +333,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GameObject\Building.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Raycasting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GeometryCreation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

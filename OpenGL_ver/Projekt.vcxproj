@@ -197,6 +197,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GeometryCreation.cpp" />
+    <ClCompile Include="src\Raycasting.cpp" />
     <ClCompile Include="src\GameObject\Building.cpp" />
     <ClCompile Include="src\GameObject\Crossing.cpp" />
     <ClCompile Include="src\FrustumCulling\AABox.cpp" />
@@ -303,6 +305,7 @@
     <ClInclude Include="include\GameObject\GameObjectLoader.h" />
     <ClInclude Include="include\GameObject\BlueprintObjectParser.h" />
     <ClInclude Include="include\GameObject\GameObjectBlueprint.h" />
+    <ClInclude Include="include\GeometryCreation.h" />
     <ClInclude Include="include\Rendering\animation\Animation.h" />
     <ClInclude Include="include\Rendering\animation\Animator.h" />
     <ClInclude Include="include\Rendering\animation\AnimData.h" />
@@ -327,6 +330,7 @@
     <ClInclude Include="include\Util.h" />
     <ClInclude Include="include\Rendering\Mesh.h" />
     <ClInclude Include="include\ObjectTags.h" />
+    <ClInclude Include="include\Raycasting.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\BasicF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\OrbitF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\SphereF.h" />

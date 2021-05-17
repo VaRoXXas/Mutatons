@@ -7,3 +7,4 @@
 #include "SkyboxF.h"
 #include "RefractF.h"
 #include "UnlitTexturedF.h"
+#include "Hud1F.h"

@@ -7,3 +7,4 @@
 #include "UnlitV.h"
 #include "SkyboxV.h"
 #include "UnlitTexturedAnimatedV.h"
+#include "Hud1V.h"

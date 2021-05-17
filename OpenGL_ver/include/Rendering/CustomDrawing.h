@@ -16,4 +16,5 @@ namespace CustomDrawing
 
 	// Used once in main.
 	void DrawSkybox();
+	void DrawHud1();
 }

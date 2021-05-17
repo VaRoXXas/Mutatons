@@ -14,6 +14,7 @@
 #include "Rendering/animation/Animator.h"
 #include "Scene/GraphNode.h"
 #include "FrustumCulling/Frustum.h"
+#include "GeometryCreation.h"
 
 #include "Collisions.h"
 #include "Component.h"
@@ -57,6 +58,7 @@ extern Shader* skyboxShaderPtr;
 extern Shader* unlitTexturedAnimatedShaderPtr;
 extern Shader* simpleDepthShaderPtr;
 extern Shader* depthMapDebugShaderPtr;
+extern Shader* hud1ShaderPtr;
 extern GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
 extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture;
 extern glm::vec3 lineShaderEndPointPos;
@@ -161,6 +163,7 @@ int main()
 	Shader unlitTexturedAnimated(s_unlitTexturedAnimatedVertexPtr, s_unlitTexturedFragmentPtr);
 	Shader simpleDepthShader(s_simpleDepthVertexPtr, s_emptyFragmentPtr);
 	Shader depthMapDebugShader(s_depthMapDebugVertexPtr, s_depthMapDebugFragmentPtr);
+	Shader hud1Shader(s_hud1VertexPtr, s_hud1FragmentPtr);
 	litTexturedShaderPtr = &litTexturedShader;
 	orbitShaderPtr = &orbitShader;
 	sphereShaderPtr = &sphereShader;
@@ -171,7 +174,8 @@ int main()
 	unlitTexturedAnimatedShaderPtr = &unlitTexturedAnimated;
 	simpleDepthShaderPtr = &simpleDepthShader;
 	depthMapDebugShaderPtr = &depthMapDebugShader;
-	
+	hud1ShaderPtr = &hud1Shader;
+
 
 	Lighting::InitLighting(litTexturedShader);
 	Lighting::InitLighting(litTexturedInstancedShader);
@@ -609,6 +613,8 @@ int main()
 	depthMapDebugShader.Use();
 	depthMapDebugShader.SetInt("depthMap", 0);
 
+	GeometryCreation::Hud1Creation();
+
 #pragma endregion
 
 
@@ -770,6 +776,10 @@ int main()
 
 		// And the skybox...
 		CustomDrawing::DrawSkybox();
+
+		// Drawing HUD
+		
+		CustomDrawing::DrawHud1();
 
 		// render Depth map to quad for visual debugging
 		// ---------------------------------------------
