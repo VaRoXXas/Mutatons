@@ -176,7 +176,6 @@ void CustomDrawing::DrawHud1()
 	glUseProgram(hud1ShaderPtr->GetId());
 	//hud1ShaderPtr->setMat4("model", (view));
 	hud1ShaderPtr->SetMat4("view", (*viewMatrixPtr));
-	std::cout << "kod:" << hud1VAO;
 	hud1ShaderPtr->SetMat4("projection", (*projectionMatrixPtr));
 	
 	glBindVertexArray(hud1VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
