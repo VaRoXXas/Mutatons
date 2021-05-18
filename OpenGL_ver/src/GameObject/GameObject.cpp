@@ -17,6 +17,7 @@ GLuint queryName, numSamplesRendered;
 int queryCount = 0, frustumCount = 0;
 extern int queryNumber, frustumNumber;
 extern Shader* unlitTexturedAnimatedShaderPtr;
+extern bool mouseClicked;
 
 //#include "GameObjectSharer.h"
 //#include "DevelopState.h"
@@ -293,3 +294,28 @@ std::shared_ptr<Component> GameObject::GetComponentByType(std::string type)
 	return m_Components[0];
 }
 
+void GameObject::SetInput(glm::vec3 loc)
+{
+	inputLocation = loc;
+}
+
+void GameObject::CheckInput(glm::vec3& terrainPoint)
+{
+	if (terrainPoint.x >= inputLocation.x-1.f && terrainPoint.x <= inputLocation.x && terrainPoint.z >= inputLocation.z - 1.f && terrainPoint.z <= inputLocation.z )
+	{
+		if (mouseClicked == true)
+			clickedOn = true;
+		else
+			clickedOn = false;
+	}
+}
+
+bool GameObject::GetHasInput()
+{
+	return hasInput;
+}
+
+bool GameObject::GetClick()
+{
+	return clickedOn;
+}

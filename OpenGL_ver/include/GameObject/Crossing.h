@@ -6,11 +6,14 @@
 class Crossing : public GameObject
 {
 private:
+	bool once = false;
 	std::string dir = "right";
+	std::vector<std::string> availableDirs;
 public:
 	~Crossing();
 	void ChangeDirection(GameObject *gameObject);
 	void InputDirection();
 	void SetDir(std::string str);
+	void AddDir(std::string str);
 };
 

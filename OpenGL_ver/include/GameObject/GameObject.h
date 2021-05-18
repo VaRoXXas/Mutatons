@@ -15,6 +15,7 @@ private:
 	std::vector<GameObject*> children;
 	std::string tag;
 	glm::mat4 gameObjectTransform;
+	glm::vec3 inputLocation;
 	std::string moveDirection = "forward";
 	bool active = false;
 	bool useUpdate = false;
@@ -27,6 +28,8 @@ private:
 	bool hasCollider = false;
 	float velocity = 0.0f;
 	float tempVel = 0.0f;
+	bool hasInput = false;
+	bool clickedOn = false;
 
 	int element = 0;
 public:
@@ -48,6 +51,10 @@ public:
 	std::shared_ptr<Component> GetComponentByType(std::string type);
 	bool HasCollider();
 	bool HasUpdate();
+	void SetInput(glm::vec3 loc);
+	void CheckInput(glm::vec3& terrainPoint);
+	bool GetHasInput();
+	bool GetClick();
 	std::shared_ptr<GraphicsComponent> GetGraphicsComponent();
 	std::shared_ptr<TransformComponent> GetTransformComponent();
 	std::shared_ptr<ColliderComponent> GetColliderComponent();

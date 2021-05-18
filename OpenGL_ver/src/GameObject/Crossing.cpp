@@ -12,6 +12,7 @@
 // posPtr = new glm::vec3();
 // sizePtr = new glm::vec3();
 
+
 Crossing::~Crossing()
 {
 }
@@ -29,14 +30,30 @@ void Crossing::ChangeDirection(GameObject *gameObject)
 	}
 }
 
-//This function will interpret input from mouse
+//This function interprets input from mouse
 void Crossing::InputDirection()
 {
-	//Input 
+	if (GetClick() && !once && !availableDirs.empty())
+	{
+		once = true;
+		if (dir != availableDirs[0])
+			SetDir(availableDirs[0]);
+		else if (dir == availableDirs[0])
+			SetDir(availableDirs[1]);
+	}
+	else
+		once = false;
+		
 }
 
 //Dir setter
 void Crossing::SetDir(std::string str)
 {
 	dir = str;
+}
+
+//adds directions to the list
+void Crossing::AddDir(std::string str)
+{
+	availableDirs.push_back(str);
 }

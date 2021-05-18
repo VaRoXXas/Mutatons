@@ -208,6 +208,8 @@ int main()
 
 	MousePicker picker(&mainCamera, windowPtr);
 
+	glm::vec3 terrainPoint;
+
 #pragma region game objects declarations
 
 	//Location and size vectors' declaration
@@ -245,6 +247,10 @@ int main()
 	crossingPtr->SetActive();
 	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(9.0f,1.0f,-2.0f)));
 	crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
+	crossingPtr->SetInput(glm::vec3(9.0f, 1.0f, -3.0f));
+	crossingPtr->AddDir("left");
+	crossingPtr->AddDir("right");
+	crossingPtr->SetDir("left");
 	crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
 	crossingPtr->GetColliderComponent()->Initialize(crossingPtr->GetTransformComponent());
 	crossingVector.push_back(crossingPtr);
@@ -254,9 +260,12 @@ int main()
 	crossingPtr->SetActive();
 	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(5.0f, 1.0f, -3.0f)));
 	crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
+	crossingPtr->SetInput(glm::vec3(6.0f, 1.0f, -3.0f));
+	crossingPtr->AddDir("forward");
+	crossingPtr->AddDir("back");
+	crossingPtr->SetDir("forward");
 	crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
 	crossingPtr->GetColliderComponent()->Initialize(crossingPtr->GetTransformComponent());
-	crossingPtr->SetDir("back");
 	crossingVector.push_back(crossingPtr);
 	gameObjectVector[0]->AddChild(crossingPtr);
 
@@ -781,18 +790,18 @@ int main()
 
 		picker.Update();
 
-		glm::vec3 terrainPoint = picker.GetCurrentTerrainPoint();
+		terrainPoint = picker.GetCurrentTerrainPoint();
 
-		if (terrainPoint.x >= -1.f && terrainPoint.x <= 1.f && terrainPoint.z >= -1.f && terrainPoint.z <= 1.f)
-		{
-			model = glm::translate(model, terrainPoint);
-			if (mouseClicked == true)
-			{
-				{
-					modeltest.Draw(litTexturedShader);
-				}
-			}
-		}
+		//if (terrainPoint.x >= -1.f && terrainPoint.x <= 1.f && terrainPoint.z >= -1.f && terrainPoint.z <= 1.f)
+		//{
+		//	model = glm::translate(model, terrainPoint);
+		//	if (mouseClicked == true)
+		//	{
+		//		{
+		//			modeltest.Draw(litTexturedShader);
+		//		}
+		//	}
+		//}
 
 		
 		// And the skybox...
@@ -893,6 +902,8 @@ int main()
 			for (GameObject* g : modifiableGameObjectVector)
 			{
 				c->ChangeDirection(g);
+				c->CheckInput(terrainPoint);
+				c->InputDirection();
 			}
 		}
 		// [glfw] Swapping buffers and polling IO events...
