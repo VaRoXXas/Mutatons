@@ -6,6 +6,7 @@
 extern Camera mainCamera;
 extern GLfloat deltaTime;
 extern bool sceneExplorationModeEnabled;
+extern bool mouseClicked;
 
 bool cursorEnabled = true;
 void (*wKeyActionPtr)();
@@ -73,6 +74,14 @@ void Input::CursorPosCallback(GLFWwindow* windowPtr, const double xpos, const do
 void Input::ScrollCallback(GLFWwindow* windowPtr, const double xoffset, const double yoffset)
 {
 	mainCamera.ProcessMouseScroll(static_cast<float>(yoffset));
+}
+
+void Input::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+		mouseClicked = true;
+	else
+		mouseClicked = false;
 }
 
 void Input::ToggleCursor()

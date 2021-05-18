@@ -15,6 +15,7 @@
 #include "Scene/GraphNode.h"
 #include "FrustumCulling/Frustum.h"
 #include "GeometryCreation.h"
+#include "MousePicker.h"
 
 #include "Collisions.h"
 #include "Component.h"
@@ -84,9 +85,10 @@ extern std::vector<Model*> vecModel;
 extern std::vector<Model*> vecAnimModel;
 extern Frustum frustum;
 extern GLuint queryName;
+extern bool mouseClicked = false;
 
 //variable representing camera mode
-bool isometric = false;
+bool isometric = true;
 //variables used in cullings
 int queryNumber = 0, frustumNumber = 0;
 
@@ -139,6 +141,7 @@ int main()
 	glfwSetFramebufferSizeCallback(windowPtr, Util::FramebufferSizeCallback);
 	glfwSetCursorPosCallback(windowPtr, Input::CursorPosCallback);
 	glfwSetScrollCallback(windowPtr, Input::ScrollCallback);
+	glfwSetMouseButtonCallback(windowPtr, Input::MouseButtonCallback);
 	
 	// [glad] Load all OpenGL function pointers.
 	if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
@@ -201,7 +204,9 @@ int main()
 
 #pragma endregion
 
+	Model modeltest("res/models/tiles/canal_corner_in.obj");
 
+	MousePicker picker(&mainCamera, windowPtr);
 
 #pragma region game objects declarations
 
@@ -772,8 +777,24 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		RenderScene();
 
+		picker.SetProjectionMatrix(projection);
 
+		picker.Update();
 
+		glm::vec3 terrainPoint = picker.GetCurrentTerrainPoint();
+
+		if (terrainPoint.x >= -1.f && terrainPoint.x <= 1.f && terrainPoint.z >= -1.f && terrainPoint.z <= 1.f)
+		{
+			model = glm::translate(model, terrainPoint);
+			if (mouseClicked == true)
+			{
+				{
+					modeltest.Draw(litTexturedShader);
+				}
+			}
+		}
+
+		
 		// And the skybox...
 		CustomDrawing::DrawSkybox();
 

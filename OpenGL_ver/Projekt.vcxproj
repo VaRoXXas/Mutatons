@@ -198,7 +198,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\GeometryCreation.cpp" />
-    <ClCompile Include="src\Raycasting.cpp" />
+    <ClCompile Include="src\MousePicker.cpp" />
     <ClCompile Include="src\GameObject\Building.cpp" />
     <ClCompile Include="src\GameObject\Crossing.cpp" />
     <ClCompile Include="src\FrustumCulling\AABox.cpp" />
@@ -330,7 +330,7 @@
     <ClInclude Include="include\Util.h" />
     <ClInclude Include="include\Rendering\Mesh.h" />
     <ClInclude Include="include\ObjectTags.h" />
-    <ClInclude Include="include\Raycasting.h" />
+    <ClInclude Include="include\MousePicker.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\BasicF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\OrbitF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\SphereF.h" />

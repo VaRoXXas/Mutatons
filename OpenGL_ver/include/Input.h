@@ -6,6 +6,7 @@ namespace Input
 	void ProcessInput(GLFWwindow* windowPtr);
 	void CursorPosCallback(GLFWwindow* windowPtr, const double xpos, const double ypos);
 	void ScrollCallback(GLFWwindow* windowPtr, const double xoffset, const double yoffset);
+	void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
 	// input actions
 	void ToggleCursor();
