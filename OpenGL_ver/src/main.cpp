@@ -808,8 +808,8 @@ int main()
 		CustomDrawing::DrawSkybox();
 
 		// Drawing HUD
-		
 		CustomDrawing::DrawHud1();
+		CustomDrawing::DrawHud2();
 
 		// render Depth map to quad for visual debugging
 		// ---------------------------------------------
