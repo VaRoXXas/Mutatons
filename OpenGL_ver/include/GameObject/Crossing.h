@@ -15,5 +15,6 @@ public:
 	void InputDirection();
 	void SetDir(std::string str);
 	void AddDir(std::string str);
+	void UpdateTransform();
 };
 

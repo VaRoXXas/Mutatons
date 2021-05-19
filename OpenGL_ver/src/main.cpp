@@ -31,6 +31,7 @@
 #include "GameObject/GameObjectFactory.h"
 #include "GameObject/GameObjectLoader.h"
 #include "GameObject/Crossing.h"
+#include "GameObject/Building.h"
 
 // Shaders
 #include "VertexShaders.h"
@@ -111,8 +112,10 @@ extern Model* modelPtr;
 std::vector<GameObject*> gameObjectVector;
 std::vector<GameObject*> modifiableGameObjectVector;
 std::vector<Crossing*> crossingVector;
+std::vector<Building*> buildingVector;
 GameObject* gameObjectPtr;
 Crossing* crossingPtr;
+Building* buildingPtr;
 
 
 void RenderScene();
@@ -229,7 +232,7 @@ int main()
 	//Testing gameobjects' declaration
 	gameObjectPtr = new GameObject;
 	gameObjectPtr->SetActive();
-	gameObjectPtr->SetVelocity(15.0f);
+	gameObjectPtr->SetVelocity(25.0f);
 	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
@@ -308,6 +311,33 @@ int main()
 	crossingPtr->SetDir("forward");
 	crossingVector.push_back(crossingPtr);
 	gameObjectVector[0]->AddChild(crossingPtr);
+
+
+	buildingPtr = new Building;
+	buildingPtr->SetActive();
+	buildingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(-2.0f, 1.0f, -1.0f)));
+	buildingPtr->AddComponent(std::make_shared<GraphicsComponent>());
+	buildingPtr->AddComponent(std::make_shared<ColliderComponent>());
+	buildingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	buildingPtr->GetGraphicsComponent()->SetModel(vecModel[12]);
+	buildingPtr->GetColliderComponent()->Initialize(buildingPtr->GetTransformComponent());
+	buildingPtr->SetElement(1);
+	buildingPtr->SetType("Obstacle");
+	buildingVector.push_back(buildingPtr);
+	gameObjectVector[0]->AddChild(buildingPtr);
+
+	buildingPtr = new Building;
+	buildingPtr->SetActive();
+	buildingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(-2.0f, 1.0f, 2.0f)));
+	buildingPtr->AddComponent(std::make_shared<GraphicsComponent>());
+	buildingPtr->AddComponent(std::make_shared<ColliderComponent>());
+	buildingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	buildingPtr->GetGraphicsComponent()->SetModel(vecModel[11]);
+	buildingPtr->GetColliderComponent()->Initialize(buildingPtr->GetTransformComponent());
+	buildingPtr->SetElement(1);
+	buildingPtr->SetType("Laboratory");
+	buildingVector.push_back(buildingPtr);
+	gameObjectVector[0]->AddChild(buildingPtr);
 #pragma endregion
 
 
@@ -863,7 +893,6 @@ int main()
 				break;
 			}
 		}
-
 		//GameObject's updates
 		modifiableGameObjectVector.front()->Update(pos,deltaTime);
 
@@ -899,11 +928,20 @@ int main()
 		//Checking if any crossing is colliding with moving gameobjects
 		for (Crossing *c : crossingVector)
 		{
+			c->CheckInput(terrainPoint);
+			c->InputDirection();
+			c->UpdateTransform();
 			for (GameObject* g : modifiableGameObjectVector)
 			{
 				c->ChangeDirection(g);
-				c->CheckInput(terrainPoint);
-				c->InputDirection();
+			}
+		}
+
+		for (Building* b : buildingVector)
+		{
+			for (GameObject* g : modifiableGameObjectVector)
+			{
+				b->Reaction(g);
 			}
 		}
 		// [glfw] Swapping buffers and polling IO events...

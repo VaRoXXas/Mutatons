@@ -38,7 +38,7 @@ public:
 	void SetActive();
 	void SetInactive();
 	bool IsActive();
-	void SetTag(std::string tag);
+	void SetTag(std::string tagTyped);
 	std::string GetTag();
 	void AddChild(GameObject* childPtr);
 	void Render();
@@ -55,6 +55,7 @@ public:
 	void CheckInput(glm::vec3& terrainPoint);
 	bool GetHasInput();
 	bool GetClick();
+	glm::vec3 GetInputLocation();
 	std::shared_ptr<GraphicsComponent> GetGraphicsComponent();
 	std::shared_ptr<TransformComponent> GetTransformComponent();
 	std::shared_ptr<ColliderComponent> GetColliderComponent();

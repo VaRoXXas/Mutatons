@@ -132,9 +132,9 @@ bool GameObject::IsActive()
 {
 	return active;
 }
-void GameObject::SetTag(std::string tag)
+void GameObject::SetTag(std::string tagTyped)
 {
-	tag = "" + tag;
+	tag = "" + tagTyped;
 }
 std::string GameObject::GetTag()
 {
@@ -294,10 +294,12 @@ std::shared_ptr<Component> GameObject::GetComponentByType(std::string type)
 	return m_Components[0];
 }
 
+//Sets if GameObject uses input
 void GameObject::SetInput(glm::vec3 loc)
 {
 	inputLocation = loc;
 }
+
 
 void GameObject::CheckInput(glm::vec3& terrainPoint)
 {
@@ -318,4 +320,9 @@ bool GameObject::GetHasInput()
 bool GameObject::GetClick()
 {
 	return clickedOn;
+}
+
+glm::vec3 GameObject::GetInputLocation()
+{
+	return inputLocation;
 }
