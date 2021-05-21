@@ -276,6 +276,11 @@ void GameObject::SetDirection(std::string dir)
 		moveDirection = dir;
 }
 
+//Returns move direction of GameObject
+std::string GameObject::GetDirection()
+{
+	return moveDirection;
+}
 //Returns specific component from the GameObject's components list
 std::shared_ptr<Component> GameObject::GetComponentByType(std::string type) 
 {

@@ -44,6 +44,7 @@ public:
 	void Render();
 	void DepthRender();
 	void SetDirection(std::string dir);
+	std::string GetDirection();
 	void SetUpdate();
 	void SetVelocity(float vel);
 	void SetElement(int elem);

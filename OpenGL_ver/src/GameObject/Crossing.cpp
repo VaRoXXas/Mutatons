@@ -30,6 +30,26 @@ void Crossing::ChangeDirection(GameObject *gameObject)
 		glm::vec3* sizePtr = gameObject->GetColliderComponent()->GetSizeRef();
 		if (this->GetColliderComponent()->Collides(*posPtr, *sizePtr))
 		{
+			if ((dir == "right" && gameObject->GetDirection() == "forward") || (dir =="left" && gameObject->GetDirection() == "forward"))
+			{
+				posPtr->z = posPtr->z - 0.001;
+				gameObject->GetTransformComponent()->SetLocation(*posPtr);
+			}
+			else if ((dir == "right" && gameObject->GetDirection() == "back") || (dir == "left" && gameObject->GetDirection() == "back"))
+			{
+				posPtr->z = posPtr->z + 0.001;
+				gameObject->GetTransformComponent()->SetLocation(*posPtr);
+			}
+			else if ((dir == "forward" && gameObject->GetDirection() == "right") || (dir == "back" && gameObject->GetDirection() == "right"))
+			{
+				posPtr->x = posPtr->x + 0.001;
+				gameObject->GetTransformComponent()->SetLocation(*posPtr);
+			}
+			else if ((dir == "forward" && gameObject->GetDirection() == "left") || (dir == "back" && gameObject->GetDirection() == "left"))
+			{
+				posPtr->x = posPtr->x - 0.001;
+				gameObject->GetTransformComponent()->SetLocation(*posPtr);
+			}
 			gameObject->SetDirection(dir);
 		}
 	}

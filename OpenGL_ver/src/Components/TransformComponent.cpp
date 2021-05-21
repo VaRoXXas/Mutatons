@@ -31,6 +31,11 @@ glm::vec3 TransformComponent::GetLocation()
 	return location;
 }
 
+glm::vec3 &TransformComponent::GetLocationAddr()
+{
+	return location;
+}
+
 glm::vec3 TransformComponent::GetScale()
 {
 	return scale;

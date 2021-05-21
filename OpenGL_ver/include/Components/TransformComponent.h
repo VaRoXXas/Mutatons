@@ -16,6 +16,7 @@ public:
 	/// TODO: GetLocation();GetScale();GetRotation()
 	glm::mat4 GetTransform();
 	glm::vec3 GetLocation();
+	glm::vec3 &GetLocationAddr();
 	glm::vec3 GetScale();
 	void SetLocation(glm::vec3 &targetLocation);
 	void SetRotation(float degrees, char rotationDirection);

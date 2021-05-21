@@ -120,6 +120,7 @@ Building* buildingPtr;
 
 void RenderScene();
 void DepthRenderScene();
+void SpawnMutaton();
 
 
 
@@ -232,8 +233,8 @@ int main()
 	//Testing gameobjects' declaration
 	gameObjectPtr = new GameObject;
 	gameObjectPtr->SetActive();
-	gameObjectPtr->SetVelocity(25.0f);
-	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
+	gameObjectPtr->SetVelocity(5.0f);
+	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(9.0f,1.0f,-7.0f)));
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
 	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
@@ -242,6 +243,7 @@ int main()
 	gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
 	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
+
 
 	objectScalePtr = &objectScale;
 	//Crossings declaration
@@ -729,6 +731,8 @@ int main()
 	static const char * items[] = { "forward", "back", "right", "left" };
 	static int selectedItem = 0;
 	int modelID = 0;
+	int counter = 0;
+	int mutatonCounter = 0;
 
 	//generate queries to occlusion culling
 	glGenQueries(1, &queryName);
@@ -740,7 +744,12 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-
+		counter++;
+		if (counter%375 == 0 && mutatonCounter!=8 )
+		{
+			SpawnMutaton();
+			mutatonCounter++;
+		}
 		// getting input
 		Input::ProcessInput(windowPtr);
 
@@ -895,7 +904,10 @@ int main()
 		}
 		//GameObject's updates
 		modifiableGameObjectVector.front()->Update(pos,deltaTime);
-
+		for (GameObject* g : modifiableGameObjectVector)
+		{
+			g->Update(g->GetTransformComponent()->GetLocationAddr(), deltaTime);
+		}
 		//Choosing model for the gameobject
 		//modifiableGameObjectVector.front()->GetGraphicsComponent()->SetModel(vecModel[modelID]);
 		// ImGui (UI for debugging purposes)
@@ -975,4 +987,21 @@ void RenderScene()
 void DepthRenderScene()
 {
 	gameObjectVector[0]->DepthRender();
+}
+
+void SpawnMutaton()
+{
+	gameObjectPtr = new GameObject;
+	gameObjectPtr->SetActive();
+	gameObjectPtr->SetVelocity(5.0f);
+	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(9.0f, 1.0f, -7.0f)));
+	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
+	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
+	gameObjectPtr->SetUpdate();
+	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[12]);
+	//gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM);
+	//gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
+	modifiableGameObjectVector.push_back(gameObjectPtr);
+	gameObjectVector[0]->AddChild(gameObjectPtr);
 }
