@@ -940,13 +940,14 @@ int main()
 		//Checking if any crossing is colliding with moving gameobjects
 		for (Crossing *c : crossingVector)
 		{
-			c->CheckInput(terrainPoint);
-			c->InputDirection();
-			c->UpdateTransform();
+
 			for (GameObject* g : modifiableGameObjectVector)
 			{
 				c->ChangeDirection(g);
 			}
+			c->CheckInput(terrainPoint);
+			c->InputDirection();
+			c->UpdateTransform();
 		}
 
 		for (Building* b : buildingVector)

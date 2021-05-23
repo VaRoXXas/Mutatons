@@ -20,6 +20,7 @@ void GameObjectFactory::BuildGameObjects(GameObjectBlueprint& bp, std::vector<Ga
 {
 	GameObject* gameObjectPtr = new GameObject;
 	gameObjectPtr->SetTag(bp.GetTag());
+	gameObjectPtr->SetActive();
 	auto it = bp.GetComponentList().begin();
 	auto end = bp.GetComponentList().end();
 	for (it; it != end; ++it)

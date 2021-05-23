@@ -22,18 +22,18 @@ void Building::Reaction(GameObject* gameObject)
 		{
 			if (type == "Laboratory")
 			{
-				gameObject->SetElement(element);
+				gameObject->SetElement(this->GetElement());
 			}
 			else if (type == "Obstacle")
 			{
-				if (gameObject->GetElement() == element)
+				if (gameObject->GetElement() == this->GetElement())
 				{
-					gameObject->SetInactive();
-					this->SetInactive();
+					gameObject->Destroy();
+					this->Destroy();
 				}
-				else if (gameObject->GetElement() != element)
+				else if (gameObject->GetElement() != this->GetElement())
 				{
-					gameObject->SetInactive();
+					gameObject->Destroy();
 				}
 			}
 			else if (type == "Control")
@@ -51,11 +51,6 @@ void Building::Reaction(GameObject* gameObject)
 void Building::SetType(std::string typeSet)
 {
 	type = typeSet;
-}
-
-void Building::SetBuildingElement(int elem)
-{
-	element = elem;
 }
 
 std::string Building::GetType()

@@ -14,11 +14,12 @@
 
 extern Frustum frustum;
 GLuint queryName, numSamplesRendered;
-int queryCount = 0, frustumCount = 0;
+int queryCount = 0, frustumCount = 0, iterator = 0;
 extern int queryNumber, frustumNumber;
 extern Shader* unlitTexturedAnimatedShaderPtr;
 extern bool mouseClicked;
-
+extern std::vector<GameObject*> gameObjectVector;
+GameObject* childPtr;
 //#include "GameObjectSharer.h"
 //#include "DevelopState.h"
 //#include "RectColliderComponent.h"
@@ -117,6 +118,13 @@ void GameObject::AddComponent(std::shared_ptr<Component> component)
 	}
 }
 
+void GameObject::Destroy()
+{
+	this->SetInactive();
+
+	//gameObjectVector.erase(gameObjectVector.begin()+iterator);
+}
+
 //various setters & getters
 void GameObject::SetActive()
 {
@@ -194,7 +202,7 @@ void GameObject::Render()
 	}
 	for (GameObject* child : children)
 	{
-		if (child->hasGraphicsComponent)
+		if (child->IsActive() && child->hasGraphicsComponent)
 		{
 			const auto absoluteTransform = gameObjectTransform * child->GetTransformComponent()->GetTransform();
 
@@ -260,7 +268,7 @@ void GameObject::DepthRender()
 	}
 	for (GameObject* child : children)
 	{
-		if (child->hasGraphicsComponent)
+		if (child->IsActive() && child->hasGraphicsComponent)
 		{
 			const auto absoluteTransform = gameObjectTransform * child->GetTransformComponent()->GetTransform();
 			//child->GetGraphicsComponent()->Render(gameObjectTransform);

@@ -38,6 +38,7 @@ public:
 	void SetActive();
 	void SetInactive();
 	bool IsActive();
+	void Destroy();
 	void SetTag(std::string tagTyped);
 	std::string GetTag();
 	void AddChild(GameObject* childPtr);
