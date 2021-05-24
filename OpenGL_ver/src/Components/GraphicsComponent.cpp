@@ -6,6 +6,7 @@
 #include "Components/TransformComponent.h"
 #include "Rendering/Shader.h"
 #include "Rendering/Model.h"
+#include "GameObject/GameObject.h"
 
 //#include "GameObjectSharer.h"
 extern Shader* litTexturedShaderPtr;
@@ -23,13 +24,33 @@ void GraphicsComponent::SetModel(Model* modelLoad)
 	modelPtr = modelLoad;
 }
 
+void GraphicsComponent::SetHighlighted(bool value)
+{
+	isHighlighted = value;
+}
+
 //renders assigned model to the scene
 void GraphicsComponent::Render(const glm::mat4& transform)
 {
 	if (modelPtr && !animated)
+	{
+		if (isHighlighted)
+		{
+			litTexturedShaderPtr->Use();
+			litTexturedShaderPtr->SetBool("isHighlighted", true);
+		}
+		else
+		{
+			litTexturedShaderPtr->Use();
+			litTexturedShaderPtr->SetBool("isHighlighted", false);
+		}
+		
 		modelPtr->CustomRender(*litTexturedShaderPtr, transform);
+	}
 	else if (modelPtr && animated)
+	{
 		modelPtr->CustomRender(*unlitTexturedAnimatedShaderPtr, transform);
+	}
 }
 
 void GraphicsComponent::DepthRender(const glm::mat4& transform)
@@ -63,7 +84,6 @@ void GraphicsComponent::InitializeAnimation(const std::string &path)
 	animated = true;
 	animPtr = new Animation(path, modelPtr);
 	animatorPtr = new Animator(animPtr);
-	
 }
 
 Animator* GraphicsComponent::GetAnimator()

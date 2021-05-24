@@ -30,6 +30,7 @@ private:
 	float tempVel = 0.0f;
 	bool hasInput = false;
 	bool clickedOn = false;
+	bool mouseHoveredOver = false;
 
 	int element = 0;
 public:
@@ -57,6 +58,7 @@ public:
 	void CheckInput(glm::vec3& terrainPoint);
 	bool GetHasInput();
 	bool GetClick();
+	bool HasMouseHoveringOver();
 	glm::vec3 GetInputLocation();
 	std::shared_ptr<GraphicsComponent> GetGraphicsComponent();
 	std::shared_ptr<TransformComponent> GetTransformComponent();

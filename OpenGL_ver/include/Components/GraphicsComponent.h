@@ -3,7 +3,7 @@
 
 class Shader;
 class Model;
-
+class GameObject;
 
 
 class GraphicsComponent : public Component {
@@ -13,9 +13,11 @@ private:
 	bool animated = 0;
 	Animation* animPtr;
 	Animator* animatorPtr;
+	bool isHighlighted = false; // strange method of determining, because there is no defined way to access parent game object of this component from within it
 
 public:
 	void SetModel(Model* modelLoad);
+	void SetHighlighted(bool value);
 	void InitializeAnimation(const std::string& path);
 	void Render(const glm::mat4& parentTransform);
 	void DepthRender(const glm::mat4& parentTransform);

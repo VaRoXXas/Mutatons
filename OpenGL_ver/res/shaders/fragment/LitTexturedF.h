@@ -44,6 +44,7 @@ static const char* s_litTexturedFragmentPtr = R"(
         vec3 specular;
 	};
 
+	uniform bool isHighlighted;
 	uniform vec3 viewPos; // Viewer's (player's) position.
 	uniform vec3 lightPos;
 	uniform sampler2D shadowMap;
@@ -76,6 +77,8 @@ static const char* s_litTexturedFragmentPtr = R"(
 		result += CalcSpotLight(spotLight1, norm, FragPos, viewDir);
 		result += CalcSpotLight(spotLight2, norm, FragPos, viewDir);
 		
+		if(isHighlighted)
+			result += vec3(0.3);
 
 		FragColor = vec4(result, 1.0);
 	}

@@ -198,6 +198,10 @@ void GameObject::Render()
 
 	if(hasGraphicsComponent)
 	{
+		if (HasMouseHoveringOver())
+			this->GetGraphicsComponent()->SetHighlighted(true);
+		else
+			this->GetGraphicsComponent()->SetHighlighted(false);
 		this->GetGraphicsComponent()->Render(gameObjectTransform);
 	}
 	for (GameObject* child : children)
@@ -318,10 +322,16 @@ void GameObject::CheckInput(glm::vec3& terrainPoint)
 {
 	if (terrainPoint.x >= inputLocation.x-1.f && terrainPoint.x <= inputLocation.x && terrainPoint.z >= inputLocation.z - 1.f && terrainPoint.z <= inputLocation.z )
 	{
+		mouseHoveredOver = true;
+		
 		if (mouseClicked == true)
 			clickedOn = true;
 		else
 			clickedOn = false;
+	}
+	else
+	{
+		mouseHoveredOver = false;
 	}
 }
 
@@ -333,6 +343,11 @@ bool GameObject::GetHasInput()
 bool GameObject::GetClick()
 {
 	return clickedOn;
+}
+
+bool GameObject::HasMouseHoveringOver()
+{
+	return mouseHoveredOver;
 }
 
 glm::vec3 GameObject::GetInputLocation()
