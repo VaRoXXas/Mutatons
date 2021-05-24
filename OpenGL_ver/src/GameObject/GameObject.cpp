@@ -78,8 +78,10 @@ void GameObject::Update(glm::vec3& locationVec, GLfloat time)
 //GameObject's Components' getters
 std::shared_ptr<GraphicsComponent> GameObject::GetGraphicsComponent()
 {
-	return std::static_pointer_cast<GraphicsComponent>(
-		m_Components[graphicsComponentLocation]);
+	if (hasGraphicsComponent)
+		return std::static_pointer_cast<GraphicsComponent>(
+			m_Components[graphicsComponentLocation]);
+	else return nullptr;
 }
 
 std::shared_ptr<TransformComponent> GameObject::GetTransformComponent()
@@ -239,7 +241,7 @@ void GameObject::Render()
 			{
 				frustumCount = frustumCount + 1;
 				glBeginConditionalRender(queryName, GL_QUERY_WAIT);
-				
+
 				child->GetGraphicsComponent()->Render(absoluteTransform);
 				glEndConditionalRender();
 			}
@@ -324,7 +326,7 @@ void GameObject::CheckInput(glm::vec3& terrainPoint)
 	{
 		mouseHoveredOver = true;
 		
-		if (mouseClicked == true)
+		if (mouseClicked)
 			clickedOn = true;
 		else
 			clickedOn = false;
