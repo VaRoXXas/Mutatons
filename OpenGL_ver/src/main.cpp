@@ -251,6 +251,7 @@ int main()
 	crossingPtr = new Crossing;
 	crossingPtr->SetActive();
 	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(9.0f,1.0f,-2.0f)));
+	crossingPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
 	crossingPtr->SetInput(glm::vec3(9.0f, 1.0f, -3.0f));
 	crossingPtr->AddDir("left");
@@ -264,6 +265,7 @@ int main()
 	crossingPtr = new Crossing;
 	crossingPtr->SetActive();
 	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(5.0f, 1.0f, -3.0f)));
+	crossingPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
 	crossingPtr->SetInput(glm::vec3(6.0f, 1.0f, -3.0f));
 	crossingPtr->AddDir("forward");

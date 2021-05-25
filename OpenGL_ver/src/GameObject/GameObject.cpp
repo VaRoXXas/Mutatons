@@ -211,7 +211,6 @@ void GameObject::Render()
 		if (child->IsActive() && child->hasGraphicsComponent)
 		{
 			const auto absoluteTransform = gameObjectTransform * child->GetTransformComponent()->GetTransform();
-
 			//Occlusion culling
 			//glDisable(GL_CULL_FACE);
 			glDepthMask(GL_FALSE);
@@ -230,6 +229,76 @@ void GameObject::Render()
 			corner.y = child->GetTransformComponent()->GetLocation().y;
 			corner.z = child->GetTransformComponent()->GetLocation().z;
 
+			glGetQueryObjectuiv(queryName, GL_QUERY_RESULT, &numSamplesRendered);
+			if (numSamplesRendered == 0)
+			{
+				queryCount++;
+			}
+			//frustum culling
+			if (frustum.SphereInFrustum(corner, 10) != Frustum::OUTSIDE)
+			{
+				frustumCount = frustumCount + 1;
+				glBeginConditionalRender(queryName, GL_QUERY_WAIT);
+				
+				//child->Render();
+				child->RenderChild(absoluteTransform);
+				//child->GetGraphicsComponent()->Render(absoluteTransform);
+				glEndConditionalRender();
+			}
+			
+		}
+	}
+	
+	frustumNumber = frustumCount;
+	queryNumber = queryCount;
+	//std::cout << "frustumCount:" << frustumCount << std::endl;
+	//std::cout << "queryCount:" << queryCount << std::endl;
+	frustumCount = 0;
+	queryCount = 0;
+}
+
+//Used in Render recursion
+void GameObject::RenderChild(const glm::mat4& transform)
+{
+
+	const glm::mat4 zeroPointTransform = glm::mat4(1.0f);
+	if (hasTransformComponent)
+	{
+		gameObjectTransform = transform;
+	}
+	else
+		gameObjectTransform = zeroPointTransform;
+
+	if (hasGraphicsComponent)
+	{
+		if (HasMouseHoveringOver())
+			this->GetGraphicsComponent()->SetHighlighted(true);
+		else
+			this->GetGraphicsComponent()->SetHighlighted(false);
+		this->GetGraphicsComponent()->Render(gameObjectTransform);
+	}
+	for (GameObject* child : children)
+	{
+		if (child->IsActive() && child->hasGraphicsComponent)
+		{
+			const auto absoluteTransform = child->GetTransformComponent()->GetTransform();
+			//Occlusion culling
+			//glDisable(GL_CULL_FACE);
+			glDepthMask(GL_FALSE);
+			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+			glBeginQuery(GL_SAMPLES_PASSED, queryName);
+			CustomDrawing::DrawRefracted(transform);
+			glEndQuery(GL_SAMPLES_PASSED);
+
+			//glEnable(GL_CULL_FACE);
+			glDepthMask(GL_TRUE);
+			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+
+			Vec3 corner;
+			corner.x = child->GetTransformComponent()->GetLocation().x;
+			corner.y = child->GetTransformComponent()->GetLocation().y;
+			corner.z = child->GetTransformComponent()->GetLocation().z;
 
 			glGetQueryObjectuiv(queryName, GL_QUERY_RESULT, &numSamplesRendered);
 			if (numSamplesRendered == 0)
@@ -242,17 +311,14 @@ void GameObject::Render()
 				frustumCount = frustumCount + 1;
 				glBeginConditionalRender(queryName, GL_QUERY_WAIT);
 
-				child->GetGraphicsComponent()->Render(absoluteTransform);
+				child->RenderChild(absoluteTransform);
 				glEndConditionalRender();
 			}
-			
+
 		}
 	}
-	
 	frustumNumber = frustumCount;
 	queryNumber = queryCount;
-	//std::cout << "frustumCount:" << frustumCount << std::endl;
-	//std::cout << "queryCount:" << queryCount << std::endl;
 	frustumCount = 0;
 	queryCount = 0;
 }

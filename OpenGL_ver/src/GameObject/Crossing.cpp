@@ -109,7 +109,8 @@ void Crossing::AddDir(std::string str)
 		gameObjectPtr->GetTransformComponent()->SetLocation(tempLoc);
 		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[13]);
 		bridges.push_back(gameObjectPtr);
-		gameObjectVector[0]->AddChild(gameObjectPtr);
+		this->AddChild(gameObjectPtr);
+		//gameObjectVector[0]->AddChild(gameObjectPtr);
 	}
 	if (str == "left")
 	{
@@ -124,7 +125,8 @@ void Crossing::AddDir(std::string str)
 		gameObjectPtr->GetTransformComponent()->SetLocation(tempLoc);
 		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[13]);
 		bridges.push_back(gameObjectPtr);
-		gameObjectVector[0]->AddChild(gameObjectPtr);
+		this->AddChild(gameObjectPtr);
+		//gameObjectVector[0]->AddChild(gameObjectPtr);
 	}
 	if (str == "forward")
 	{
@@ -140,7 +142,8 @@ void Crossing::AddDir(std::string str)
 		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[13]);
 		gameObjectPtr->GetTransformComponent()->SetRotation(90.0f, 'y');
 		bridges.push_back(gameObjectPtr);
-		gameObjectVector[0]->AddChild(gameObjectPtr);
+		this->AddChild(gameObjectPtr);
+		//gameObjectVector[0]->AddChild(gameObjectPtr);
 		
 		
 	}
@@ -158,7 +161,8 @@ void Crossing::AddDir(std::string str)
 		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[13]);
 		gameObjectPtr->GetTransformComponent()->SetRotation(-90.0f, 'y');
 		bridges.push_back(gameObjectPtr);
-		gameObjectVector[0]->AddChild(gameObjectPtr);
+		this->AddChild(gameObjectPtr);
+		//gameObjectVector[0]->AddChild(gameObjectPtr);
 	}
 }
 
