@@ -16,8 +16,6 @@ private:
 	bool isHighlighted = false; // strange method of determining, because there is no defined way to access parent game object of this component from within it
 
 public:
-	bool IsHighlighted();
-	bool HasModel();
 	void SetModel(Model* modelLoad);
 	void SetHighlighted(bool value);
 	void InitializeAnimation(const std::string& path);
