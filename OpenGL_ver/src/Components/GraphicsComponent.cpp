@@ -17,6 +17,18 @@ extern Shader* sphereShaderPtr;
 extern Shader* unlitTexturedAnimatedShaderPtr;
 
 
+bool GraphicsComponent::IsHighlighted()
+{
+	return isHighlighted;
+}
+
+bool GraphicsComponent::HasModel()
+{
+	if (modelPtr)
+		return true;
+	else
+		return false;
+}
 
 //assigns model to the gameobject
 void GraphicsComponent::SetModel(Model* modelLoad)
@@ -27,6 +39,8 @@ void GraphicsComponent::SetModel(Model* modelLoad)
 void GraphicsComponent::SetHighlighted(bool value)
 {
 	isHighlighted = value;
+	//if (this->IsHighlighted())
+		//std::cout << this << std::endl;
 }
 
 //renders assigned model to the scene
@@ -49,7 +63,7 @@ void GraphicsComponent::Render(const glm::mat4& transform)
 	}
 	else if (modelPtr && animated)
 	{
-		modelPtr->CustomRender(*unlitTexturedAnimatedShaderPtr, transform);
+		//modelPtr->CustomRender(*unlitTexturedAnimatedShaderPtr, transform);
 	}
 }
 
