@@ -78,10 +78,8 @@ void GameObject::Update(glm::vec3& locationVec, GLfloat time)
 //GameObject's Components' getters
 std::shared_ptr<GraphicsComponent> GameObject::GetGraphicsComponent()
 {
-	if (hasGraphicsComponent)
-		return std::static_pointer_cast<GraphicsComponent>(
-			m_Components[graphicsComponentLocation]);
-	else return nullptr;
+	return std::static_pointer_cast<GraphicsComponent>(
+		m_Components[graphicsComponentLocation]);
 }
 
 std::shared_ptr<TransformComponent> GameObject::GetTransformComponent()
@@ -201,9 +199,13 @@ void GameObject::Render()
 	if(hasGraphicsComponent)
 	{
 		if (HasMouseHoveringOver())
+		{
 			this->GetGraphicsComponent()->SetHighlighted(true);
+		}
 		else
+		{
 			this->GetGraphicsComponent()->SetHighlighted(false);
+		}
 		this->GetGraphicsComponent()->Render(gameObjectTransform);
 	}
 	for (GameObject* child : children)
@@ -260,7 +262,6 @@ void GameObject::Render()
 //Used in Render recursion
 void GameObject::RenderChild(const glm::mat4& transform)
 {
-
 	const glm::mat4 zeroPointTransform = glm::mat4(1.0f);
 	if (hasTransformComponent)
 	{
@@ -275,6 +276,10 @@ void GameObject::RenderChild(const glm::mat4& transform)
 			this->GetGraphicsComponent()->SetHighlighted(true);
 		else
 			this->GetGraphicsComponent()->SetHighlighted(false);
+
+		if (this->GetGraphicsComponent()->HasModel() && this->GetGraphicsComponent()->IsHighlighted())
+			std::cout << "ABC\n";
+		
 		this->GetGraphicsComponent()->Render(gameObjectTransform);
 	}
 	for (GameObject* child : children)
