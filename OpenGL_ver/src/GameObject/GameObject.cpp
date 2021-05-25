@@ -23,7 +23,7 @@ GameObject* childPtr;
 //#include "GameObjectSharer.h"
 //#include "DevelopState.h"
 //#include "RectColliderComponent.h"
-
+float face = 0.f;
 
 
 //Allows GameObject to move in four directions
@@ -35,18 +35,22 @@ void GameObject::Update(glm::vec3& locationVec, GLfloat time)
 		if (moveDirection == "forward")
 		{
 			locationVec.z = locationVec.z + (0.001f * velocity);
+			face = 0.0f;
 		}
 		else if (moveDirection == "back")
 		{
 			locationVec.z = locationVec.z - (0.001f * velocity);
+			face = 180.0f;
 		}
 		else if (moveDirection == "right")
 		{
 			locationVec.x = locationVec.x - (0.001f * velocity);
+			face = -90.0f;
 		}
 		else if (moveDirection == "left")
 		{
 			locationVec.x = locationVec.x + (0.001f * velocity);
+			face = 90.0f;
 		}
 		else if (moveDirection == "up")
 		{
@@ -59,7 +63,7 @@ void GameObject::Update(glm::vec3& locationVec, GLfloat time)
 	} else 
 		velocity = 0.0f;
 	this->GetTransformComponent()->SetLocation(locationVec);
-
+	this->GetTransformComponent()->SetRotation(face, 'y');
 	if (active && hasCollider)
 	{
 		this->GetColliderComponent()->Update();
