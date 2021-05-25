@@ -80,13 +80,13 @@ void Crossing::SetDir(std::string str)
 		if (br->GetTag() == str)
 		{
 			tempLoc = br->GetTransformComponent()->GetLocation();
-			tempLoc.y = 0.5f;
+			tempLoc.y = -0.5f;
 			br->GetTransformComponent()->SetLocation(tempLoc);
 		}
 		else
 		{
 			tempLoc = br->GetTransformComponent()->GetLocation();
-			tempLoc.y = 1.0f;
+			tempLoc.y = 0.0f;
 			br->GetTransformComponent()->SetLocation(tempLoc);
 		}
 	}
@@ -95,11 +95,13 @@ void Crossing::SetDir(std::string str)
 //adds directions to the list
 void Crossing::AddDir(std::string str)
 {
+	tempLoc = glm::vec3(0.0f);
 	availableDirs.push_back(str);
 	if (str == "right")
 	{
-		tempLoc = this->GetInputLocation();
-		tempLoc.x = tempLoc.x - 1.f;
+		//tempLoc = this->GetInputLocation();
+		
+		tempLoc.x = -1.f;
 		gameObjectPtr = new GameObject;
 		gameObjectPtr->SetActive();
 		gameObjectPtr->SetTag("right");
@@ -114,8 +116,8 @@ void Crossing::AddDir(std::string str)
 	}
 	if (str == "left")
 	{
-		tempLoc = this->GetInputLocation();
-		tempLoc.x = tempLoc.x + 1.f;
+		//tempLoc = this->GetInputLocation();
+		tempLoc.x = 1.f;
 		gameObjectPtr = new GameObject;
 		gameObjectPtr->SetActive();
 		gameObjectPtr->SetTag("left");
@@ -130,15 +132,15 @@ void Crossing::AddDir(std::string str)
 	}
 	if (str == "forward")
 	{
-		tempLoc = this->GetInputLocation();
-		tempLoc.z = tempLoc.z + 1.f;
+		//tempLoc = this->GetInputLocation();
+		tempLoc.x = 1.f;
 		gameObjectPtr = new GameObject;
 		gameObjectPtr->SetActive();
 		gameObjectPtr->SetTag("forward");
 		//gameObjectPtr->SetVelocity(15.0f);
 		gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(tempLoc));
 		gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
-		//gameObjectPtr->GetTransformComponent()->SetLocation();
+		//gameObjectPtr->GetTransformComponent()->SetLocation(tempLoc);
 		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[13]);
 		gameObjectPtr->GetTransformComponent()->SetRotation(90.0f, 'y');
 		bridges.push_back(gameObjectPtr);
@@ -149,15 +151,15 @@ void Crossing::AddDir(std::string str)
 	}
 	if (str == "back")
 	{
-		tempLoc = this->GetInputLocation();
-		tempLoc.z = tempLoc.z - 1.f;
+		//tempLoc = this->GetInputLocation();
+		tempLoc.x = -1.f;
 		gameObjectPtr = new GameObject;
 		gameObjectPtr->SetActive();
 		gameObjectPtr->SetTag("back");
 		//gameObjectPtr->SetVelocity(15.0f);
-		gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
+		gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(tempLoc));
 		gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
-		gameObjectPtr->GetTransformComponent()->SetLocation(tempLoc);
+		//gameObjectPtr->GetTransformComponent()->SetLocation(tempLoc);
 		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[13]);
 		gameObjectPtr->GetTransformComponent()->SetRotation(-90.0f, 'y');
 		bridges.push_back(gameObjectPtr);

@@ -7,6 +7,7 @@ class Component;
 class TransformComponent : public Component {
 private:
 	const std::string type = "transform";
+	std::string initialRotation = "";
 	glm::mat4 transform;
 	glm::vec3 location;
 	glm::vec3 scale;

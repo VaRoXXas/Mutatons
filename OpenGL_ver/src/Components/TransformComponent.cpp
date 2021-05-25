@@ -60,6 +60,9 @@ void TransformComponent::SetRotation(float degrees, char rotationDirection)
 	else if (rotationDirection == 'z')
 		direction = glm::vec3(0.0, 0.0, 1.0);
 	transform = glm::rotate(transform, glm::radians(degrees), direction);
+	initialRotation.push_back(rotationDirection);
+	initialRotation = initialRotation + " " + std::to_string(degrees);
+	//EXAMPLE initialRotation output: y 90.000000
 }
 
 //you can set scale using only float or directly using vec3

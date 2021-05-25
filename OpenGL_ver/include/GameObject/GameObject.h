@@ -43,8 +43,7 @@ public:
 	void SetTag(std::string tagTyped);
 	std::string GetTag();
 	void AddChild(GameObject* childPtr);
-	void Render();
-	void RenderChild(const glm::mat4& transform);
+	void Render(const glm::mat4& transform);
 	void DepthRender();
 	void SetDirection(std::string dir);
 	std::string GetDirection();
