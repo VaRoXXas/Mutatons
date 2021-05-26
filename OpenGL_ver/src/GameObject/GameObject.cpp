@@ -18,7 +18,6 @@ int queryCount = 0, frustumCount = 0, iterator = 0;
 extern int queryNumber, frustumNumber;
 extern Shader* unlitTexturedAnimatedShaderPtr;
 extern bool mouseClicked;
-extern std::vector<GameObject*> gameObjectVector;
 GameObject* childPtr;
 //#include "GameObjectSharer.h"
 //#include "DevelopState.h"

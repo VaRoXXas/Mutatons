@@ -9,6 +9,7 @@ private:
 	bool once = false;
 	std::string dir = "right";
 	std::vector<std::string> availableDirs;
+	std::vector<GameObject*> bridges;
 public:
 	~Crossing();
 	void ChangeDirection(GameObject *gameObject);
