@@ -10,10 +10,12 @@ private:
 	std::string dir = "right";
 	std::vector<std::string> availableDirs;
 	std::vector<GameObject*> bridges;
+	GameObject* directionSwitch;
 public:
 	~Crossing();
 	void ChangeDirection(GameObject *gameObject);
 	void InputDirection();
+	void AddSwitch();
 	void SetDir(std::string str);
 	void AddDir(std::string str);
 	void UpdateTransform();

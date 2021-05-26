@@ -18,6 +18,7 @@ extern std::vector<GameObject*> gameObjectVector;
 glm::vec3 tempLoc, tempLoc2;
 
 
+
 Crossing::~Crossing()
 {
 }
@@ -71,6 +72,16 @@ void Crossing::InputDirection()
 		
 }
 
+void Crossing::AddSwitch()
+{
+	directionSwitch = new GameObject;
+	directionSwitch->SetActive();
+	directionSwitch->AddComponent(std::make_shared<TransformComponent>(glm::vec3(0.f,0.f,0.f)));
+	directionSwitch->AddComponent(std::make_shared<GraphicsComponent>());
+	directionSwitch->GetGraphicsComponent()->SetModel(vecModel[30]);
+	this->AddChild(directionSwitch);
+}
+
 //Dir setter, this function also sets
 void Crossing::SetDir(std::string str)
 {
@@ -97,6 +108,16 @@ void Crossing::SetDir(std::string str)
 			tempLoc.y = 0.0f;
 			bridges[0]->GetTransformComponent()->SetLocation(tempLoc);
 		}
+
+		if (dir == "left" && directionSwitch!=nullptr)
+		{
+			directionSwitch->GetTransformComponent()->SetRotation(180.0f, 'y');
+		}
+		if (dir == "forward" && directionSwitch != nullptr)
+		{
+			directionSwitch->GetTransformComponent()->SetRotation(180.0f, 'y');
+		}
+
 	}
 }
 

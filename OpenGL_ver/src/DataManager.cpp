@@ -178,6 +178,9 @@ void DataManager::LoadAllModels()
 	vecModel.push_back(modelPtr);
 	modelPtr = new Model(NATURE_PATH_TJUNCTION);
 	vecModel.push_back(modelPtr);
+	//30
+	modelPtr = new Model(DIRECTION_SWITCH);
+	vecModel.push_back(modelPtr);
 
 	//Animated
 	modelPtr = new Model(ANIM);
