@@ -38,6 +38,7 @@
 #define NATURE_PATH_STRAIGHT "res/models/tiles/nature_path_straight.obj"
 #define NATURE_PATH_TJUNCTION "res/models/tiles/nature_path_tjunction.obj"
 #define DIRECTION_SWITCH "res/models/tiles/direction_switch.obj"
+#define CREATURE "res/models/creature/creature_1.obj"
 
 //Animated models
 #define ANIM "res/models/vampire/dancing_vampire.dae"

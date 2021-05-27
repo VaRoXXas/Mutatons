@@ -181,7 +181,8 @@ void DataManager::LoadAllModels()
 	//30
 	modelPtr = new Model(DIRECTION_SWITCH);
 	vecModel.push_back(modelPtr);
-
+	modelPtr = new Model(CREATURE);
+	vecModel.push_back(modelPtr);
 	//Animated
 	modelPtr = new Model(ANIM);
 	vecAnimModel.push_back(modelPtr);

@@ -42,6 +42,7 @@ void Building::Reaction(GameObject* gameObject)
 					captured = true;
 				else if(childrenObstacles.empty())
 					captured = true;
+				gameObject->SetVelocity(0.0f);
 			}
 		}
 	}

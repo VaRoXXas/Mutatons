@@ -262,6 +262,7 @@ int main()
 	crossingPtr->AddDir("left");
 	crossingPtr->AddDir("right");
 	crossingPtr->SetDir("left");
+	crossingPtr->AddSwitch();
 	crossingPtr->GetGraphicsComponent()->SetModel(vecModel[29]);
 	crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
 	crossingPtr->GetColliderComponent()->Initialize(glm::vec3(9.0f, 1.0f, -2.0f), *objectScalePtr);
@@ -277,6 +278,7 @@ int main()
 	crossingPtr->AddDir("forward");
 	crossingPtr->AddDir("back");
 	crossingPtr->SetDir("forward");
+	crossingPtr->AddSwitch();
 	crossingPtr->GetGraphicsComponent()->SetModel(vecModel[6]);
 	crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
 	crossingPtr->GetTransformComponent()->SetRotation(-90.f,'y');
@@ -348,6 +350,18 @@ int main()
 	buildingPtr->GetColliderComponent()->Initialize(buildingPtr->GetTransformComponent());
 	buildingPtr->SetElement(1);
 	buildingPtr->SetType("Laboratory");
+	buildingVector.push_back(buildingPtr);
+	gameObjectVector[0]->AddChild(buildingPtr);
+
+	buildingPtr = new Building;
+	buildingPtr->SetActive();
+	buildingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(8.0f, 1.0f, 2.0f)));
+	buildingPtr->AddComponent(std::make_shared<GraphicsComponent>());
+	buildingPtr->AddComponent(std::make_shared<ColliderComponent>());
+	buildingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	buildingPtr->GetGraphicsComponent()->SetModel(vecModel[10]);
+	buildingPtr->GetColliderComponent()->Initialize(buildingPtr->GetTransformComponent());
+	buildingPtr->SetType("Control");
 	buildingVector.push_back(buildingPtr);
 	gameObjectVector[0]->AddChild(buildingPtr);
 #pragma endregion
