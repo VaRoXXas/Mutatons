@@ -181,7 +181,13 @@ void DataManager::LoadAllModels()
 	//30
 	modelPtr = new Model(DIRECTION_SWITCH);
 	vecModel.push_back(modelPtr);
-	modelPtr = new Model(CREATURE);
+	modelPtr = new Model(LASER_RED);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LASER_BLUE);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LASER_GREEN);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LASER_OFF);
 	vecModel.push_back(modelPtr);
 	//Animated
 	modelPtr = new Model(ANIM);

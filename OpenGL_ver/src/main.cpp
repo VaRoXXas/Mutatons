@@ -333,10 +333,12 @@ int main()
 	buildingPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	buildingPtr->AddComponent(std::make_shared<ColliderComponent>());
 	buildingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	buildingPtr->GetGraphicsComponent()->SetModel(vecModel[23]);
+	//buildingPtr->GetGraphicsComponent()->SetModel(vecModel[23]);
 	buildingPtr->GetColliderComponent()->Initialize(buildingPtr->GetTransformComponent());
-	buildingPtr->SetElement(1);
+	buildingPtr->SetElement(3);
 	buildingPtr->SetType("Obstacle");
+	buildingPtr->AddLaserSide("back");
+	buildingPtr->AddLaserSide("right");
 	buildingVector.push_back(buildingPtr);
 	gameObjectVector[0]->AddChild(buildingPtr);
 

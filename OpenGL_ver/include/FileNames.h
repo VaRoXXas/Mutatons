@@ -38,7 +38,10 @@
 #define NATURE_PATH_STRAIGHT "res/models/tiles/nature_path_straight.obj"
 #define NATURE_PATH_TJUNCTION "res/models/tiles/nature_path_tjunction.obj"
 #define DIRECTION_SWITCH "res/models/tiles/direction_switch.obj"
-#define CREATURE "res/models/creature/creature_1.obj"
+#define LASER_RED "res/models/tiles/laser_red.obj"
+#define LASER_BLUE "res/models/tiles/laser_blue.obj"
+#define LASER_GREEN "res/models/tiles/laser_green.obj"
+#define LASER_OFF "res/models/tiles/laser_off.obj"
 
 //Animated models
 #define ANIM "res/models/vampire/dancing_vampire.dae"
