@@ -12,6 +12,7 @@
 #include "Rendering/CustomDrawing.h"
 #include "Rendering/animation/Animation.h"
 #include "Rendering/animation/Animator.h"
+#include "Rendering/PostProcessor.h"
 #include "Scene/GraphNode.h"
 #include "FrustumCulling/Frustum.h"
 #include "GeometryCreation.h"
@@ -61,6 +62,8 @@ extern Shader* unlitTexturedAnimatedShaderPtr;
 extern Shader* simpleDepthShaderPtr;
 extern Shader* depthMapDebugShaderPtr;
 extern Shader* hud1ShaderPtr;
+extern Shader* postProcessingShaderPtr;
+extern PostProcessor* postProcessorPtr;
 extern GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
 extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture;
 extern glm::vec3 lineShaderEndPointPos;
@@ -95,6 +98,8 @@ int queryNumber = 0, frustumNumber = 0;
 
 bool IMGUI_ENABLED = true;
 bool sceneExplorationModeEnabled = true;
+bool confusionPostProcessOn = false;
+bool chaosPostProcessOn = false;
 DataManager dataManager = DataManager();
 Camera mainCamera(isometric);
 GLfloat deltaTime = 0.0f; // the difference between the current and the last frame
@@ -175,6 +180,7 @@ int main()
 	Shader simpleDepthShader(s_simpleDepthVertexPtr, s_emptyFragmentPtr);
 	Shader depthMapDebugShader(s_depthMapDebugVertexPtr, s_depthMapDebugFragmentPtr);
 	Shader hud1Shader(s_hud1VertexPtr, s_hud1FragmentPtr);
+	Shader postProcessingShader(s_postProcessingVertexPtr, s_postProcessingFragmentPtr);
 	litTexturedShaderPtr = &litTexturedShader;
 	orbitShaderPtr = &orbitShader;
 	sphereShaderPtr = &sphereShader;
@@ -186,10 +192,13 @@ int main()
 	simpleDepthShaderPtr = &simpleDepthShader;
 	depthMapDebugShaderPtr = &depthMapDebugShader;
 	hud1ShaderPtr = &hud1Shader;
+	postProcessingShaderPtr = &postProcessingShader;
 
 
 	Lighting::InitLighting(litTexturedShader);
 	Lighting::InitLighting(litTexturedInstancedShader);
+
+	postProcessorPtr = new PostProcessor(postProcessingShader, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 #pragma endregion
 
@@ -852,7 +861,18 @@ int main()
 		litTexturedShader.Use();
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
-		RenderScene();
+		const bool postProcessingEnabled = true;
+		if(postProcessingEnabled)
+		{
+			postProcessorPtr->BeginRender();
+			RenderScene();
+			postProcessorPtr->EndRender();
+			postProcessorPtr->RenderQuad(glfwGetTime());
+		}
+		else
+		{
+			RenderScene();
+		}
 
 		picker.SetProjectionMatrix(projection);
 
@@ -961,6 +981,22 @@ int main()
 			ImGui::SliderInt("GameObject model", &modelID, 0, 29);
 			ImGui::Text("Number of hidden object due to occlusion culling: %i", queryNumber);
 			ImGui::Text("Number of object rendered with frustum culling: %i", frustumNumber);
+
+			// PostProcessing
+			if(ImGui::Button("Shake it"))
+			{
+				// shaking the screen
+				postProcessorPtr->SetShakeTime(0.5f);
+				postProcessorPtr->shake = GL_TRUE;
+			}
+			if (postProcessorPtr->GetShakeTime() > 0.0f)
+			{
+				postProcessorPtr->SetShakeTime(postProcessorPtr->GetShakeTime() - deltaTime);
+				if (postProcessorPtr->GetShakeTime() <= 0.0f)
+					postProcessorPtr->shake = GL_FALSE;
+			}
+			ImGui::Checkbox("Confusion post process", &confusionPostProcessOn);
+			ImGui::Checkbox("Chaos post process", &chaosPostProcessOn);
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

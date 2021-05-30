@@ -197,6 +197,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Rendering\PostProcessor.cpp" />
     <ClCompile Include="src\GeometryCreation.cpp" />
     <ClCompile Include="src\MousePicker.cpp" />
     <ClCompile Include="src\GameObject\Building.cpp" />
@@ -331,12 +332,14 @@
     <ClInclude Include="include\Rendering\Mesh.h" />
     <ClInclude Include="include\ObjectTags.h" />
     <ClInclude Include="include\MousePicker.h" />
+    <ClInclude Include="include\Rendering\PostProcessor.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\BasicF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\OrbitF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\SphereF.h" />
     <ClInclude Include="res\shaders\fragment\DepthMapDebugF.h" />
     <ClInclude Include="res\shaders\fragment\EmptyF.h" />
     <ClInclude Include="res\shaders\fragment\LitTexturedF.h" />
+    <ClInclude Include="res\shaders\fragment\PostProcessingF.h" />
     <ClInclude Include="res\shaders\fragment\RefractF.h" />
     <ClInclude Include="res\shaders\fragment\SkyboxF.h" />
     <ClInclude Include="res\shaders\fragment\UnlitF.h" />
@@ -356,6 +359,7 @@
     <ClInclude Include="res\shaders\vertex\DepthMapDebugV.h" />
     <ClInclude Include="res\shaders\vertex\LitTexturedInstancedV.h" />
     <ClInclude Include="res\shaders\vertex\LitTexturedV.h" />
+    <ClInclude Include="res\shaders\vertex\PostProcessingV.h" />
     <ClInclude Include="res\shaders\vertex\SimpleDepthV.h" />
     <ClInclude Include="res\shaders\vertex\SkyboxV.h" />
     <ClInclude Include="res\shaders\vertex\UnlitTexturedAnimatedV.h" />

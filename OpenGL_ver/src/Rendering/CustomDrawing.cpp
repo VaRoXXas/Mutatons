@@ -18,6 +18,7 @@ Shader* unlitTexturedAnimatedShaderPtr;
 Shader* simpleDepthShaderPtr;
 Shader* depthMapDebugShaderPtr;
 Shader* hud1ShaderPtr;
+Shader* postProcessingShaderPtr;
 GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO, hud1VAO, hud1VBO;
 GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture;
 std::vector<GLuint*> customVAOs, customVBOs;
