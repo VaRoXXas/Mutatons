@@ -16,6 +16,8 @@ extern GameObject* gameObjectPtr;
 extern std::vector<Model*> vecModel;
 extern std::vector<GameObject*> gameObjectVector;
 glm::vec3 tempLoc, tempLoc2;
+float oneRotation = -90.f;
+float twoRotation = 90.f;
 
 
 
@@ -72,6 +74,7 @@ void Crossing::InputDirection()
 		
 }
 
+//Adds switch with arrows to the crossing
 void Crossing::AddSwitch()
 {
 	directionSwitch = new GameObject;
@@ -89,36 +92,38 @@ void Crossing::SetDir(std::string str)
 
 	if (!bridges.empty())
 	{
-		if (bridges[0]->GetTag() == dir)
+		if (firstTime)
+			twoRotation = 0.0f;
+		else twoRotation = 90.f;
+
+		if (bridges[0]->GetTag() == dir && bridges[1]->GetTag() == dir)
 		{
-			tempLoc = bridges[0]->GetTransformComponent()->GetLocation();
-			tempLoc.y = -0.5f;
-			bridges[0]->GetTransformComponent()->SetLocation(tempLoc);
-			//bridges[0]->GetTransformComponent()->SetRotation(-90.0f,'z');
-			tempLoc = bridges[1]->GetTransformComponent()->GetLocation();
-			tempLoc.y = 0.0f;
-			bridges[1]->GetTransformComponent()->SetLocation(tempLoc);
+			bridges[0]->GetTransformComponent()->SetRotation(twoRotation,'z');
+			bridges[1]->GetTransformComponent()->SetRotation(twoRotation, 'z');
+
+			bridges[2]->GetTransformComponent()->SetRotation(oneRotation, 'z');
+			bridges[3]->GetTransformComponent()->SetRotation(oneRotation, 'z');
 		}
-		else if (bridges[1]->GetTag() == dir)
+		else if (bridges[2]->GetTag() == dir && bridges[3]->GetTag() == dir)
 		{
-			tempLoc = bridges[1]->GetTransformComponent()->GetLocation();
-			tempLoc.y = -0.5f;
-			bridges[1]->GetTransformComponent()->SetLocation(tempLoc);
-			tempLoc = bridges[0]->GetTransformComponent()->GetLocation();
-			tempLoc.y = 0.0f;
-			bridges[0]->GetTransformComponent()->SetLocation(tempLoc);
+			bridges[0]->GetTransformComponent()->SetRotation(oneRotation, 'z');
+			bridges[1]->GetTransformComponent()->SetRotation(oneRotation, 'z');
+
+			bridges[2]->GetTransformComponent()->SetRotation(twoRotation, 'z');
+			bridges[3]->GetTransformComponent()->SetRotation(twoRotation, 'z');
 		}
 
 		if (dir == "left" && directionSwitch!=nullptr)
 		{
-			directionSwitch->GetTransformComponent()->SetRotation(180.0f, 'y');
+			directionSwitch->GetTransformComponent()->SetRotation(-180.0f, 'y');
 		}
 		if (dir == "forward" && directionSwitch != nullptr)
 		{
-			directionSwitch->GetTransformComponent()->SetRotation(180.0f, 'y');
+			directionSwitch->GetTransformComponent()->SetRotation(-180.0f, 'y');
 		}
 
 	}
+	firstTime = false;
 }
 
 //adds directions to the list
@@ -128,51 +133,93 @@ void Crossing::AddDir(std::string str)
 	availableDirs.push_back(str);
 	if (str == "right")
 	{
-		tempLoc.x = -1.f;
+		tempLoc.x = -1.0f;
 		gameObjectPtr = new GameObject;
 		gameObjectPtr->SetActive();
 		gameObjectPtr->SetTag("right");
 		gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
 		gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 		gameObjectPtr->GetTransformComponent()->SetLocation(tempLoc);
-		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[13]);
+		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[36]);
+		bridges.push_back(gameObjectPtr);
+		this->AddChild(gameObjectPtr);
+		tempLoc.x = -2.0f;
+		gameObjectPtr = new GameObject;
+		gameObjectPtr->SetActive();
+		gameObjectPtr->SetTag("right");
+		gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
+		gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
+		gameObjectPtr->GetTransformComponent()->SetLocation(tempLoc);
+		gameObjectPtr->GetTransformComponent()->SetRotation(180.f,'y');
+		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[36]);
 		bridges.push_back(gameObjectPtr);
 		this->AddChild(gameObjectPtr);
 	}
 	if (str == "left")
 	{
-		tempLoc.x = 1.f;
+		tempLoc.x = 2.0f;
 		gameObjectPtr = new GameObject;
 		gameObjectPtr->SetActive();
 		gameObjectPtr->SetTag("left");
 		gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
 		gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 		gameObjectPtr->GetTransformComponent()->SetLocation(tempLoc);
-		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[13]);
+		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[36]);
+		bridges.push_back(gameObjectPtr);
+		this->AddChild(gameObjectPtr);
+		tempLoc.x = 1.0f;
+		gameObjectPtr = new GameObject;
+		gameObjectPtr->SetActive();
+		gameObjectPtr->SetTag("left");
+		gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
+		gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
+		gameObjectPtr->GetTransformComponent()->SetLocation(tempLoc);
+		gameObjectPtr->GetTransformComponent()->SetRotation(180.f, 'y');
+		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[36]);
 		bridges.push_back(gameObjectPtr);
 		this->AddChild(gameObjectPtr);
 	}
 	if (str == "forward")
 	{
-		tempLoc.x = 1.f;
+		tempLoc.x = 2.0f;
 		gameObjectPtr = new GameObject;
 		gameObjectPtr->SetActive();
 		gameObjectPtr->SetTag("forward");
 		gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(tempLoc));
 		gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
-		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[13]);
+		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[36]);
+		bridges.push_back(gameObjectPtr);
+		this->AddChild(gameObjectPtr);
+		tempLoc.x = 1.0f;
+		gameObjectPtr = new GameObject;
+		gameObjectPtr->SetActive();
+		gameObjectPtr->SetTag("forward");
+		gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(tempLoc));
+		gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
+		gameObjectPtr->GetTransformComponent()->SetRotation(180.f, 'y');
+		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[36]);
 		bridges.push_back(gameObjectPtr);
 		this->AddChild(gameObjectPtr);
 	}
 	if (str == "back")
 	{
-		tempLoc.x = -1.f;
+		tempLoc.x = -1.0f;
 		gameObjectPtr = new GameObject;
 		gameObjectPtr->SetActive();
 		gameObjectPtr->SetTag("back");
 		gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(tempLoc));
 		gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
-		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[13]);
+		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[36]);
+		bridges.push_back(gameObjectPtr);
+		this->AddChild(gameObjectPtr);
+		tempLoc.x = -2.0f;
+		gameObjectPtr = new GameObject;
+		gameObjectPtr->SetActive();
+		gameObjectPtr->SetTag("back");
+		gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(tempLoc));
+		gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
+		gameObjectPtr->GetTransformComponent()->SetRotation(180.f, 'y');
+		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[36]);
 		bridges.push_back(gameObjectPtr);
 		this->AddChild(gameObjectPtr);
 	}

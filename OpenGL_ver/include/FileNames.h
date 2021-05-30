@@ -42,6 +42,7 @@
 #define LASER_BLUE "res/models/tiles/laser_blue.obj"
 #define LASER_GREEN "res/models/tiles/laser_green.obj"
 #define LASER_OFF "res/models/tiles/laser_off.obj"
-
+#define BRIDGE_BASE "res/models/tiles/bridge_base.obj"
+#define BRIDGE_PLATFORM "res/models/tiles/bridge_platform.obj"
 //Animated models
 #define ANIM "res/models/vampire/dancing_vampire.dae"

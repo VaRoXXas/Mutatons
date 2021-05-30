@@ -264,17 +264,17 @@ int main()
 	//TODO: parser interprets crossings in file
 	crossingPtr = new Crossing;
 	crossingPtr->SetActive();
-	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(9.0f,1.0f,-3.0f)));
+	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f,1.0f,-3.0f)));
 	crossingPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
-	crossingPtr->SetInput(glm::vec3(9.0f, 1.0f, -3.0f));
+	crossingPtr->SetInput(glm::vec3(10.0f, 1.0f, -3.0f));
 	crossingPtr->AddDir("left");
 	crossingPtr->AddDir("right");
 	crossingPtr->SetDir("left");
 	crossingPtr->AddSwitch();
 	crossingPtr->GetGraphicsComponent()->SetModel(vecModel[29]);
 	crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	crossingPtr->GetColliderComponent()->Initialize(glm::vec3(9.0f, 1.0f, -2.0f), *objectScalePtr);
+	crossingPtr->GetColliderComponent()->Initialize(glm::vec3(10.0f, 1.0f, -2.0f), *objectScalePtr);
 	crossingVector.push_back(crossingPtr);
 	gameObjectVector[0]->AddChild(crossingPtr);
 
@@ -317,7 +317,7 @@ int main()
 
 	crossingPtr = new Crossing;
 	crossingPtr->SetActive();
-	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(4.0f, 1.0f, 0.0f)));
+	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(4.0f, 1.0f, 1.0f)));
 	crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
 	crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
 	crossingPtr->GetColliderComponent()->Initialize(crossingPtr->GetTransformComponent());
@@ -327,7 +327,7 @@ int main()
 
 	crossingPtr = new Crossing;
 	crossingPtr->SetActive();
-	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(9.0f, 1.0f, -1.0f)));
+	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(9.0f, 1.0f, 0.0f)));
 	crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
 	crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
 	crossingPtr->GetColliderComponent()->Initialize(crossingPtr->GetTransformComponent());
@@ -338,13 +338,13 @@ int main()
 
 	buildingPtr = new Building;
 	buildingPtr->SetActive();
-	buildingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(6.0f, 1.0f, -1.0f)));
+	buildingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(6.0f, 1.0f, 0.0f)));
 	buildingPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	buildingPtr->AddComponent(std::make_shared<ColliderComponent>());
 	buildingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
 	//buildingPtr->GetGraphicsComponent()->SetModel(vecModel[23]);
 	buildingPtr->GetColliderComponent()->Initialize(buildingPtr->GetTransformComponent());
-	buildingPtr->SetElement(3);
+	buildingPtr->SetElement(1);
 	buildingPtr->SetType("Obstacle");
 	buildingPtr->AddLaserSide("back");
 	buildingPtr->AddLaserSide("right");
@@ -353,7 +353,7 @@ int main()
 
 	buildingPtr = new Building;
 	buildingPtr->SetActive();
-	buildingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(4.0f, 1.0f, -4.0f)));
+	buildingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(4.0f, 1.0f, -3.0f)));
 	buildingPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	buildingPtr->AddComponent(std::make_shared<ColliderComponent>());
 	buildingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
@@ -366,7 +366,7 @@ int main()
 
 	buildingPtr = new Building;
 	buildingPtr->SetActive();
-	buildingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(8.0f, 1.0f, 2.0f)));
+	buildingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(8.0f, 1.0f, 3.0f)));
 	buildingPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	buildingPtr->AddComponent(std::make_shared<ColliderComponent>());
 	buildingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
@@ -861,7 +861,7 @@ int main()
 		litTexturedShader.Use();
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
-		const bool postProcessingEnabled = true;
+		const bool postProcessingEnabled = false;
 		if(postProcessingEnabled)
 		{
 			postProcessorPtr->BeginRender();
@@ -1059,7 +1059,7 @@ void SpawnMutaton()
 	gameObjectPtr = new GameObject;
 	gameObjectPtr->SetActive();
 	gameObjectPtr->SetVelocity(5.0f);
-	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(9.0f, 1.0f, -7.0f)));
+	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f, 1.0f, -7.0f)));
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
 	gameObjectPtr->SetUpdate();

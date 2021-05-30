@@ -11,6 +11,7 @@ private:
 	std::vector<std::string> availableDirs;
 	std::vector<GameObject*> bridges;
 	GameObject* directionSwitch;
+	bool firstTime = true;
 public:
 	~Crossing();
 	void ChangeDirection(GameObject *gameObject);
