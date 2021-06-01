@@ -193,6 +193,17 @@ void DataManager::LoadAllModels()
 	vecModel.push_back(modelPtr);
 	modelPtr = new Model(BRIDGE_PLATFORM);
 	vecModel.push_back(modelPtr);
+	modelPtr = new Model(NATURE_PATH_CORNER);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(NATURE_PATH_CROSSING);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(CANAL_CORNER_OUT);
+	vecModel.push_back(modelPtr);
+	//40
+	modelPtr = new Model(LAB_VAT);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(LAB_WINDOWS);
+	vecModel.push_back(modelPtr);
 	//Animated
 	modelPtr = new Model(ANIM);
 	vecAnimModel.push_back(modelPtr);
