@@ -62,9 +62,10 @@ extern Shader* unlitTexturedAnimatedShaderPtr;
 extern Shader* simpleDepthShaderPtr;
 extern Shader* depthMapDebugShaderPtr;
 extern Shader* hud1ShaderPtr;
+extern Shader* textShaderPtr;
 extern Shader* postProcessingShaderPtr;
 extern PostProcessor* postProcessorPtr;
-extern GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO;
+extern GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO, textVAO, textVBO;
 extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture;
 extern glm::vec3 lineShaderEndPointPos;
 extern int geometryShaderPseudoMeshDetailLevel;
@@ -131,6 +132,13 @@ void DepthRenderScene();
 void SpawnMutaton();
 void Reset();
 
+struct TextCharacter {
+	GLuint TextureID;   // ID handle of the glyph texture
+	glm::ivec2 Size;    // Size of glyph
+	glm::ivec2 Bearing;  // Offset from baseline to left/top of glyph
+	GLuint Advance;    // Horizontal offset to advance to next glyph
+};
+extern std::map<GLchar, TextCharacter> TextCharacters;
 
 
 int main()
@@ -180,6 +188,7 @@ int main()
 	Shader simpleDepthShader(s_simpleDepthVertexPtr, s_emptyFragmentPtr);
 	Shader depthMapDebugShader(s_depthMapDebugVertexPtr, s_depthMapDebugFragmentPtr);
 	Shader hud1Shader(s_hud1VertexPtr, s_hud1FragmentPtr);
+	Shader textShader(s_textVertexPtr, s_textFragmentPtr);
 	Shader postProcessingShader(s_postProcessingVertexPtr, s_postProcessingFragmentPtr);
 	litTexturedShaderPtr = &litTexturedShader;
 	orbitShaderPtr = &orbitShader;
@@ -192,6 +201,7 @@ int main()
 	simpleDepthShaderPtr = &simpleDepthShader;
 	depthMapDebugShaderPtr = &depthMapDebugShader;
 	hud1ShaderPtr = &hud1Shader;
+	textShaderPtr = &textShader;
 	postProcessingShaderPtr = &postProcessingShader;
 
 
@@ -770,6 +780,88 @@ int main()
 	//generate queries to occlusion culling
 	glGenQueries(1, &queryName);
 	
+	//text init
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glm::mat4 projectionText = glm::ortho(0.0f, static_cast<GLfloat>(WINDOW_WIDTH), 0.0f, static_cast<GLfloat>(WINDOW_HEIGHT));
+	textShaderPtr->Use();
+	textShaderPtr->SetMat4("projection", projectionText);
+	//glUniformMatrix4fv(glGetUniformLocation(textShader->Use(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+	// FreeType
+	FT_Library ft;
+	// All functions return a value different than 0 whenever an error occurred
+	if (FT_Init_FreeType(&ft))
+		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+
+	// Load font as face
+	FT_Face face;
+	if (FT_New_Face(ft, "res/arial.ttf", 0, &face))
+		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+
+	// Set size to load glyphs as
+	FT_Set_Pixel_Sizes(face, 0, 48);
+
+	// Disable byte-alignment restriction
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	// Load first 128 characters of ASCII set
+	for (GLubyte c = 0; c < 128; c++)
+	{
+		// Load character glyph 
+		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+		{
+			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+			continue;
+		}
+		// Generate texture
+		GLuint texTexture;
+		glGenTextures(1, &texTexture);
+		glBindTexture(GL_TEXTURE_2D, texTexture);
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RED,
+			face->glyph->bitmap.width,
+			face->glyph->bitmap.rows,
+			0,
+			GL_RED,
+			GL_UNSIGNED_BYTE,
+			face->glyph->bitmap.buffer
+		);
+		// Set texture options
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// Now store character for later use
+		TextCharacter character = {
+			texTexture,
+			glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+			face->glyph->advance.x
+		};
+		TextCharacters.insert(std::pair<GLchar, TextCharacter>(c, character));
+	}
+	glBindTexture(GL_TEXTURE_2D, 0);
+	// Destroy FreeType once we're finished
+	FT_Done_Face(face);
+	FT_Done_FreeType(ft);
+
+
+	// Configure VAO/VBO for texture quads
+	glGenVertexArrays(1, &textVAO);
+	glGenBuffers(1, &textVBO);
+	glBindVertexArray(textVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, textVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	std::chrono::time_point start = std::chrono::system_clock::now();
+	std::chrono::time_point between = std::chrono::system_clock::now();
+
 	// game loop
 	while (!glfwWindowShouldClose(windowPtr))
 	{
@@ -896,8 +988,19 @@ int main()
 		CustomDrawing::DrawSkybox();
 
 		// Drawing HUD
+		between = std::chrono::system_clock::now();
+		std::chrono::duration <double> diff = between - start;
 		CustomDrawing::DrawHud1();
 		CustomDrawing::DrawHud2();
+		CustomDrawing::RenderText("Time spent on map: " + std::to_string((int)diff.count()), 500.0f, 100.0f, 1.0f, glm::vec3(0.5, 0.1f, 0.2f));
+		CustomDrawing::RenderText("Mutatons left:", 1640.0f, 880.0f, 0.8f, glm::vec3(0.3, 0.7f, 0.9f));
+		std::chrono::system_clock::time_point p = std::chrono::system_clock::now();
+		time_t t = std::chrono::system_clock::to_time_t(p);
+		char str[26];
+		ctime_s(str, sizeof str, &t);
+		std::string sysTime(str);
+		CustomDrawing::RenderText("System time: " + sysTime, 500.0f, 50.0f, 1.0f, glm::vec3(0.5, 0.1f, 0.2f));
+		//TextRendering::TextInitialize();
 
 		// render Depth map to quad for visual debugging
 		// ---------------------------------------------

@@ -8,4 +8,5 @@
 #include "SkyboxV.h"
 #include "UnlitTexturedAnimatedV.h"
 #include "Hud1V.h"
+#include "TextV.h"
 #include "PostProcessingV.h"

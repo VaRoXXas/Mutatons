@@ -8,4 +8,5 @@
 #include "RefractF.h"
 #include "UnlitTexturedF.h"
 #include "Hud1F.h"
+#include "TextF.h"
 #include "PostProcessingF.h"

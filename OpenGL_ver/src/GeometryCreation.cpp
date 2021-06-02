@@ -8,13 +8,13 @@ void GeometryCreation::Hud1Creation()
 {
     float hud1ver[] = {
         // Pierwszy trójk¹t  
-         0.5f,  -0.2f, -1.0f, // Prawy górny  
-         0.5f, -0.5f, -1.0f, // Prawy dolny  
-          -0.5f,  -0.2f, -1.0f, // Lewy górny  
+         0.5f, -0.2f, 0.5f, // Prawy górny  
+         0.5f, -0.5f, 0.5f, // Prawy dolny  
+         -0.5f,-0.2f, 0.5f, // Lewy górny  
         // Drugi trójk¹t  
-         0.5f, -0.5f, -1.0f, // Prawy dolny  
-        -0.5f, -0.5f, -1.0f, // Lewy dolny  
-        -0.5f,  -0.2f, -1.0f // Lewy górny  
+         0.5f, -0.5f, 0.5f, // Prawy dolny  
+        -0.5f, -0.5f, 0.5f, // Lewy dolny  
+        -0.5f, -0.2f, 0.5f // Lewy górny  
     };
 
     //float hud1ver[] = {
