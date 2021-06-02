@@ -338,6 +338,7 @@
     <ClInclude Include="res\shaders\fragment\deprecated\SphereF.h" />
     <ClInclude Include="res\shaders\fragment\DepthMapDebugF.h" />
     <ClInclude Include="res\shaders\fragment\EmptyF.h" />
+    <ClInclude Include="res\shaders\fragment\Hud1F.h" />
     <ClInclude Include="res\shaders\fragment\LitTexturedF.h" />
     <ClInclude Include="res\shaders\fragment\PostProcessingF.h" />
     <ClInclude Include="res\shaders\fragment\RefractF.h" />
@@ -357,11 +358,13 @@
     <ClInclude Include="res\shaders\vertex\deprecated\PyramidV.h" />
     <ClInclude Include="res\shaders\vertex\deprecated\SphereV.h" />
     <ClInclude Include="res\shaders\vertex\DepthMapDebugV.h" />
+    <ClInclude Include="res\shaders\vertex\Hud1V.h" />
     <ClInclude Include="res\shaders\vertex\LitTexturedInstancedV.h" />
     <ClInclude Include="res\shaders\vertex\LitTexturedV.h" />
     <ClInclude Include="res\shaders\vertex\PostProcessingV.h" />
     <ClInclude Include="res\shaders\vertex\SimpleDepthV.h" />
     <ClInclude Include="res\shaders\vertex\SkyboxV.h" />
+    <ClInclude Include="res\shaders\vertex\TextV.h" />
     <ClInclude Include="res\shaders\vertex\UnlitTexturedAnimatedV.h" />
     <ClInclude Include="res\shaders\vertex\UnlitV.h" />
     <ClInclude Include="include\Components\TransformComponent.h" />
