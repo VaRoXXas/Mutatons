@@ -7,6 +7,7 @@
 * Assimp v3.3.1 -> assimp.sourceforge.net/main_downloads.html
 * imgui v1.79 -> github.com/ocornut/imgui
 * SFML 2.5.1 -> sfml-dev.org/download/sfml/2.5.1/
+* FreeType v2.10.4 -> download.savannah.gnu.org/releases/freetype/
 
 3) 3rd party assets credits:
 Intergalactic Odyssey.ogg - https://patrickdearteaga.com
