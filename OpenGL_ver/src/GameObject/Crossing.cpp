@@ -82,6 +82,7 @@ void Crossing::AddSwitch()
 	directionSwitch->AddComponent(std::make_shared<TransformComponent>(glm::vec3(0.f,0.f,0.f)));
 	directionSwitch->AddComponent(std::make_shared<GraphicsComponent>());
 	directionSwitch->GetGraphicsComponent()->SetModel(vecModel[30]);
+	directionSwitch->GetTransformComponent()->SetRotation(180.0f, 'y');
 	this->AddChild(directionSwitch);
 }
 
@@ -117,9 +118,17 @@ void Crossing::SetDir(std::string str)
 		{
 			directionSwitch->GetTransformComponent()->SetRotation(-180.0f, 'y');
 		}
+		if (dir == "right" && directionSwitch != nullptr)
+		{
+			directionSwitch->GetTransformComponent()->SetRotation(180.0f, 'y');
+		}
 		if (dir == "forward" && directionSwitch != nullptr)
 		{
 			directionSwitch->GetTransformComponent()->SetRotation(-180.0f, 'y');
+		}
+		if (dir == "back" && directionSwitch != nullptr)
+		{
+			directionSwitch->GetTransformComponent()->SetRotation(180.0f, 'y');
 		}
 
 	}
