@@ -111,7 +111,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;C:\OpenGL\include;$(SolutionDir)res\shaders;$(SolutionDir)res\shaders\fragment;$(SolutionDir)res\shaders\geometry;$(SolutionDir)res\shaders\vertex;C:\SFML-2.5.1\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;C:\OpenGL\include;$(SolutionDir)res\shaders;$(SolutionDir)res\shaders\fragment;$(SolutionDir)res\shaders\geometry;$(SolutionDir)res\shaders\vertex;C:\SFML-2.5.1\include\;C:\OpenGL\include\freetype</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -134,7 +134,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;C:\OpenGL\include;$(SolutionDir)res\shaders;$(SolutionDir)res\shaders\fragment;$(SolutionDir)res\shaders\geometry;$(SolutionDir)res\shaders\vertex;C:\SFML-2.5.1\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;C:\OpenGL\include;$(SolutionDir)res\shaders;$(SolutionDir)res\shaders\fragment;$(SolutionDir)res\shaders\geometry;$(SolutionDir)res\shaders\vertex;C:\SFML-2.5.1\include\;C:\OpenGL\include\freetype</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <AdditionalOptions>
       </AdditionalOptions>
@@ -159,7 +159,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;C:\OpenGL\include;$(SolutionDir)res\shaders;$(SolutionDir)res\shaders\fragment;$(SolutionDir)res\shaders\geometry;$(SolutionDir)res\shaders\vertex;C:\SFML-2.5.1\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;C:\OpenGL\include;$(SolutionDir)res\shaders;$(SolutionDir)res\shaders\fragment;$(SolutionDir)res\shaders\geometry;$(SolutionDir)res\shaders\vertex;C:\SFML-2.5.1\include\;C:\OpenGL\include\freetype</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -182,7 +182,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;C:\OpenGL\include;$(SolutionDir)res\shaders;$(SolutionDir)res\shaders\fragment;$(SolutionDir)res\shaders\geometry;$(SolutionDir)res\shaders\vertex;C:\SFML-2.5.1\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;C:\OpenGL\include;$(SolutionDir)res\shaders;$(SolutionDir)res\shaders\fragment;$(SolutionDir)res\shaders\geometry;$(SolutionDir)res\shaders\vertex;C:\SFML-2.5.1\include\;C:\OpenGL\include\freetype</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>

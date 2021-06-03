@@ -6,7 +6,7 @@
 extern Camera mainCamera;
 extern GLfloat deltaTime;
 extern bool sceneExplorationModeEnabled;
-extern bool mouseClicked;
+extern bool LMBreleaseEventTriggered;
 
 bool cursorEnabled = true;
 void (*wKeyActionPtr)();
@@ -78,10 +78,10 @@ void Input::ScrollCallback(GLFWwindow* windowPtr, const double xoffset, const do
 
 void Input::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-		mouseClicked = true;
-	else
-		mouseClicked = false;
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+	{
+		LMBreleaseEventTriggered = true;
+	}
 }
 
 void Input::ToggleCursor()

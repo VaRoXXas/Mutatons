@@ -90,7 +90,7 @@ extern std::vector<Model*> vecModel;
 extern std::vector<Model*> vecAnimModel;
 extern Frustum frustum;
 extern GLuint queryName;
-extern bool mouseClicked = false;
+extern bool LMBreleaseEventTriggered = false;
 
 //variable representing camera mode
 bool isometric = true;
@@ -975,7 +975,7 @@ int main()
 		//if (terrainPoint.x >= -1.f && terrainPoint.x <= 1.f && terrainPoint.z >= -1.f && terrainPoint.z <= 1.f)
 		//{
 		//	model = glm::translate(model, terrainPoint);
-		//	if (mouseClicked == true)
+		//	if (LMBreleaseEventTriggered == true)
 		//	{
 		//		{
 		//			modeltest.Draw(litTexturedShader);
@@ -1125,9 +1125,9 @@ int main()
 			}
 		}
 		// [glfw] Swapping buffers and polling IO events...
+		LMBreleaseEventTriggered = false;
 		glfwSwapBuffers(windowPtr);
 		glfwPollEvents();
-		
 	}
 
 	glDeleteQueries(1, &queryName);

@@ -17,7 +17,7 @@ GLuint queryName, numSamplesRendered;
 int queryCount = 0, frustumCount = 0, iterator = 0;
 extern int queryNumber, frustumNumber;
 extern Shader* unlitTexturedAnimatedShaderPtr;
-extern bool mouseClicked;
+extern bool LMBreleaseEventTriggered;
 GameObject* childPtr;
 //#include "GameObjectSharer.h"
 //#include "DevelopState.h"
@@ -327,7 +327,7 @@ void GameObject::CheckInput(glm::vec3& terrainPoint)
 	{
 		mouseHoveredOver = true;
 		
-		if (mouseClicked)
+		if (LMBreleaseEventTriggered)
 			clickedOn = true;
 		else
 			clickedOn = false;
