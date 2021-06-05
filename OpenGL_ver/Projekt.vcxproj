@@ -372,6 +372,7 @@
   <ItemGroup>
     <Text Include="Readme.txt" />
     <Text Include="res\level.txt" />
+    <Text Include="res\level_buildings.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

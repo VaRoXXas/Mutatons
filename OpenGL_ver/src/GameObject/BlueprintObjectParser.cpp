@@ -37,6 +37,21 @@ void BlueprintObjectParser::ParseNextObjectForBlueprint(std::ifstream& reader, G
 			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::Z, ObjectTags::Z_END);
 			bp.SetZ(stof(value));
 		}
+		else if (lineFromFile.find(ObjectTags::COLLIDER_X) != std::string::npos)
+		{
+			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::COLLIDER_X, ObjectTags::COLLIDER_X_END);
+			bp.SetColX(stof(value));
+		}
+		else if (lineFromFile.find(ObjectTags::COLLIDER_Y) != std::string::npos)
+		{
+			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::COLLIDER_Y, ObjectTags::COLLIDER_Y_END);
+			bp.SetColY(stof(value));
+		}
+		else if (lineFromFile.find(ObjectTags::COLLIDER_Z) != std::string::npos)
+		{
+			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::COLLIDER_Z, ObjectTags::COLLIDER_Z_END);
+			bp.SetColZ(stof(value));
+		}
 		else if (lineFromFile.find(ObjectTags::SCALE) != std::string::npos)
 		{
 			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::SCALE, ObjectTags::SCALE_END);
@@ -57,7 +72,27 @@ void BlueprintObjectParser::ParseNextObjectForBlueprint(std::ifstream& reader, G
 			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::MODEL_ID, ObjectTags::MODEL_ID_END);
 			bp.SetModelID(stoi(value));
 		}
-		else if (lineFromFile.find(ObjectTags::END_OF_OBJECT) != std::string::npos)
+		else if (lineFromFile.find(ObjectTags::CROSS_DIRS) != std::string::npos)
+		{
+			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::CROSS_DIRS, ObjectTags::CROSS_DIRS_END);
+			bp.AddDir(value);
+		}
+		else if (lineFromFile.find(ObjectTags::SET_DIR) != std::string::npos)
+		{
+			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::SET_DIR, ObjectTags::SET_DIR_END);
+			bp.SetCurDir(value);
+		}
+		else if (lineFromFile.find(ObjectTags::SWITCH) != std::string::npos)
+		{
+			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::SWITCH, ObjectTags::SWITCH_END);
+			bp.SetSwitch(value);
+		}
+		else if (lineFromFile.find(ObjectTags::INPUT) != std::string::npos)
+		{
+			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::INPUT, ObjectTags::INPUT_END);
+			bp.SetInput(value);
+		}
+		else if ((lineFromFile.find(ObjectTags::END_OF_OBJECT) != std::string::npos)|| (lineFromFile.find(ObjectTags::END_OF_CROSSING) != std::string::npos))
 		{
 			return;
 		}

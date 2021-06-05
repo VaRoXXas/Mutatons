@@ -1,15 +1,19 @@
 #include "pch.h"
 #include "GameObject/GameObject.h"
+#include "GameObject/Crossing.h"
+#include "GameObject/Building.h"
 #include "ObjectTags.h"
 #include "GameObject/GameObjectBlueprint.h"
 #include "GameObject/BlueprintObjectParser.h"
 #include "GameObject/GameObjectFactory.h"
 #include "GameObject/GameObjectLoader.h"
 
-
+extern std::vector<GameObject*> gameObjectVector;
+extern std::vector<Crossing*> crossingVector;
+extern std::vector<Building*> buildingVector;
 
 //this function calls the beginning of gameobject declaration in given file, and later calls building of read game objects
-void GameObjectLoader::LoadGameObjects(std::string pathToFile, std::vector<GameObject*> gameObjects, GameObject& parentGameObject)
+void GameObjectLoader::LoadGameObjects(std::string pathToFile, GameObject& parentGameObject)
 {
 	std::ifstream reader(pathToFile);
 	std::string lineFromFile;
@@ -21,7 +25,13 @@ void GameObjectLoader::LoadGameObjects(std::string pathToFile, std::vector<GameO
 		{
 			GameObjectBlueprint bp;
 			parser.ParseNextObjectForBlueprint(reader, bp);
-			gameObjectFactory.BuildGameObjects(bp, gameObjects, parentGameObject);
+			gameObjectFactory.BuildGameObjects(bp, "object", parentGameObject);
+		}
+		if (lineFromFile.find(ObjectTags::START_OF_CROSSING) != std::string::npos)
+		{
+			GameObjectBlueprint bp;
+			parser.ParseNextObjectForBlueprint(reader, bp);
+			gameObjectFactory.BuildGameObjects(bp, "crossing", parentGameObject);
 		}
 	}
 }

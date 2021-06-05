@@ -34,6 +34,36 @@ void GameObjectBlueprint::SetZ(float zFloat)
 	z = zFloat;
 }
 
+float GameObjectBlueprint::GetColX()
+{
+	return colX;
+}
+
+void GameObjectBlueprint::SetColX(float xFloat)
+{
+	colX = xFloat;
+}
+
+float GameObjectBlueprint::GetColY()
+{
+	return colY;
+}
+
+void GameObjectBlueprint::SetColY(float yFloat)
+{
+	colY = yFloat;
+}
+
+float GameObjectBlueprint::GetColZ()
+{
+	return colZ;
+}
+
+void GameObjectBlueprint::SetColZ(float zFloat)
+{
+	colZ = zFloat;
+}
+
 float GameObjectBlueprint::GetScale()
 {
 	return scale;
@@ -92,4 +122,50 @@ int GameObjectBlueprint::GetModelID()
 void GameObjectBlueprint::SetModelID(int id)
 {
 	modelID = id;
+}
+
+void GameObjectBlueprint::SetInput(std::string ifInput)
+{
+	if (ifInput == "YES")
+		hasInput = 1;
+}
+
+bool GameObjectBlueprint::GetInput()
+{
+	return hasInput;
+}
+
+//crossings setters
+
+void GameObjectBlueprint::AddDir(std::string direction)
+{
+	dirs.push_back(direction);
+}
+
+std::vector<std::string>& GameObjectBlueprint::GetDirs()
+{
+	return dirs;
+}
+
+void GameObjectBlueprint::SetCurDir(std::string direction)
+{
+	currentDir = direction;
+}
+
+std::string GameObjectBlueprint::GetCurrentDir()
+{
+	return currentDir;
+}
+ 
+void GameObjectBlueprint::SetSwitch(std::string switchString)
+{
+	if (switchString == "YES")
+		ifSwitch = 1;
+	else
+		ifSwitch = 0;
+}
+
+bool GameObjectBlueprint::GetIfSwitch()
+{
+	return ifSwitch;
 }

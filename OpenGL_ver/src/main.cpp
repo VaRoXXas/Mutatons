@@ -252,7 +252,9 @@ int main()
 
 	//Loading gameobjects from file
 	GameObjectLoader loader;
-	loader.LoadGameObjects("res/level.txt", gameObjectVector, *gameObjectVector[0]);
+	loader.LoadGameObjects("res/level.txt", *gameObjectVector[0]);
+	loader.LoadGameObjects("res/level_buildings.txt", *gameObjectVector[0]);
+
 	//objectScalePtr = new glm::vec3(0.01f, 0.01f, 0.01f);
 	//Testing gameobjects' declaration
 	gameObjectPtr = new GameObject;
@@ -272,78 +274,78 @@ int main()
 	objectScalePtr = &objectScale;
 	//Crossings declaration
 	//TODO: parser interprets crossings in file
-	crossingPtr = new Crossing;
-	crossingPtr->SetActive();
-	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f,1.0f,-3.0f)));
-	crossingPtr->AddComponent(std::make_shared<GraphicsComponent>());
-	crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
-	crossingPtr->SetInput(glm::vec3(10.0f, 1.0f, -3.0f));
-	crossingPtr->AddDir("left");
-	crossingPtr->AddDir("right");
-	crossingPtr->SetDir("left");
-	crossingPtr->AddSwitch();
-	crossingPtr->GetGraphicsComponent()->SetModel(vecModel[29]);
-	crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	crossingPtr->GetColliderComponent()->Initialize(glm::vec3(10.0f, 1.0f, -2.0f), *objectScalePtr);
-	crossingVector.push_back(crossingPtr);
-	gameObjectVector[0]->AddChild(crossingPtr);
+	//crossingPtr = new Crossing;
+	//crossingPtr->SetActive();
+	//crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f,1.0f,-3.0f)));
+	//crossingPtr->AddComponent(std::make_shared<GraphicsComponent>());
+	//crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
+	//crossingPtr->SetInput(glm::vec3(10.0f, 1.0f, -3.0f));
+	//crossingPtr->AddDir("left");
+	//crossingPtr->AddDir("right");
+	//crossingPtr->SetDir("left");
+	//crossingPtr->AddSwitch();
+	//crossingPtr->GetGraphicsComponent()->SetModel(vecModel[29]);
+	//crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	//crossingPtr->GetColliderComponent()->Initialize(glm::vec3(10.0f, 1.0f, -2.0f), *objectScalePtr);
+	//crossingVector.push_back(crossingPtr);
+	//gameObjectVector[0]->AddChild(crossingPtr);
 
-	crossingPtr = new Crossing;
-	crossingPtr->SetActive();
-	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(6.0f, 1.0f, -3.0f)));
-	crossingPtr->AddComponent(std::make_shared<GraphicsComponent>());
-	crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
-	crossingPtr->SetInput(glm::vec3(6.0f, 1.0f, -3.0f));
-	crossingPtr->AddDir("forward");
-	crossingPtr->AddDir("back");
-	crossingPtr->SetDir("forward");
-	crossingPtr->AddSwitch();
-	crossingPtr->GetGraphicsComponent()->SetModel(vecModel[6]);
-	crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	crossingPtr->GetTransformComponent()->SetRotation(-90.f,'y');
-	crossingPtr->GetColliderComponent()->Initialize(glm::vec3(5.0f, 1.0f, -3.0f), *objectScalePtr);
-	crossingVector.push_back(crossingPtr);
-	gameObjectVector[0]->AddChild(crossingPtr);
+	//crossingPtr = new Crossing;
+	//crossingPtr->SetActive();
+	//crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(6.0f, 1.0f, -3.0f)));
+	//crossingPtr->AddComponent(std::make_shared<GraphicsComponent>());
+	//crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
+	//crossingPtr->SetInput(glm::vec3(6.0f, 1.0f, -3.0f));
+	//crossingPtr->AddDir("forward");
+	//crossingPtr->AddDir("back");
+	//crossingPtr->SetDir("forward");
+	//crossingPtr->AddSwitch();
+	//crossingPtr->GetGraphicsComponent()->SetModel(vecModel[6]);
+	//crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	//crossingPtr->GetTransformComponent()->SetRotation(-90.f,'y');
+	//crossingPtr->GetColliderComponent()->Initialize(glm::vec3(5.0f, 1.0f, -3.0f), *objectScalePtr);
+	//crossingVector.push_back(crossingPtr);
+	//gameObjectVector[0]->AddChild(crossingPtr);
 
-	crossingPtr = new Crossing;
-	crossingPtr->SetActive();
-	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(6.0f, 1.0f, -7.0f)));
-	crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
-	crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	crossingPtr->GetColliderComponent()->Initialize(crossingPtr->GetTransformComponent());
-	crossingPtr->SetDir("right");
-	crossingVector.push_back(crossingPtr);
-	gameObjectVector[0]->AddChild(crossingPtr);
+	//crossingPtr = new Crossing;
+	//crossingPtr->SetActive();
+	//crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(6.0f, 1.0f, -7.0f)));
+	//crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
+	//crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	//crossingPtr->GetColliderComponent()->Initialize(crossingPtr->GetTransformComponent());
+	//crossingPtr->SetDir("right");
+	//crossingVector.push_back(crossingPtr);
+	//gameObjectVector[0]->AddChild(crossingPtr);
 
-	crossingPtr = new Crossing;
-	crossingPtr->SetActive();
-	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(3.0f, 1.0f, -6.0f)));
-	crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
-	crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	crossingPtr->GetColliderComponent()->Initialize(crossingPtr->GetTransformComponent());
-	crossingPtr->SetDir("forward");
-	crossingVector.push_back(crossingPtr);
-	gameObjectVector[0]->AddChild(crossingPtr);
+	//crossingPtr = new Crossing;
+	//crossingPtr->SetActive();
+	//crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(3.0f, 1.0f, -6.0f)));
+	//crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
+	//crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	//crossingPtr->GetColliderComponent()->Initialize(crossingPtr->GetTransformComponent());
+	//crossingPtr->SetDir("forward");
+	//crossingVector.push_back(crossingPtr);
+	//gameObjectVector[0]->AddChild(crossingPtr);
 
-	crossingPtr = new Crossing;
-	crossingPtr->SetActive();
-	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(4.0f, 1.0f, 1.0f)));
-	crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
-	crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	crossingPtr->GetColliderComponent()->Initialize(crossingPtr->GetTransformComponent());
-	crossingPtr->SetDir("left");
-	crossingVector.push_back(crossingPtr);
-	gameObjectVector[0]->AddChild(crossingPtr);
+	//crossingPtr = new Crossing;
+	//crossingPtr->SetActive();
+	//crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(4.0f, 1.0f, 1.0f)));
+	//crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
+	//crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	//crossingPtr->GetColliderComponent()->Initialize(crossingPtr->GetTransformComponent());
+	//crossingPtr->SetDir("left");
+	//crossingVector.push_back(crossingPtr);
+	//gameObjectVector[0]->AddChild(crossingPtr);
 
-	crossingPtr = new Crossing;
-	crossingPtr->SetActive();
-	crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(9.0f, 1.0f, 0.0f)));
-	crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
-	crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	crossingPtr->GetColliderComponent()->Initialize(crossingPtr->GetTransformComponent());
-	crossingPtr->SetDir("forward");
-	crossingVector.push_back(crossingPtr);
-	gameObjectVector[0]->AddChild(crossingPtr);
+	//crossingPtr = new Crossing;
+	//crossingPtr->SetActive();
+	//crossingPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(9.0f, 1.0f, 0.0f)));
+	//crossingPtr->AddComponent(std::make_shared<ColliderComponent>());
+	//crossingPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	//crossingPtr->GetColliderComponent()->Initialize(crossingPtr->GetTransformComponent());
+	//crossingPtr->SetDir("forward");
+	//crossingVector.push_back(crossingPtr);
+	//gameObjectVector[0]->AddChild(crossingPtr);
 
 
 	buildingPtr = new Building;
@@ -1161,7 +1163,7 @@ void SpawnMutaton()
 {
 	gameObjectPtr = new GameObject;
 	gameObjectPtr->SetActive();
-	gameObjectPtr->SetVelocity(5.0f);
+	gameObjectPtr->SetVelocity(25.0f);
 	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f, 1.0f, -7.0f)));
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
@@ -1203,7 +1205,7 @@ void Reset()
 
 	//Loading gameobjects from file
 	GameObjectLoader loader;
-	loader.LoadGameObjects("res/level.txt", gameObjectVector, *gameObjectVector[0]);
+	loader.LoadGameObjects("res/level.txt", *gameObjectVector[0]);
 	//objectScalePtr = new glm::vec3(0.01f, 0.01f, 0.01f);
 	//Testing gameobjects' declaration
 	gameObjectPtr = new GameObject;
