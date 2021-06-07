@@ -204,6 +204,16 @@ void DataManager::LoadAllModels()
 	vecModel.push_back(modelPtr);
 	modelPtr = new Model(LAB_WINDOWS);
 	vecModel.push_back(modelPtr);
+	modelPtr = new Model(MUTATOR_RED);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(MUTATOR_BLUE);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(MUTATOR_GREEN);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(CHECKPOINT_ON);
+	vecModel.push_back(modelPtr);
+	modelPtr = new Model(CHECKPOINT_OFF);
+	vecModel.push_back(modelPtr);
 	//Animated
 	modelPtr = new Model(ANIM);
 	vecAnimModel.push_back(modelPtr);

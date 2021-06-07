@@ -42,4 +42,15 @@ public:
 	static const std::string SWITCH;
 	static const std::string SWITCH_END;
 
+	//building
+	static const std::string START_OF_BUILDING;
+	static const std::string END_OF_BUILDING;
+	static const std::string BUILDING_TYPE;
+	static const std::string BUILDING_TYPE_END;
+	static const std::string ELEMENT;
+	static const std::string ELEMENT_END;
+	static const std::string OBSTACLES;
+	static const std::string OBSTACLES_END;
+	static const std::string LASER_SIDE;
+	static const std::string LASER_SIDE_END;
 };

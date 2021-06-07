@@ -92,7 +92,27 @@ void BlueprintObjectParser::ParseNextObjectForBlueprint(std::ifstream& reader, G
 			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::INPUT, ObjectTags::INPUT_END);
 			bp.SetInput(value);
 		}
-		else if ((lineFromFile.find(ObjectTags::END_OF_OBJECT) != std::string::npos)|| (lineFromFile.find(ObjectTags::END_OF_CROSSING) != std::string::npos))
+		else if (lineFromFile.find(ObjectTags::BUILDING_TYPE) != std::string::npos)
+		{
+			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::BUILDING_TYPE, ObjectTags::BUILDING_TYPE_END);
+			bp.SetType(value);
+		}
+		else if (lineFromFile.find(ObjectTags::ELEMENT) != std::string::npos)
+		{
+			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::ELEMENT, ObjectTags::ELEMENT_END);
+			bp.SetElement(stoi(value));
+		}
+		else if (lineFromFile.find(ObjectTags::OBSTACLES) != std::string::npos)
+		{
+			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::OBSTACLES, ObjectTags::OBSTACLES_END);
+			bp.AddObstacle(value);
+		}
+		else if (lineFromFile.find(ObjectTags::LASER_SIDE) != std::string::npos)
+		{
+			value = ExtractStringBetweenTags(lineFromFile, ObjectTags::LASER_SIDE, ObjectTags::LASER_SIDE_END);
+			bp.AddLaserSides(value);
+		}
+		else if ((lineFromFile.find(ObjectTags::END_OF_OBJECT) != std::string::npos)|| (lineFromFile.find(ObjectTags::END_OF_CROSSING) != std::string::npos) || (lineFromFile.find(ObjectTags::END_OF_BUILDING) != std::string::npos))
 		{
 			return;
 		}

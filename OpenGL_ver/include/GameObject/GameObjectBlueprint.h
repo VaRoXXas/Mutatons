@@ -21,6 +21,11 @@ private:
 	std::vector<std::string> dirs;
 	std::string currentDir;
 	bool ifSwitch = 0;
+	//buildings
+	std::string buildingType = "empty";
+	int element = 1;
+	std::vector<std::string> assignedObstacles;
+	std::vector<std::string> laserSides;
 public:
 	float GetX();
 	void SetX(float xFloat);
@@ -55,5 +60,14 @@ public:
 	std::string GetCurrentDir();
 	void SetSwitch(std::string switchString);
 	bool GetIfSwitch();
+	//buildings
+	void SetType(std::string type);
+	std::string GetType();
+	void SetElement(int elem);
+	int GetElement();
+	void AddObstacle(std::string obs);
+	std::vector<std::string>& GetObstacles();
+	void AddLaserSides(std::string lasr);
+	std::vector<std::string>& GetLaserSides();
 };
 

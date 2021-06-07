@@ -169,3 +169,43 @@ bool GameObjectBlueprint::GetIfSwitch()
 {
 	return ifSwitch;
 }
+
+void GameObjectBlueprint::SetType(std::string type)
+{
+	buildingType = type;
+}
+
+std::string GameObjectBlueprint::GetType()
+{
+	return buildingType;
+}
+
+void GameObjectBlueprint::SetElement(int elem)
+{
+	element = elem;
+}
+
+int GameObjectBlueprint::GetElement()
+{
+	return element;
+}
+
+void GameObjectBlueprint::AddObstacle(std::string obs)
+{
+	assignedObstacles.push_back(obs);
+}
+
+std::vector<std::string>& GameObjectBlueprint::GetObstacles()
+{
+	return assignedObstacles;
+}
+
+void GameObjectBlueprint::AddLaserSides(std::string lasr)
+{
+	laserSides.push_back(lasr);
+}
+
+std::vector<std::string>& GameObjectBlueprint::GetLaserSides()
+{
+	return laserSides;
+}

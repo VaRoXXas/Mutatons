@@ -33,5 +33,11 @@ void GameObjectLoader::LoadGameObjects(std::string pathToFile, GameObject& paren
 			parser.ParseNextObjectForBlueprint(reader, bp);
 			gameObjectFactory.BuildGameObjects(bp, "crossing", parentGameObject);
 		}
+		if (lineFromFile.find(ObjectTags::START_OF_BUILDING) != std::string::npos)
+		{
+			GameObjectBlueprint bp;
+			parser.ParseNextObjectForBlueprint(reader, bp);
+			gameObjectFactory.BuildGameObjects(bp, "building", parentGameObject);
+		}
 	}
 }

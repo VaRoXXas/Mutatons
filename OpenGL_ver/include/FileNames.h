@@ -49,5 +49,11 @@
 #define LASER_OFF "res/models/tiles/laser_off.obj"
 #define BRIDGE_BASE "res/models/tiles/bridge_base.obj"
 #define BRIDGE_PLATFORM "res/models/tiles/bridge_platform.obj"
+#define MUTATOR_RED "res/models/tiles/mutator_red.obj"
+#define MUTATOR_BLUE "res/models/tiles/mutator_blue.obj"
+#define MUTATOR_GREEN "res/models/tiles/mutator_green.obj"
+#define CHECKPOINT_ON "res/models/tiles/checkpoint_on.obj"
+#define CHECKPOINT_OFF "res/models/tiles/checkpoint_off.obj"
+
 //Animated models
 #define ANIM "res/models/vampire/dancing_vampire.dae"

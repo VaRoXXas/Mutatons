@@ -42,3 +42,15 @@ const std::string ObjectTags::SET_DIR = "<DIR>";
 const std::string ObjectTags::SET_DIR_END = "</DIR>";
 const std::string ObjectTags::SWITCH = "<SWITCH>";
 const std::string ObjectTags::SWITCH_END = "</SWITCH>";
+
+//building variables
+const std::string ObjectTags::START_OF_BUILDING = "<BUILDING>";
+const std::string ObjectTags::END_OF_BUILDING = "</BUILDING>";
+const std::string ObjectTags::BUILDING_TYPE = "<TYPE>";
+const std::string ObjectTags::BUILDING_TYPE_END = "</TYPE>";
+const std::string ObjectTags::ELEMENT = "<ELEMENT>";
+const std::string ObjectTags::ELEMENT_END = "</ELEMENT>";
+const std::string ObjectTags::OBSTACLES = "<OBSTACLES>";
+const std::string ObjectTags::OBSTACLES_END = "</OBSTACLES>";
+const std::string ObjectTags::LASER_SIDE = "<LASER_SIDE>";
+const std::string ObjectTags::LASER_SIDE_END = "</LASER_SIDE>";

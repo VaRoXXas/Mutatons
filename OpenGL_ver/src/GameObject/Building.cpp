@@ -34,6 +34,7 @@ void Building::Reaction(GameObject* gameObject)
 				{
 					gameObject->Destroy();
 					this->GetColliderComponent()->DisableComponent();
+					this->SetInactive();
 					for (GameObject*  cl : childrenLasers)
 					{
 						cl->GetGraphicsComponent()->SetModel(vecModel[34]);
@@ -46,11 +47,12 @@ void Building::Reaction(GameObject* gameObject)
 			}
 			else if (type == "Control")
 			{
-				if (!childrenObstacles.empty() && CheckObstacles())
+				if ((!childrenObstacles.empty() && CheckObstacles()) || childrenObstacles.empty())
+				{
 					captured = true;
-				else if(childrenObstacles.empty())
-					captured = true;
-				gameObject->SetVelocity(0.0f);
+					this->GetGraphicsComponent()->SetModel(vecModel[46]);
+					gameObject->SetVelocity(0.0f);
+				}
 			}
 		}
 	}
@@ -75,6 +77,24 @@ void Building::SetType(std::string typeSet)
 			laserModel = 33;
 		}
 	}
+	if (type == "Laboratory")
+	{
+		if (this->GetElement() == 1)
+		{
+			this->GetGraphicsComponent()->SetModel(vecModel[42]);
+		}
+		else if (this->GetElement() == 2)
+		{
+			this->GetGraphicsComponent()->SetModel(vecModel[43]);
+		}
+		else if (this->GetElement() == 3)
+		{
+			this->GetGraphicsComponent()->SetModel(vecModel[44]);
+		}
+	}
+
+	if (type == "Control")
+		this->GetGraphicsComponent()->SetModel(vecModel[45]);
 }
 
 std::string Building::GetType()
