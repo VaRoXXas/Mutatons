@@ -756,7 +756,7 @@ int main()
 		//L = reset
 		if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
 		{
-			static unsigned short levelIndex = 1;
+			static unsigned short levelIndex = 0;
 			levelIndex++;
 			Reset(levelIndex);
 		}
