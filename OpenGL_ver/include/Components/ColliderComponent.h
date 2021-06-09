@@ -11,11 +11,14 @@ private:
 	glm::vec3 pos;
 	glm::vec3 size;
 	Collisions col;
+	std::string colliderTag;
 public:
 	std::string Component::GetType();
 	void Component::DisableComponent();
 	void Component::EnableComponent();
 	bool Component::Enabled();
+	void SetColliderTag(std::string typeTag);
+	std::string GetColliderTag();
 
 	glm::vec3 GetPos();
 	glm::vec3 GetSize();

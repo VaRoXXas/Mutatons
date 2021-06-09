@@ -33,6 +33,7 @@ void Building::Reaction(GameObject* gameObject)
 				if (gameObject->GetElement() == this->GetElement())
 				{
 					gameObject->Destroy();
+					gameObject->GetColliderComponent()->DisableComponent();
 					this->GetColliderComponent()->DisableComponent();
 					this->SetInactive();
 					for (GameObject*  cl : childrenLasers)
@@ -43,6 +44,7 @@ void Building::Reaction(GameObject* gameObject)
 				else if (gameObject->GetElement() != this->GetElement())
 				{
 					gameObject->Destroy();
+					gameObject->GetColliderComponent()->DisableComponent();
 				}
 			}
 			else if (type == "Control")

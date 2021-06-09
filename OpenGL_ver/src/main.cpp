@@ -264,8 +264,9 @@ int main()
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
 	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	gameObjectPtr->GetGraphicsComponent()->SetModel(vecAnimModel[0]);
-	gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM);
+	gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[4]);
+	//gameObjectPtr->GetGraphicsComponent()->SetModel(vecAnimModel[0]);
+	//gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM);
 	gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
 	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
@@ -760,7 +761,8 @@ int main()
 		}
 
 		counter++;
-		if (counter%375 == 0 && mutatonCounter!=8 )
+		//if (counter%375 == 0 && mutatonCounter!=8 )
+		if (counter % 200 == 0 && mutatonCounter != 8)
 		{
 			SpawnMutaton();
 			mutatonCounter++;
@@ -996,11 +998,13 @@ int main()
 			for (GameObject* g : modifiableGameObjectVector)
 			{
 				c->ChangeDirection(g);
+				c->CheckIfBlocked(g);
 			}
+			
 			c->CheckInput(terrainPoint);
 			c->InputDirection();
-
 		}
+
 
 		for (Building* b : buildingVector)
 		{
@@ -1045,8 +1049,9 @@ void DepthRenderScene()
 void SpawnMutaton()
 {
 	gameObjectPtr = new GameObject;
+	gameObjectPtr->SetTag("mutaton"+std::to_string(mutatonCounter));
 	gameObjectPtr->SetActive();
-	gameObjectPtr->SetVelocity(25.0f);
+	gameObjectPtr->SetVelocity(15.0f);
 	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f, 1.0f, -7.0f)));
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
@@ -1057,6 +1062,7 @@ void SpawnMutaton()
 	//gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
 	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
+	//std::cout << gameObjectPtr->GetTag() << std::endl;
 }
 
 void Reset()

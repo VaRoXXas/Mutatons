@@ -27,12 +27,7 @@ void GameObjectFactory::BuildGameObjects(GameObjectBlueprint& bp, std::string ga
 	if (gameObjectType == "crossing")
 	{
 		Crossing* gameObjectPtr = new Crossing;
-		for (std::string di : bp.GetDirs())
-			gameObjectPtr->AddDir(di);
-		gameObjectPtr->SetDir(bp.GetCurrentDir());
-		if (bp.GetIfSwitch())
-			gameObjectPtr->AddSwitch();
-		gameObjectPtr->SetTag(bp.GetTag());
+
 		gameObjectPtr->SetActive();
 		auto it = bp.GetComponentList().begin();
 		auto end = bp.GetComponentList().end();
@@ -52,10 +47,19 @@ void GameObjectFactory::BuildGameObjects(GameObjectBlueprint& bp, std::string ga
 			}
 			else if (*it == "Collider")
 			{
-				gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
-				gameObjectPtr->GetColliderComponent()->Initialize(glm::vec3(bp.GetColX(), bp.GetColY(), bp.GetColZ()), glm::vec3(1.0f,1.0f,1.0f));
+				std::shared_ptr<ColliderComponent> collider = std::make_shared<ColliderComponent>();
+				collider->SetColliderTag("mainCollider");
+				collider->Initialize(glm::vec3(bp.GetColX(), bp.GetColY(), bp.GetColZ()), glm::vec3(1.0f, 1.0f, 1.0f));
+				gameObjectPtr->AddComponent(collider);
+				//gameObjectPtr->GetColliderComponent()->Initialize(glm::vec3(bp.GetColX(), bp.GetColY(), bp.GetColZ()), glm::vec3(1.0f, 1.0f, 1.0f));
 			}
 		}
+		for (std::string di : bp.GetDirs())
+			gameObjectPtr->AddDir(di);
+		gameObjectPtr->SetDir(bp.GetCurrentDir());
+		if (bp.GetIfSwitch())
+			gameObjectPtr->AddSwitch();
+		gameObjectPtr->SetTag(bp.GetTag());
 		if (bp.GetInput())
 			gameObjectPtr->SetInput(gameObjectPtr->GetTransformComponent()->GetLocation());
 		parentGameObject.AddChild(gameObjectPtr);

@@ -28,6 +28,16 @@ bool ColliderComponent::Enabled()
 	return enabled;
 }
 
+void ColliderComponent::SetColliderTag(std::string typeTag)
+{
+	colliderTag = typeTag;
+}
+
+std::string ColliderComponent::GetColliderTag()
+{
+	return colliderTag;
+}
+
 //returns collider position
 glm::vec3 ColliderComponent::GetPos()
 {

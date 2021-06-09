@@ -31,26 +31,26 @@ void Crossing::ChangeDirection(GameObject *gameObject)
 	{
 		glm::vec3* posPtr = gameObject->GetColliderComponent()->GetPosRef();
 		glm::vec3* sizePtr = gameObject->GetColliderComponent()->GetSizeRef();
-		if (this->GetColliderComponent()->Collides(*posPtr, *sizePtr))
+		if (this->GetColliderComponent()->Collides(*posPtr, *sizePtr) && this->GetColliderComponent()->GetColliderTag()=="mainCollider")
 		{
 			if ((dir == "right" && gameObject->GetDirection() == "forward") || (dir =="left" && gameObject->GetDirection() == "forward"))
 			{
-				posPtr->z = posPtr->z - 0.001;
+				posPtr->z = posPtr->z - 0.002;
 				gameObject->GetTransformComponent()->SetLocation(*posPtr);
 			}
 			else if ((dir == "right" && gameObject->GetDirection() == "back") || (dir == "left" && gameObject->GetDirection() == "back"))
 			{
-				posPtr->z = posPtr->z + 0.001;
+				posPtr->z = posPtr->z + 0.002;
 				gameObject->GetTransformComponent()->SetLocation(*posPtr);
 			}
 			else if ((dir == "forward" && gameObject->GetDirection() == "right") || (dir == "back" && gameObject->GetDirection() == "right"))
 			{
-				posPtr->x = posPtr->x + 0.001;
+				posPtr->x = posPtr->x + 0.002;
 				gameObject->GetTransformComponent()->SetLocation(*posPtr);
 			}
 			else if ((dir == "forward" && gameObject->GetDirection() == "left") || (dir == "back" && gameObject->GetDirection() == "left"))
 			{
-				posPtr->x = posPtr->x - 0.001;
+				posPtr->x = posPtr->x - 0.002;
 				gameObject->GetTransformComponent()->SetLocation(*posPtr);
 			}
 			gameObject->SetDirection(dir);
@@ -61,7 +61,7 @@ void Crossing::ChangeDirection(GameObject *gameObject)
 //This function interprets input from mouse
 void Crossing::InputDirection()
 {
-	if (GetClick() && !once && !availableDirs.empty())
+	if (GetClick() && !once && !availableDirs.empty() && !blocked)
 	{
 		once = true;
 		if (dir != availableDirs[0])
@@ -147,8 +147,10 @@ void Crossing::AddDir(std::string str)
 		gameObjectPtr->SetActive();
 		gameObjectPtr->SetTag("right");
 		gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
+		gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
 		gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 		gameObjectPtr->GetTransformComponent()->SetLocation(tempLoc);
+		gameObjectPtr->GetColliderComponent()->Initialize(tempLoc,glm::vec3(1.0f));
 		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[36]);
 		bridges.push_back(gameObjectPtr);
 		this->AddChild(gameObjectPtr);
@@ -163,6 +165,11 @@ void Crossing::AddDir(std::string str)
 		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[36]);
 		bridges.push_back(gameObjectPtr);
 		this->AddChild(gameObjectPtr);
+		
+		tempLoc = this->GetTransformComponent()->GetLocation();
+		tempLoc.x = tempLoc.x -1.5f;
+		bridgeOneCollider->Initialize(tempLoc, glm::vec3(1.0f));
+		this->AddComponent(bridgeOneCollider);
 	}
 	if (str == "left")
 	{
@@ -187,6 +194,11 @@ void Crossing::AddDir(std::string str)
 		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[36]);
 		bridges.push_back(gameObjectPtr);
 		this->AddChild(gameObjectPtr);
+
+		tempLoc = this->GetTransformComponent()->GetLocation();
+		tempLoc.x = tempLoc.x + 1.5f;
+		bridgeTwoCollider->Initialize(tempLoc, glm::vec3(1.0f));
+		this->AddComponent(bridgeTwoCollider);
 	}
 	if (str == "forward")
 	{
@@ -209,6 +221,11 @@ void Crossing::AddDir(std::string str)
 		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[36]);
 		bridges.push_back(gameObjectPtr);
 		this->AddChild(gameObjectPtr);
+
+		tempLoc = this->GetTransformComponent()->GetLocation();
+		tempLoc.z = tempLoc.z + 1.5f;
+		bridgeTwoCollider->Initialize(tempLoc, glm::vec3(1.0f));
+		this->AddComponent(bridgeTwoCollider);
 	}
 	if (str == "back")
 	{
@@ -231,5 +248,36 @@ void Crossing::AddDir(std::string str)
 		gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[36]);
 		bridges.push_back(gameObjectPtr);
 		this->AddChild(gameObjectPtr);
+
+		tempLoc = this->GetTransformComponent()->GetLocation();
+		tempLoc.z = tempLoc.z - 1.5f;
+		bridgeOneCollider->Initialize(tempLoc, glm::vec3(1.0f));
+		this->AddComponent(bridgeOneCollider);
+	}
+}
+
+void Crossing::CheckIfBlocked(GameObject* mutaton)
+{
+	if (mutaton->GetTag() == "mutaton"+std::to_string(count) )
+	{
+		mutatonPosPtr = mutaton->GetColliderComponent()->GetPosRef();
+		mutatonSizePtr = mutaton->GetColliderComponent()->GetSizeRef();
+		if (bridgeOneCollider->Collides(*mutatonPosPtr, *mutatonSizePtr) || bridgeTwoCollider->Collides(*mutatonPosPtr, *mutatonSizePtr))
+		{
+			blocked = true;
+			colided = true;
+		}
+		else if ((!bridgeOneCollider->Collides(*mutatonPosPtr, *mutatonSizePtr) && !bridgeTwoCollider->Collides(*mutatonPosPtr, *mutatonSizePtr) && colided))
+		{
+			blocked = false;
+			colided = false;
+			count++;
+		} 
+		if(!mutaton->IsActive())
+		{
+			blocked = false;
+			colided = false;
+			count++;
+		}
 	}
 }

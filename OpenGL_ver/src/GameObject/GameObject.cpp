@@ -117,9 +117,14 @@ void GameObject::AddComponent(std::shared_ptr<Component> component)
 	}
 	else if (component->GetType() == "collider")
 	{
-		hasCollider = true;
-		colliderComponentLocation = m_Components.size() - 1;
-		this->GetColliderComponent()->Initialize(this->GetTransformComponent());
+		if (hasCollider == false)
+		{
+			hasCollider = true;
+			colliderComponentLocation = m_Components.size() - 1;
+			std::size_t found = this->GetTag().find("mutaton");
+			if (found!=std::string::npos)
+				this->GetColliderComponent()->Initialize(this->GetTransformComponent());
+		}
 	}
 }
 
