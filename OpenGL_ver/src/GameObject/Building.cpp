@@ -35,7 +35,7 @@ void Building::Reaction(GameObject* gameObject)
 					gameObject->Destroy();
 					gameObject->GetColliderComponent()->DisableComponent();
 					this->GetColliderComponent()->DisableComponent();
-					this->SetInactive();
+					//this->SetInactive();
 					for (GameObject*  cl : childrenLasers)
 					{
 						cl->GetGraphicsComponent()->SetModel(vecModel[34]);
@@ -116,7 +116,7 @@ bool Building::CheckObstacles()
 	int inactiveObstacles = 0;
 	for (Building* b : childrenObstacles)
 	{
-		if (!b->IsActive())
+		if (!b->GetColliderComponent()->Enabled())
 			inactiveObstacles = inactiveObstacles + 1;
 	}
 

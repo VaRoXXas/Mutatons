@@ -259,8 +259,8 @@ int main()
 
 	//Loading gameobjects from file
 	GameObjectLoader loader;
-	loader.LoadGameObjects("res/level.txt", *gameObjectVector[0]);
-	loader.LoadGameObjects("res/level_buildings.txt", *gameObjectVector[0]);
+	loader.LoadGameObjects("res/level1.txt", *gameObjectVector[0]);
+	loader.LoadGameObjects("res/level_buildings1.txt", *gameObjectVector[0]);
 
 	//objectScalePtr = new glm::vec3(0.01f, 0.01f, 0.01f);
 	//Testing gameobjects' declaration
@@ -1071,12 +1071,11 @@ void SpawnMutaton()
 	//gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
 	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
-	//std::cout << gameObjectPtr->GetTag() << std::endl;
+	std::cout << gameObjectPtr->GetTag() << std::endl;
 }
 
 void Reset(unsigned short levelIndex)
 {
-	//TODO mutatons react to crossings
 	counter = 0;
 	mutatonCounter = 0;
 	
@@ -1124,6 +1123,5 @@ void Reset(unsigned short levelIndex)
 	gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
 	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
-	
 
 }
