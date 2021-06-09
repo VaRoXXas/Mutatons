@@ -130,7 +130,7 @@ int mutatonCounter = 0;
 void RenderScene();
 void DepthRenderScene();
 void SpawnMutaton();
-void Reset();
+void Reset(unsigned short levelIndex);
 
 struct TextCharacter {
 	GLuint TextureID;   // ID handle of the glyph texture
@@ -757,7 +757,9 @@ int main()
 		//L = reset
 		if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
 		{
-			Reset();
+			static unsigned short levelIndex = 0;
+			levelIndex++;
+			Reset(levelIndex);
 		}
 
 		counter++;
@@ -1065,7 +1067,7 @@ void SpawnMutaton()
 	//std::cout << gameObjectPtr->GetTag() << std::endl;
 }
 
-void Reset()
+void Reset(unsigned short levelIndex)
 {
 	//TODO mutatons react to crossings
 	counter = 0;
@@ -1094,8 +1096,13 @@ void Reset()
 
 	//Loading gameobjects from file
 	GameObjectLoader loader;
-	loader.LoadGameObjects("res/level.txt", *gameObjectVector[0]);
-	loader.LoadGameObjects("res/level_buildings.txt", *gameObjectVector[0]);
+	std::string extension = ".txt";
+	std::string levelPath = "res/level";
+	std::string levelBuildingsPath = "res/level_buildings";
+	levelPath += std::to_string(levelIndex) + extension;
+	levelBuildingsPath += std::to_string(levelIndex) + extension;
+	loader.LoadGameObjects(levelPath, *gameObjectVector[0]);
+	loader.LoadGameObjects(levelBuildingsPath, *gameObjectVector[0]);
 
 	//Testing gameobjects' declaration
 	gameObjectPtr = new GameObject;
