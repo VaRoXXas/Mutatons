@@ -172,7 +172,14 @@ int main()
 	}
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Setting window's background color.
 
-
+	const bool MUSIC_ENABLED = true;
+	sf::Music music;
+	if(MUSIC_ENABLED)
+	{
+		music.openFromFile("res/music/Intergalactic Odyssey.ogg");
+		music.setVolume(0.5f);
+		music.play();
+	}
 
 #pragma region shaders init
 
