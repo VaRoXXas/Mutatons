@@ -271,9 +271,9 @@ int main()
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
 	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[4]);
-	//gameObjectPtr->GetGraphicsComponent()->SetModel(vecAnimModel[0]);
-	//gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM);
+	//gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[4]);
+	gameObjectPtr->GetGraphicsComponent()->SetModel(vecAnimModel[1]);
+	gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM_CREATURE);
 	gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
 	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
@@ -951,7 +951,7 @@ int main()
 			}
 		}
 		//GameObject's updates
-		modifiableGameObjectVector.front()->Update(pos,deltaTime);
+		modifiableGameObjectVector.front()->Update(pos,deltaTime/100000);
 		for (GameObject* g : modifiableGameObjectVector)
 		{
 			g->Update(g->GetTransformComponent()->GetLocationAddr(), deltaTime);
@@ -1085,9 +1085,9 @@ void Reset(unsigned short levelIndex)
 	mainCamera.SetZoom(S_ZOOM_DEFAULT);
 
 	modifiableGameObjectVector.clear();
-	gameObjectVector.clear();
 	crossingVector.clear();
 	buildingVector.clear();
+	gameObjectVector[0]->ClearChildren();
 
 	//Location and size vectors' declaration
 	glm::vec3 objectScale = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -1124,4 +1124,19 @@ void Reset(unsigned short levelIndex)
 	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
 
+	gameObjectPtr = new GameObject;
+	gameObjectPtr->SetTag("mutaton" + std::to_string(mutatonCounter));
+	gameObjectPtr->SetActive();
+	gameObjectPtr->SetVelocity(15.0f);
+	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f, 1.0f, -7.0f)));
+	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
+	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
+	gameObjectPtr->SetUpdate();
+	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
+	gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[12]);
+	//gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM);
+	//gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
+	modifiableGameObjectVector.push_back(gameObjectPtr);
+	gameObjectVector[0]->AddChild(gameObjectPtr);
+	std::cout << gameObjectPtr->GetTag() << std::endl;
 }

@@ -63,6 +63,6 @@ public:
 	std::shared_ptr<GraphicsComponent> GetGraphicsComponent();
 	std::shared_ptr<TransformComponent> GetTransformComponent();
 	std::shared_ptr<ColliderComponent> GetColliderComponent();
-
+	void ClearChildren();
 };
 

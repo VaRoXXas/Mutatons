@@ -217,6 +217,14 @@ void DataManager::LoadAllModels()
 	//Animated
 	modelPtr = new Model(ANIM);
 	vecAnimModel.push_back(modelPtr);
+	modelPtr = new Model(ANIM_CREATURE_BASIC);
+	vecAnimModel.push_back(modelPtr);
+	modelPtr = new Model(ANIM_CREATURE_RED);
+	vecAnimModel.push_back(modelPtr);
+	modelPtr = new Model(ANIM_CREATURE_BLUE);
+	vecAnimModel.push_back(modelPtr);
+	modelPtr = new Model(ANIM_CREATURE_GREEN);
+	vecAnimModel.push_back(modelPtr);
 }
 
 unsigned int DataManager::LoadCubemap()

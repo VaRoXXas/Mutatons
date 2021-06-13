@@ -57,3 +57,7 @@
 
 //Animated models
 #define ANIM "res/models/vampire/dancing_vampire.dae"
+#define ANIM_CREATURE_BASIC "res/models/creature/creature_basic.fbx"
+#define ANIM_CREATURE_RED "res/models/creature/creature_red.fbx"
+#define ANIM_CREATURE_BLUE "res/models/creature/creature_blue.fbx"
+#define ANIM_CREATURE_GREEN "res/models/creature/creature_green.fbx"

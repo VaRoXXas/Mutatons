@@ -362,3 +362,8 @@ glm::vec3 GameObject::GetInputLocation()
 {
 	return inputLocation;
 }
+
+void GameObject::ClearChildren()
+{
+	children.clear();
+}
