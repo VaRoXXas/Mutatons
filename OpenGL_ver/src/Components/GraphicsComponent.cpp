@@ -32,6 +32,7 @@ void GraphicsComponent::SetHighlighted(bool value)
 //renders assigned model to the scene
 void GraphicsComponent::Render(const glm::mat4& transform)
 {
+	glm::mat4 localTransform = transform;
 	if (modelPtr && !animated)
 	{
 		if (isHighlighted)
@@ -49,7 +50,10 @@ void GraphicsComponent::Render(const glm::mat4& transform)
 	}
 	else if (modelPtr && animated)
 	{
-		modelPtr->CustomRender(*unlitTexturedAnimatedShaderPtr, transform);
+		if(oversized)
+			localTransform = glm::scale(localTransform, glm::vec3(0.015f, 0.015f, 0.015f));
+
+		modelPtr->CustomRender(*unlitTexturedAnimatedShaderPtr, localTransform);
 	}
 }
 
@@ -95,4 +99,14 @@ Animator* GraphicsComponent::GetAnimator()
 bool GraphicsComponent::GetAnimated()
 {
 	return animated;
+}
+
+void GraphicsComponent::SetOversized(bool truefalse)
+{
+	oversized = truefalse;
+}
+
+bool GraphicsComponent::GetOversized()
+{
+	return oversized;
 }

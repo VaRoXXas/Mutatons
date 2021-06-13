@@ -238,8 +238,6 @@ int main()
 
 #pragma endregion
 
-	Model modeltest("res/models/tiles/canal_corner_in.obj");
-
 	MousePicker picker(&mainCamera, windowPtr);
 
 	glm::vec3 terrainPoint;
@@ -273,6 +271,7 @@ int main()
 	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
 	//gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[4]);
 	gameObjectPtr->GetGraphicsComponent()->SetModel(vecAnimModel[1]);
+	gameObjectPtr->GetGraphicsComponent()->SetOversized(true);
 	gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM_CREATURE_BASIC);
 	gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
 	modifiableGameObjectVector.push_back(gameObjectPtr);
@@ -771,7 +770,7 @@ int main()
 
 		counter++;
 		//if (counter%375 == 0 && mutatonCounter!=8 )
-		if (counter % 600 == 0 && mutatonCounter != 8)
+		if (counter % 745 == 0 && mutatonCounter != 8)
 		{
 			SpawnMutaton();
 			mutatonCounter++;
@@ -1013,7 +1012,8 @@ int main()
 			c->CheckInput(terrainPoint);
 			c->InputDirection();
 		}
-
+		//objectScalePtr = new glm::vec3(0.1f);
+		//modifiableGameObjectVector[0]->GetTransformComponent()->SetScale(*objectScalePtr);
 
 		for (Building* b : buildingVector)
 		{
@@ -1060,15 +1060,18 @@ void SpawnMutaton()
 	gameObjectPtr = new GameObject;
 	gameObjectPtr->SetTag("mutaton"+std::to_string(mutatonCounter));
 	gameObjectPtr->SetActive();
-	gameObjectPtr->SetVelocity(5.0f);
+	gameObjectPtr->SetVelocity(4.0f);
 	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f, 1.0f, -7.0f)));
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
 	gameObjectPtr->SetUpdate();
 	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[12]);
+	//gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[12]);
 	//gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM);
 	//gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
+	gameObjectPtr->GetGraphicsComponent()->SetModel(vecAnimModel[1]);
+	gameObjectPtr->GetGraphicsComponent()->SetOversized(true);
+	gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM_CREATURE_BASIC);
 	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
 	std::cout << gameObjectPtr->GetTag() << std::endl;
@@ -1127,7 +1130,7 @@ void Reset(unsigned short levelIndex)
 	gameObjectPtr = new GameObject;
 	gameObjectPtr->SetTag("mutaton" + std::to_string(mutatonCounter));
 	gameObjectPtr->SetActive();
-	gameObjectPtr->SetVelocity(15.0f);
+	gameObjectPtr->SetVelocity(4.0f);
 	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f, 1.0f, -7.0f)));
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());

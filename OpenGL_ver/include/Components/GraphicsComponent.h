@@ -14,7 +14,7 @@ private:
 	Animation* animPtr;
 	Animator* animatorPtr;
 	bool isHighlighted = false; // strange method of determining, because there is no defined way to access parent game object of this component from within it
-
+	bool oversized = 0;
 public:
 	void SetModel(Model* modelLoad);
 	void SetHighlighted(bool value);
@@ -22,6 +22,8 @@ public:
 	void Render(const glm::mat4& parentTransform);
 	void DepthRender(const glm::mat4& parentTransform);
 	bool GetAnimated();
+	void SetOversized(bool truefalse);
+	bool GetOversized();
 	Animator* GetAnimator();
 	std::string Component::GetType();
 	void Component::DisableComponent();

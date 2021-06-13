@@ -23,6 +23,7 @@ GameObject* childPtr;
 //#include "DevelopState.h"
 //#include "RectColliderComponent.h"
 float face = 0.f;
+extern std::vector<Model*> vecAnimModel;
 
 
 //Allows GameObject to move in four directions
@@ -173,6 +174,16 @@ void GameObject::SetVelocity(float vel)
 void GameObject::SetElement(int elem)
 {
 	element = elem;
+	std::size_t found = this->GetTag().find("mutaton");
+	if (found != std::string::npos)
+	{
+		if (element == 1)
+			this->GetGraphicsComponent()->SetModel(vecAnimModel[2]);
+		else if (element == 2)
+			this->GetGraphicsComponent()->SetModel(vecAnimModel[3]);
+		else if (element == 3)
+			this->GetGraphicsComponent()->SetModel(vecAnimModel[4]);
+	}
 }
 
 int GameObject::GetElement()
