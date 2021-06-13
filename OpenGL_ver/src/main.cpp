@@ -273,7 +273,7 @@ int main()
 	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
 	//gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[4]);
 	gameObjectPtr->GetGraphicsComponent()->SetModel(vecAnimModel[1]);
-	gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM_CREATURE);
+	gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM_CREATURE_BASIC);
 	gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
 	modifiableGameObjectVector.push_back(gameObjectPtr);
 	gameObjectVector[0]->AddChild(gameObjectPtr);
