@@ -771,7 +771,7 @@ int main()
 
 		counter++;
 		//if (counter%375 == 0 && mutatonCounter!=8 )
-		if (counter % 200 == 0 && mutatonCounter != 8)
+		if (counter % 600 == 0 && mutatonCounter != 8)
 		{
 			SpawnMutaton();
 			mutatonCounter++;
@@ -1060,7 +1060,7 @@ void SpawnMutaton()
 	gameObjectPtr = new GameObject;
 	gameObjectPtr->SetTag("mutaton"+std::to_string(mutatonCounter));
 	gameObjectPtr->SetActive();
-	gameObjectPtr->SetVelocity(15.0f);
+	gameObjectPtr->SetVelocity(5.0f);
 	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f, 1.0f, -7.0f)));
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());

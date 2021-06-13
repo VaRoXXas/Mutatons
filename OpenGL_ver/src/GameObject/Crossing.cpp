@@ -33,6 +33,8 @@ void Crossing::ChangeDirection(GameObject *gameObject)
 		glm::vec3* sizePtr = gameObject->GetColliderComponent()->GetSizeRef();
 		if (this->GetColliderComponent()->Collides(*posPtr, *sizePtr) && this->GetColliderComponent()->GetColliderTag()=="mainCollider")
 		{
+			if (gameObject->GetTag()[7] - '0' != count)
+				count = gameObject->GetTag()[7] - '0';
 			if ((dir == "right" && gameObject->GetDirection() == "forward") || (dir =="left" && gameObject->GetDirection() == "forward"))
 			{
 				posPtr->z = posPtr->z - 0.002;
@@ -258,7 +260,7 @@ void Crossing::AddDir(std::string str)
 
 void Crossing::CheckIfBlocked(GameObject* mutaton)
 {
-	if (mutaton->GetTag() == "mutaton"+std::to_string(count) )
+	if (mutaton->GetTag()[7] - '0' == count)
 	{
 		mutatonPosPtr = mutaton->GetColliderComponent()->GetPosRef();
 		mutatonSizePtr = mutaton->GetColliderComponent()->GetSizeRef();
