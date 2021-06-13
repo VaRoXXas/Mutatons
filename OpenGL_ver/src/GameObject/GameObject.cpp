@@ -224,35 +224,35 @@ void GameObject::Render(const glm::mat4& transform)
 			//const auto absoluteTransform = child->GetTransformComponent()->GetTransform();
 			//Occlusion culling
 			//glDisable(GL_CULL_FACE);
-			glDepthMask(GL_FALSE);
+			/*glDepthMask(GL_FALSE);
 			glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 
 			glBeginQuery(GL_SAMPLES_PASSED, queryName);
 			CustomDrawing::DrawRefracted(absoluteTransform);
 			glEndQuery(GL_SAMPLES_PASSED);
-
+			*/
 			//glEnable(GL_CULL_FACE);
-			glDepthMask(GL_TRUE);
+			/*glDepthMask(GL_TRUE);
 			glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-
+			*/
 			Vec3 corner;
 			corner.x = child->GetTransformComponent()->GetLocation().x;
 			corner.y = child->GetTransformComponent()->GetLocation().y;
 			corner.z = child->GetTransformComponent()->GetLocation().z;
-
+			/*
 			glGetQueryObjectuiv(queryName, GL_QUERY_RESULT, &numSamplesRendered);
 			if (numSamplesRendered == 0)
 			{
 				queryCount++;
-			}
+			}*/
 			//frustum culling
 			if (frustum.SphereInFrustum(corner, 16) != Frustum::OUTSIDE)
 			{
 				frustumCount = frustumCount + 1;
-				glBeginConditionalRender(queryName, GL_QUERY_WAIT);
+				//glBeginConditionalRender(queryName, GL_QUERY_WAIT);
 
 				child->Render(absoluteTransform);
-				glEndConditionalRender();
+				//glEndConditionalRender();
 			}
 
 		}
