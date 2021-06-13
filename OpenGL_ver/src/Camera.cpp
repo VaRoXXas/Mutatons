@@ -75,16 +75,20 @@ void Camera::ProcessKeyboard(const CameraDirection& direction, const float& delt
         switch (direction)
         {
         case CameraDirection::Forward:
-            position -= glm::vec3(1.0f, 0.0f, 1.0f) * velocity;
+            if(position.x >= 0 && position.z >= -10)
+                position -= glm::vec3(1.0f, 0.0f, 1.0f) * velocity;
             break;
         case CameraDirection::Backward:
-            position += glm::vec3(1.0f, 0.0f, 1.0f) * velocity;
+            if (position.x <= 30 && position.z <= 15)
+                position += glm::vec3(1.0f, 0.0f, 1.0f) * velocity;
             break;
         case CameraDirection::Left:
-            position -= glm::vec3(1.0f, 0.0f, -1.0f) * velocity;
+            if (position.x >= 0 && position.z <= 15)
+                position -= glm::vec3(1.0f, 0.0f, -1.0f) * velocity;
             break;
         case CameraDirection::Right:
-            position += glm::vec3(1.0f, 0.0f, -1.0f) * velocity;
+            if (position.x <= 30 && position.z >= -10)
+                position += glm::vec3(1.0f, 0.0f, -1.0f) * velocity;
             break;
         default:
             break;
