@@ -214,6 +214,8 @@ void DataManager::LoadAllModels()
 	vecModel.push_back(modelPtr);
 	modelPtr = new Model(CHECKPOINT_OFF);
 	vecModel.push_back(modelPtr);
+	modelPtr = new Model(SPAWNPOINT);
+	vecModel.push_back(modelPtr);
 	//Animated
 	modelPtr = new Model(ANIM);
 	vecAnimModel.push_back(modelPtr);
