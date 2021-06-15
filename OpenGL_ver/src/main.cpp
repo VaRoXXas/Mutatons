@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "FileNames.h"
 #include "DataManager.h"
+#include "AudioManager.h"
 #include "Rendering/Shader.h"
 #include "Rendering/Mesh.h"
 #include "Rendering/Model.h"
@@ -129,6 +130,8 @@ int counter = 0;
 int mutatonCounter = 0;
 int maxMutatonsInLevel = 8;
 
+AudioManager audioManager = AudioManager();
+extern sf::SoundBuffer winningSoundBuffer, losingSoundBuffer, mutationSoundBuffer, controlPanelSoundBuffer, dyingFromLaserSoundBuffer;
 
 void RenderScene();
 void DepthRenderScene();
@@ -142,6 +145,7 @@ struct TextCharacter {
 	GLuint Advance;    // Horizontal offset to advance to next glyph
 };
 extern std::map<GLchar, TextCharacter> TextCharacters;
+
 
 
 int main()
@@ -175,14 +179,7 @@ int main()
 	}
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Setting window's background color.
 
-	const bool MUSIC_ENABLED = true;
-	sf::Music music;
-	if(MUSIC_ENABLED)
-	{
-		music.openFromFile("res/music/Intergalactic Odyssey.ogg");
-		music.setVolume(0.5f);
-		music.play();
-	}
+	audioManager.Initialize();
 
 #pragma region shaders init
 
@@ -1010,6 +1007,11 @@ int main()
 			ImGui::Checkbox("Confusion post process", &confusionPostProcessOn);
 			ImGui::Checkbox("Chaos post process", &chaosPostProcessOn);
 
+			if (ImGui::Button("SoundTest"))
+			{
+				audioManager.PlaySfSound(losingSoundBuffer);
+			}
+			
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		}
@@ -1036,6 +1038,9 @@ int main()
 				b->Reaction(g);
 			}
 		}
+
+		audioManager.TryClean();
+		
 		// [glfw] Swapping buffers and polling IO events...
 		LMBreleaseEventTriggered = false;
 		glfwSwapBuffers(windowPtr);
