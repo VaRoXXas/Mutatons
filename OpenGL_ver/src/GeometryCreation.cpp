@@ -2,7 +2,7 @@
 #include "GeometryCreation.h"
 #include "Rendering/CustomDrawing.h"
 
-extern GLuint hud1VAO, hud1VBO;
+extern GLuint hud1VAO, hud1VBO, mainmenuVAO, mainmenuVBO;
 
 void GeometryCreation::Hud1Creation()
 {
@@ -52,4 +52,36 @@ void GeometryCreation::Hud1Creation()
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     //glBindVertexArray(0);
+}
+
+void GeometryCreation::MainmenuCreation()
+{
+    float mainmenuver[] = {
+        // Pierwszy trójk¹t  
+         1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // Prawy górny  
+         1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Prawy dolny  
+         -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Lewy górny   
+        // Drugi trójk¹t  
+         1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Prawy dolny  
+        -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // Lewy dolny  
+        -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f // Lewy górny  
+    };
+
+
+    glGenVertexArrays(1, &mainmenuVAO);
+    glBindVertexArray(mainmenuVAO);
+    glGenBuffers(1, &mainmenuVBO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, mainmenuVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(mainmenuver), mainmenuver, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    // texture coord attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 }

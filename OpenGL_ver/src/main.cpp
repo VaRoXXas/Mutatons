@@ -65,9 +65,10 @@ extern Shader* depthMapDebugShaderPtr;
 extern Shader* hud1ShaderPtr;
 extern Shader* textShaderPtr;
 extern Shader* postProcessingShaderPtr;
+extern Shader* mainmenuShaderPtr;
 extern PostProcessor* postProcessorPtr;
 extern GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO, textVAO, textVBO;
-extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture;
+extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture, mainmenuTexture;
 extern glm::vec3 lineShaderEndPointPos;
 extern int geometryShaderPseudoMeshDetailLevel;
 extern bool directionalLightEnabled;
@@ -200,6 +201,7 @@ int main()
 	Shader hud1Shader(s_hud1VertexPtr, s_hud1FragmentPtr);
 	Shader textShader(s_textVertexPtr, s_textFragmentPtr);
 	Shader postProcessingShader(s_postProcessingVertexPtr, s_postProcessingFragmentPtr);
+	Shader mainmenuShader(s_mainmenuVertexPtr, s_mainmenuFragmentPtr);
 	litTexturedShaderPtr = &litTexturedShader;
 	orbitShaderPtr = &orbitShader;
 	sphereShaderPtr = &sphereShader;
@@ -213,7 +215,7 @@ int main()
 	hud1ShaderPtr = &hud1Shader;
 	textShaderPtr = &textShader;
 	postProcessingShaderPtr = &postProcessingShader;
-
+	mainmenuShaderPtr = &mainmenuShader;
 
 	Lighting::InitLighting(litTexturedShader);
 	Lighting::InitLighting(litTexturedInstancedShader);
@@ -229,13 +231,13 @@ int main()
 	//Data manager loads all models
 	dataManager.LoadAllModels();
 
-	houseBaseDiffuseTexture = dataManager.LoadTexture("container_diffuse.png");
-	houseBaseSpecularTexture = dataManager.LoadTexture("container_specular.png");
-	roofDiffuseTexture = dataManager.LoadTexture("stone_diffuse.jpg");
-	roofSpecularTexture = dataManager.LoadTexture("stone_specular.jpg");
-	planeDiffuseTexture = dataManager.LoadTexture("grass_diffuse.jpg");
-	planeSpecularTexture = dataManager.LoadTexture("grass_specular.jpg");
-
+	//houseBaseDiffuseTexture = dataManager.LoadTexture("container_diffuse.png");
+	//houseBaseSpecularTexture = dataManager.LoadTexture("container_specular.png");
+	//roofDiffuseTexture = dataManager.LoadTexture("stone_diffuse.jpg");
+	//roofSpecularTexture = dataManager.LoadTexture("stone_specular.jpg");
+	//planeDiffuseTexture = dataManager.LoadTexture("grass_diffuse.jpg");
+	//planeSpecularTexture = dataManager.LoadTexture("grass_specular.jpg");
+	mainmenuTexture = dataManager.LoadTexture("res/textures/mainmenu.png");
 	
 	cubemapTexture = dataManager.LoadCubemap();
 
@@ -601,6 +603,7 @@ int main()
 	depthMapDebugShader.SetInt("depthMap", 0);
 
 	GeometryCreation::Hud1Creation();
+	GeometryCreation::MainmenuCreation();
 
 #pragma endregion
 
@@ -900,7 +903,7 @@ int main()
 		between = std::chrono::system_clock::now();
 		std::chrono::duration <double> diff = between - start;
 		CustomDrawing::DrawHud1();
-		CustomDrawing::DrawHud2();
+		//CustomDrawing::DrawHud2();
 		CustomDrawing::RenderText("Time spent on map: " + std::to_string((int)diff.count()), 500.0f, 100.0f, 1.0f, glm::vec3(0.5, 0.1f, 0.2f));
 		CustomDrawing::RenderText("Mutatons left:", 1640.0f, 880.0f, 0.8f, glm::vec3(0.3, 0.7f, 0.9f));
 		std::chrono::system_clock::time_point p = std::chrono::system_clock::now();
@@ -909,6 +912,7 @@ int main()
 		ctime_s(str, sizeof str, &t);
 		std::string sysTime(str);
 		CustomDrawing::RenderText("System time: " + sysTime, 500.0f, 50.0f, 1.0f, glm::vec3(0.5, 0.1f, 0.2f));
+		//CustomDrawing::DrawMainmenu();
 		//TextRendering::TextInitialize();
 
 		// render Depth map to quad for visual debugging
