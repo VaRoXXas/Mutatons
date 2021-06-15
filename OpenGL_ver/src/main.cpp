@@ -1090,7 +1090,7 @@ void SpawnMutaton()
 	gameObjectPtr = new GameObject;
 	gameObjectPtr->SetTag("mutaton"+std::to_string(mutatonCounter));
 	gameObjectPtr->SetActive();
-	gameObjectPtr->SetVelocity(4.0f);
+	gameObjectPtr->SetVelocity(10.0f);
 	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f, 1.0f, -7.0f)));
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
