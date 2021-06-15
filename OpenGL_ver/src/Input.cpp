@@ -9,6 +9,7 @@ extern bool sceneExplorationModeEnabled;
 extern bool LMBreleaseEventTriggered;
 
 bool cursorEnabled = true;
+void (*escKeyActionPtr)();
 void (*wKeyActionPtr)();
 void (*sKeyActionPtr)();
 void (*aKeyActionPtr)();
@@ -28,8 +29,7 @@ void Input::ProcessInput(GLFWwindow* windowPtr)
 	// We use if-cascade instead of switch, because we want to be able to press multiple keys in a single frame.
 
 	if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(windowPtr, true);
-
+		//escKeyActionPtr();
 	if (glfwGetKey(windowPtr, GLFW_KEY_W) == GLFW_PRESS)
 		wKeyActionPtr();
 	if (glfwGetKey(windowPtr, GLFW_KEY_S) == GLFW_PRESS)

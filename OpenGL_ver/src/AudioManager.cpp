@@ -42,7 +42,7 @@ void AudioManager::PlaySfSound(sf::SoundBuffer& buffer)
 	{
 		auto* soundPtr = new sf::Sound();
 		soundPtr->setBuffer(buffer);
-		soundPtr->setVolume(50.0f);
+		soundPtr->setVolume(10.0f);
 		soundPtr->setLoop(false);
 		soundPtr->play();
 		soundsRunning.push_back(soundPtr);

@@ -8,12 +8,14 @@
 #include "Components/GraphicsComponent.h"
 #include "Components/TransformComponent.h"
 #include "GameObject/Building.h"
+#include <AudioManager.h>
 
 extern GameObject* gameObjectPtr;
 extern std::vector<Model*> vecModel;
 glm::vec3 temp = glm::vec3(0.0f);
 
-
+extern sf::SoundBuffer mutationSoundBuffer, controlPanelSoundBuffer, dyingFromLaserSoundBuffer;
+extern AudioManager audioManager;
 
 //this function is used to call, suitable to the Building type, actions
 void Building::Reaction(GameObject* gameObject)
@@ -26,12 +28,20 @@ void Building::Reaction(GameObject* gameObject)
 		{
 			if (type == "Laboratory")
 			{
+				if (gameObject->GetElement() != this->GetElement())
+				{
+					audioManager.PlaySfSound(mutationSoundBuffer);
+				}
 				gameObject->SetElement(this->GetElement());
 			}
 			else if (type == "Obstacle")
 			{
 				if (gameObject->GetElement() == this->GetElement())
 				{
+					if (gameObject->IsActive() == true)
+					{
+						audioManager.PlaySfSound(dyingFromLaserSoundBuffer);
+					}
 					gameObject->Destroy();
 					gameObject->GetColliderComponent()->DisableComponent();
 					this->GetColliderComponent()->DisableComponent();
@@ -43,6 +53,10 @@ void Building::Reaction(GameObject* gameObject)
 				}
 				else if (gameObject->GetElement() != this->GetElement())
 				{
+					if (gameObject->IsActive() == true)
+					{
+						audioManager.PlaySfSound(dyingFromLaserSoundBuffer);
+					}
 					gameObject->Destroy();
 					gameObject->GetColliderComponent()->DisableComponent();
 				}
@@ -51,6 +65,10 @@ void Building::Reaction(GameObject* gameObject)
 			{
 				if ((!childrenObstacles.empty() && CheckObstacles()) || childrenObstacles.empty())
 				{
+					if (captured == false)
+					{
+						audioManager.PlaySfSound(controlPanelSoundBuffer);
+					}
 					captured = true;
 					this->GetGraphicsComponent()->SetModel(vecModel[46]);
 					gameObject->SetVelocity(0.0f);
