@@ -69,6 +69,10 @@ void LevelManager::LoadLevel(std::string level)
 		loader.LoadGameObjects("res/level_buildings2.txt", *gameObjectVector[0]);
 	}
 }
+int LevelManager::GetCurrScene()
+{
+	return currScene;
+}
 
 //void LevelManager::SpawnMutaton()
 //{

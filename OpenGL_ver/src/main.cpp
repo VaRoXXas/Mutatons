@@ -43,6 +43,7 @@
 
 // input externs
 extern bool cursorEnabled;
+extern void (*escKeyActionPtr)();
 extern void (*wKeyActionPtr)();
 extern void (*sKeyActionPtr)();
 extern void (*aKeyActionPtr)();
@@ -104,6 +105,7 @@ bool IMGUI_ENABLED = true;
 bool sceneExplorationModeEnabled = true;
 bool confusionPostProcessOn = false;
 bool chaosPostProcessOn = false;
+bool stateEsc = false;
 DataManager dataManager = DataManager();
 LevelManager levelManager;
 Camera mainCamera(isometric);
@@ -251,7 +253,7 @@ int main()
 
 	//Parent GameObject declaration
 	levelManager.CreateParent();
-	levelManager.LoadLevel("first");
+	levelManager.LoadLevel("mainmenu");
 	//gameObjectPtr = new GameObject;
 	//gameObjectPtr->SetActive();
 	//gameObjectPtr->SetTag("Parent");
@@ -767,6 +769,7 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		//L = reset
+		
 		if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
 		{
 			//static unsigned short levelIndex = 0;
@@ -793,6 +796,10 @@ int main()
 		}
 		// getting input
 		Input::ProcessInput(windowPtr);
+		if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		{
+			stateEsc = true;
+		}
 
 		// updating matrices, uniforms, vectors
 		transform = glm::mat4(1.0f);
@@ -904,7 +911,7 @@ int main()
 		CustomDrawing::DrawHud1();
 		//CustomDrawing::DrawHud2();
 		CustomDrawing::RenderText("Time spent on map: " + std::to_string((int)diff.count()), 500.0f, 100.0f, 1.0f, glm::vec3(0.5, 0.1f, 0.2f));
-		CustomDrawing::RenderText("Mutatons left:", 1640.0f, 880.0f, 0.8f, glm::vec3(0.3, 0.7f, 0.9f));
+		//CustomDrawing::RenderText("Mutatons left:", 1640.0f, 880.0f, 0.8f, glm::vec3(0.3, 0.7f, 0.9f));
 		std::chrono::system_clock::time_point p = std::chrono::system_clock::now();
 		time_t t = std::chrono::system_clock::to_time_t(p);
 		char str[26];
@@ -922,7 +929,48 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		//CustomDrawing::DrawQuad();
+		if (levelManager.GetCurrScene() == 0)
+		{
+			levelManager.LoadLevel("mainmenu");
+			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+			{
+				start = std::chrono::system_clock::now();
+				levelManager.LoadLevel("first");
+			}
+			if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true)
+			{
+				stateEsc = false;
+				glfwSetWindowShouldClose(windowPtr, true);
 
+			}
+		}
+		if (levelManager.GetCurrScene() == 1)
+		{
+			if(glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
+			{
+				start = std::chrono::system_clock::now();
+				levelManager.LoadLevel("second");
+
+			}
+			if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true)
+			{
+				stateEsc = false;
+				levelManager.LoadLevel("mainmenu");
+			}
+		}
+		if (levelManager.GetCurrScene() == 2)
+		{
+			if(glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
+			{
+				start = std::chrono::system_clock::now();
+				levelManager.LoadLevel("first");
+			}
+			if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true)
+			{
+				stateEsc = false;
+				levelManager.LoadLevel("mainmenu");
+			}
+		}
 
 		//GameObject editor options, first one determines if gameobject has Update
 		if (update && !once)
