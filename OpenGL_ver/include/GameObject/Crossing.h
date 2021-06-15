@@ -20,6 +20,7 @@ private:
 	glm::vec3* mutatonPosPtr;
 	glm::vec3* mutatonSizePtr;
 	std::string mutatonTag = "mutaton0";
+	int openedBridge;
 public:
 	~Crossing();
 	void ChangeDirection(GameObject *gameObject);

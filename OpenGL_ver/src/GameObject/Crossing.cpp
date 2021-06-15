@@ -37,22 +37,26 @@ void Crossing::ChangeDirection(GameObject *gameObject)
 				count = gameObject->GetTag()[7] - '0';
 			if ((dir == "right" && gameObject->GetDirection() == "forward") || (dir =="left" && gameObject->GetDirection() == "forward"))
 			{
-				posPtr->z = posPtr->z - 0.002;
+				//posPtr->z = posPtr->z - 0.001;
+				posPtr->z = posPtr->z - 0.05f;
 				gameObject->GetTransformComponent()->SetLocation(*posPtr);
 			}
 			else if ((dir == "right" && gameObject->GetDirection() == "back") || (dir == "left" && gameObject->GetDirection() == "back"))
 			{
-				posPtr->z = posPtr->z + 0.002;
+				//posPtr->z = posPtr->z + 0.001;
+				posPtr->z = posPtr->z + 0.05f;
 				gameObject->GetTransformComponent()->SetLocation(*posPtr);
 			}
 			else if ((dir == "forward" && gameObject->GetDirection() == "right") || (dir == "back" && gameObject->GetDirection() == "right"))
 			{
-				posPtr->x = posPtr->x + 0.002;
+				//posPtr->x = posPtr->x + 0.001;
+				posPtr->x = posPtr->x + 0.05f;
 				gameObject->GetTransformComponent()->SetLocation(*posPtr);
 			}
 			else if ((dir == "forward" && gameObject->GetDirection() == "left") || (dir == "back" && gameObject->GetDirection() == "left"))
 			{
-				posPtr->x = posPtr->x - 0.002;
+				//posPtr->x = posPtr->x - 0.001;
+				posPtr->x = posPtr->x - 0.05f;
 				gameObject->GetTransformComponent()->SetLocation(*posPtr);
 			}
 			gameObject->SetDirection(dir);
@@ -67,9 +71,16 @@ void Crossing::InputDirection()
 	{
 		once = true;
 		if (dir != availableDirs[0])
+		{
 			SetDir(availableDirs[0]);
+			openedBridge = 0;
+		}
 		else if (dir == availableDirs[0])
+		{
 			SetDir(availableDirs[1]);
+			openedBridge = 1;
+		}
+			
 	}
 	else
 		once = false;
@@ -281,5 +292,18 @@ void Crossing::CheckIfBlocked(GameObject* mutaton)
 			colided = false;
 			count++;
 		}
+	}
+	mutatonPosPtr = mutaton->GetColliderComponent()->GetPosRef();
+	mutatonSizePtr = mutaton->GetColliderComponent()->GetSizeRef();
+	if (mutaton->GetTag()[7] - '0' != count && (bridgeOneCollider->Collides(*mutatonPosPtr, *mutatonSizePtr) || bridgeTwoCollider->Collides(*mutatonPosPtr, *mutatonSizePtr)))
+	{
+		if (mutaton->GetDirection() == "forward")
+			mutaton->SetDirection("back");
+		if (mutaton->GetDirection() == "back")
+			mutaton->SetDirection("forward");
+		if (mutaton->GetDirection() == "right")
+			mutaton->SetDirection("left");
+		if (mutaton->GetDirection() == "left")
+			mutaton->SetDirection("right");
 	}
 }
