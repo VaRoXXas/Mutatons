@@ -674,7 +674,7 @@ int main()
 	int modelID = 0;
 
 	//generate queries to occlusion culling
-	glGenQueries(1, &queryName);
+	//glGenQueries(1, &queryName);
 	
 	//text init
 	glEnable(GL_BLEND);
@@ -758,6 +758,8 @@ int main()
 	std::chrono::time_point start = std::chrono::system_clock::now();
 	std::chrono::time_point between = std::chrono::system_clock::now();
 
+	double lasttime = glfwGetTime();
+
 	// game loop
 	while (!glfwWindowShouldClose(windowPtr))
 	{
@@ -772,7 +774,7 @@ int main()
 			//Reset(levelIndex);
 
 			mainCamera.SetFront(glm::vec3(-1.0f, -3.0f, -1.0f));
-			mainCamera.SetPosition(glm::vec3(10.0f, 10.0f, 10.0f));
+			mainCamera.SetPosition(glm::vec3(12.0f, 10.0f, 0.0f));
 			mainCamera.SetWorldUp(glm::vec3(0.0f, 1.0f, 0.0f));
 			mainCamera.SetZoom(S_ZOOM_DEFAULT);
 
@@ -1043,6 +1045,11 @@ int main()
 			}
 		}
 
+		while (glfwGetTime() < lasttime + 1.0 / 60) 
+		{
+		}
+		lasttime += 1.0 / 60;
+
 		audioManager.TryClean();
 		
 		// [glfw] Swapping buffers and polling IO events...
@@ -1051,7 +1058,7 @@ int main()
 		glfwPollEvents();
 	}
 
-	glDeleteQueries(1, &queryName);
+	//glDeleteQueries(1, &queryName);
 
 	// de-allocation
 	delete[] directionalLightColorPtr;

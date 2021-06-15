@@ -7,7 +7,7 @@
 Frustum frustum;
 
 Camera::Camera(bool isometric, float yaw, float pitch)
-: isometric(isometric), position(glm::vec3(10.0f, 10.0f, 10.0f)), front(glm::vec3(-1.0f, -3.0f, -1.0f)), worldUp(glm::vec3(0.0f, 1.0f, 0.0f)), yaw(yaw), pitch(pitch), movementSpeed(S_SPEED_DEFAULT), mouseSensitivity(S_SENSITIVITY_DEFAULT), zoom(S_ZOOM_DEFAULT)
+: isometric(isometric), position(glm::vec3(12.0f, 10.0f, 0.0f)), front(glm::vec3(-1.0f, -3.0f, -1.0f)), worldUp(glm::vec3(0.0f, 1.0f, 0.0f)), yaw(yaw), pitch(pitch), movementSpeed(S_SPEED_DEFAULT), mouseSensitivity(S_SENSITIVITY_DEFAULT), zoom(S_ZOOM_DEFAULT)
 {
     if (isometric == false)
     {
