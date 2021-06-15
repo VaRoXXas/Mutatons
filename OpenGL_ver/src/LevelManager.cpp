@@ -3,6 +3,7 @@
 #include "Collisions.h"
 #include "Rendering/animation/Animation.h"
 #include "Rendering/animation/Animator.h"
+#include "Rendering/CustomDrawing.h"
 #include "Components/GraphicsComponent.h"
 #include "Components/TransformComponent.h"
 #include "Components/ColliderComponent.h"
@@ -49,6 +50,11 @@ void LevelManager::LoadLevel(std::string level)
 		crossingVector.clear();
 		buildingVector.clear();
 		gameObjectVector[0]->ClearChildren();
+	}
+	if (level == "mainmenu")
+	{
+		currScene = 0;
+		CustomDrawing::DrawMainmenu();
 	}
 	if (level == "first")
 	{
