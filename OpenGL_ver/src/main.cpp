@@ -33,6 +33,7 @@
 #include "GameObject/GameObjectLoader.h"
 #include "GameObject/Crossing.h"
 #include "GameObject/Building.h"
+#include "LevelManager.h"
 
 // Shaders
 #include "VertexShaders.h"
@@ -102,6 +103,7 @@ bool sceneExplorationModeEnabled = true;
 bool confusionPostProcessOn = false;
 bool chaosPostProcessOn = false;
 DataManager dataManager = DataManager();
+LevelManager levelManager;
 Camera mainCamera(isometric);
 GLfloat deltaTime = 0.0f; // the difference between the current and the last frame
 GLfloat lastFrame = 0.0f;
@@ -125,6 +127,7 @@ Building* buildingPtr;
 
 int counter = 0;
 int mutatonCounter = 0;
+int maxMutatonsInLevel = 8;
 
 
 void RenderScene();
@@ -239,7 +242,6 @@ int main()
 #pragma endregion
 
 	MousePicker picker(&mainCamera, windowPtr);
-
 	glm::vec3 terrainPoint;
 
 #pragma region game objects declarations
@@ -249,16 +251,18 @@ int main()
 	objectScalePtr = &objectScale;
 
 	//Parent GameObject declaration
-	gameObjectPtr = new GameObject;
-	gameObjectPtr->SetActive();
-	gameObjectPtr->SetTag("Parent");
-	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
-	gameObjectVector.push_back(gameObjectPtr);
+	levelManager.CreateParent();
+	levelManager.LoadLevel("first");
+	//gameObjectPtr = new GameObject;
+	//gameObjectPtr->SetActive();
+	//gameObjectPtr->SetTag("Parent");
+	//gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
+	//gameObjectVector.push_back(gameObjectPtr);
 
 	//Loading gameobjects from file
-	GameObjectLoader loader;
-	loader.LoadGameObjects("res/level1.txt", *gameObjectVector[0]);
-	loader.LoadGameObjects("res/level_buildings1.txt", *gameObjectVector[0]);
+	//GameObjectLoader loader;
+	//loader.LoadGameObjects("res/level1.txt", *gameObjectVector[0]);
+	//loader.LoadGameObjects("res/level_buildings1.txt", *gameObjectVector[0]);
 
 	//objectScalePtr = new glm::vec3(0.01f, 0.01f, 0.01f);
 	//Testing gameobjects' declaration
@@ -763,14 +767,24 @@ int main()
 		//L = reset
 		if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
 		{
-			static unsigned short levelIndex = 0;
-			levelIndex++;
-			Reset(levelIndex);
+			//static unsigned short levelIndex = 0;
+			//levelIndex++;
+			//Reset(levelIndex);
+
+			mainCamera.SetFront(glm::vec3(-1.0f, -3.0f, -1.0f));
+			mainCamera.SetPosition(glm::vec3(10.0f, 10.0f, 10.0f));
+			mainCamera.SetWorldUp(glm::vec3(0.0f, 1.0f, 0.0f));
+			mainCamera.SetZoom(S_ZOOM_DEFAULT);
+
+			levelManager.LoadLevel("second");
+			counter = 0;
+			mutatonCounter = 0;
+			maxMutatonsInLevel = 9;
 		}
 
 		counter++;
 		//if (counter%375 == 0 && mutatonCounter!=8 )
-		if (counter % 745 == 0 && mutatonCounter != 8)
+		if (counter % 745 == 0 && mutatonCounter != maxMutatonsInLevel)
 		{
 			SpawnMutaton();
 			mutatonCounter++;
@@ -1066,9 +1080,6 @@ void SpawnMutaton()
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
 	gameObjectPtr->SetUpdate();
 	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	//gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[12]);
-	//gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM);
-	//gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
 	gameObjectPtr->GetGraphicsComponent()->SetModel(vecAnimModel[1]);
 	gameObjectPtr->GetGraphicsComponent()->SetOversized(true);
 	gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM_CREATURE_BASIC);

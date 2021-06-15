@@ -11,7 +11,9 @@
 #include "Collisions.h"
 #include "Components/ColliderComponent.h"
 #include "Rendering/Model.h"
+#include "GameObject/BlueprintObjectParser.h"
 #include "GameObject/GameObjectFactory.h"
+#include "GameObject/GameObjectLoader.h"
 
 extern std::vector<Model*> vecModel;
 extern std::vector<GameObject*> gameObjectVector;

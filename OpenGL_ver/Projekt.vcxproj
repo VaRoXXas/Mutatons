@@ -197,6 +197,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\Rendering\PostProcessor.cpp" />
     <ClCompile Include="src\GeometryCreation.cpp" />
     <ClCompile Include="src\MousePicker.cpp" />
@@ -333,6 +334,7 @@
     <ClInclude Include="include\ObjectTags.h" />
     <ClInclude Include="include\MousePicker.h" />
     <ClInclude Include="include\Rendering\PostProcessor.h" />
+    <ClInclude Include="include\LevelManager.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\BasicF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\OrbitF.h" />
     <ClInclude Include="res\shaders\fragment\deprecated\SphereF.h" />
