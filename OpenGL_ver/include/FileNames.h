@@ -55,6 +55,7 @@
 #define CHECKPOINT_ON "res/models/tiles/checkpoint_on.obj"
 #define CHECKPOINT_OFF "res/models/tiles/checkpoint_off.obj"
 #define SPAWNPOINT "res/models/tiles/spawnpoint.obj"
+#define ENVIRONMENT "res/models/environment/environment.obj"
 
 //Animated models
 #define ANIM "res/models/vampire/dancing_vampire.dae"
