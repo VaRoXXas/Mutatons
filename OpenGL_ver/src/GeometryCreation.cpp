@@ -8,13 +8,13 @@ void GeometryCreation::Hud1Creation()
 {
     float hud1ver[] = {
         // Pierwszy trójk¹t  
-         0.5f, -0.2f, 0.5f, // Prawy górny  
-         0.5f, -0.5f, 0.5f, // Prawy dolny  
-         -0.5f,-0.2f, 0.5f, // Lewy górny  
+         1.0f, -0.6f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // Prawy górny  
+         1.0f, -1.0f, 0.5f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Prawy dolny  
+         -1.0f,-0.6f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Lewy górny  
         // Drugi trójk¹t  
-         0.5f, -0.5f, 0.5f, // Prawy dolny  
-        -0.5f, -0.5f, 0.5f, // Lewy dolny  
-        -0.5f, -0.2f, 0.5f // Lewy górny  
+         1.0f, -1.0f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Prawy dolny  
+        -1.0f, -1.0f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // Lewy dolny  
+        -1.0f, -0.6f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // Lewy górny  
     };
 
     //float hud1ver[] = {
@@ -40,8 +40,13 @@ void GeometryCreation::Hud1Creation()
     //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, hud1EBO);
     //glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(hud1ind), hud1ind, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    // texture coord attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -64,7 +69,7 @@ void GeometryCreation::MainmenuCreation()
         // Drugi trójk¹t  
          1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Prawy dolny  
         -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // Lewy dolny  
-        -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f // Lewy górny  
+        -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // Lewy górny  
     };
 
 

@@ -43,7 +43,6 @@
 
 // input externs
 extern bool cursorEnabled;
-extern void (*escKeyActionPtr)();
 extern void (*wKeyActionPtr)();
 extern void (*sKeyActionPtr)();
 extern void (*aKeyActionPtr)();
@@ -70,7 +69,7 @@ extern Shader* postProcessingShaderPtr;
 extern Shader* mainmenuShaderPtr;
 extern PostProcessor* postProcessorPtr;
 extern GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO, textVAO, textVBO;
-extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture, mainmenuTexture;
+extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture, mainmenuTexture, UITexture;
 extern glm::vec3 lineShaderEndPointPos;
 extern int geometryShaderPseudoMeshDetailLevel;
 extern bool directionalLightEnabled;
@@ -237,6 +236,7 @@ int main()
 	//planeDiffuseTexture = dataManager.LoadTexture("grass_diffuse.jpg");
 	//planeSpecularTexture = dataManager.LoadTexture("grass_specular.jpg");
 	mainmenuTexture = dataManager.LoadTexture("res/textures/mainmenu.png");
+	UITexture = dataManager.LoadTexture("res/textures/UI.png");
 	
 	cubemapTexture = dataManager.LoadCubemap();
 
@@ -910,14 +910,15 @@ int main()
 		std::chrono::duration <double> diff = between - start;
 		CustomDrawing::DrawHud1();
 		//CustomDrawing::DrawHud2();
-		CustomDrawing::RenderText("Time spent on map: " + std::to_string((int)diff.count()), 500.0f, 100.0f, 1.0f, glm::vec3(0.5, 0.1f, 0.2f));
+		CustomDrawing::RenderText(std::to_string((int)diff.count()), 950.0f, 100.0f, 1.0f, glm::vec3(0.1, 0.1f, 0.7f));
+		CustomDrawing::RenderText(std::to_string(mutatonCounter)+'/'+std::to_string(maxMutatonsInLevel), 680.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
 		//CustomDrawing::RenderText("Mutatons left:", 1640.0f, 880.0f, 0.8f, glm::vec3(0.3, 0.7f, 0.9f));
 		std::chrono::system_clock::time_point p = std::chrono::system_clock::now();
 		time_t t = std::chrono::system_clock::to_time_t(p);
 		char str[26];
 		ctime_s(str, sizeof str, &t);
 		std::string sysTime(str);
-		CustomDrawing::RenderText("System time: " + sysTime, 500.0f, 50.0f, 1.0f, glm::vec3(0.5, 0.1f, 0.2f));
+		//CustomDrawing::RenderText("System time: " + sysTime, 500.0f, 50.0f, 1.0f, glm::vec3(0.5, 0.1f, 0.2f));
 		//CustomDrawing::DrawMainmenu();
 		//TextRendering::TextInitialize();
 
@@ -941,7 +942,7 @@ int main()
 			{
 				stateEsc = false;
 				glfwSetWindowShouldClose(windowPtr, true);
-
+			
 			}
 		}
 		if (levelManager.GetCurrScene() == 1)

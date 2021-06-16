@@ -28,7 +28,7 @@ void Input::ProcessInput(GLFWwindow* windowPtr)
 {
 	// We use if-cascade instead of switch, because we want to be able to press multiple keys in a single frame.
 
-	if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	//if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		//escKeyActionPtr();
 	if (glfwGetKey(windowPtr, GLFW_KEY_W) == GLFW_PRESS)
 		wKeyActionPtr();

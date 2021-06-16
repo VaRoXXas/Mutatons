@@ -22,7 +22,7 @@ Shader* textShaderPtr;
 Shader* postProcessingShaderPtr;
 Shader* mainmenuShaderPtr;
 GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO, hud1VAO, hud1VBO, textVAO, textVBO, mainmenuVAO, mainmenuVBO;
-GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture, mainmenuTexture;
+GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture, mainmenuTexture, UITexture;
 std::vector<GLuint*> customVAOs, customVBOs;
 glm::vec3 lineShaderEndPointPos;
 int geometryShaderPseudoMeshDetailLevel = 3;
@@ -182,7 +182,9 @@ void CustomDrawing::DrawSkybox()
 
 void CustomDrawing::DrawHud1()
 {
-	glUseProgram(hud1ShaderPtr->GetId());
+	glUseProgram(mainmenuShaderPtr->GetId());
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, UITexture);
 	glm::mat4 transform = glm::mat4(1.0f);
 	transform = glm::translate(transform, glm::vec3(0,-0.5,0));
 	hud1ShaderPtr->SetMat4("view", (*viewMatrixPtr));
