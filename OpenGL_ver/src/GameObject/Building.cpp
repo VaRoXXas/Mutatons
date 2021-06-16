@@ -121,7 +121,13 @@ void Building::SetType(std::string typeSet)
 	}
 
 	if (type == "Control")
+	{
+		glm::vec3 tempLoc = this->GetTransformComponent()->GetLocation();
+		tempLoc.z = tempLoc.z + 0.4f;
+		tempLoc.x = tempLoc.x + 0.4f;
+		this->GetColliderComponent()->Initialize(tempLoc, glm::vec3(0.1f));
 		this->GetGraphicsComponent()->SetModel(vecModel[46]);
+	}
 }
 
 std::string Building::GetType()
