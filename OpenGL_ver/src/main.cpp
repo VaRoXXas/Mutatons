@@ -789,7 +789,7 @@ int main()
 
 		counter++;
 		//if (counter%375 == 0 && mutatonCounter!=8 )
-		if (counter % 745 == 0 && mutatonCounter != maxMutatonsInLevel)
+		if (counter % 500 == 0 && mutatonCounter != maxMutatonsInLevel)
 		{
 			SpawnMutaton();
 			mutatonCounter++;

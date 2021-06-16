@@ -37,9 +37,14 @@ void GameObjectFactory::BuildGameObjects(GameObjectBlueprint& bp, std::string ga
 		{
 			if (*it == "Transform")
 			{
-				float tempScale = bp.GetScale();
+				//float tempScale = bp.GetScale();
+				glm::vec3 tempScale = glm::vec3(bp.GetScale(), bp.GetScale(), bp.GetScale());
 				gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(bp.GetX(), bp.GetY(), bp.GetZ())));
 				gameObjectPtr->GetTransformComponent()->SetRotation(bp.GetRotation(), bp.GetRotationAxis());
+				if (bp.GetRotation() == 90)
+				{
+					tempScale.x = -tempScale.x;
+				}
 				gameObjectPtr->GetTransformComponent()->SetScale(tempScale);
 			}
 			else if (*it == "Graphics")
@@ -49,9 +54,13 @@ void GameObjectFactory::BuildGameObjects(GameObjectBlueprint& bp, std::string ga
 			}
 			else if (*it == "Collider")
 			{
+				//glm::vec3 tempLoc = this->GetTransformComponent()->GetLocation();
+				//tempLoc.z = tempLoc.z + 0.9f;
+				//tempLoc.x = tempLoc.x + 0.9f;
+				//this->GetColliderComponent()->Initialize(tempLoc, glm::vec3(0.1f));
 				std::shared_ptr<ColliderComponent> collider = std::make_shared<ColliderComponent>();
 				collider->SetColliderTag("mainCollider");
-				collider->Initialize(glm::vec3(bp.GetColX(), bp.GetColY(), bp.GetColZ()), glm::vec3(1.0f, 1.0f, 1.0f));
+				collider->Initialize(glm::vec3(bp.GetColX() + 0.05f, bp.GetColY(), bp.GetColZ() + 0.05f), glm::vec3(0.9f, 0.9f, 0.9f));
 				gameObjectPtr->AddComponent(collider);
 				//gameObjectPtr->GetColliderComponent()->Initialize(glm::vec3(bp.GetColX(), bp.GetColY(), bp.GetColZ()), glm::vec3(1.0f, 1.0f, 1.0f));
 			}

@@ -70,8 +70,11 @@ void Building::Reaction(GameObject* gameObject)
 						audioManager.PlaySfSound(controlPanelSoundBuffer);
 					}
 					captured = true;
-					this->GetGraphicsComponent()->SetModel(vecModel[46]);
-					gameObject->SetVelocity(0.0f);
+					this->GetGraphicsComponent()->SetModel(vecModel[45]);
+					//gameObject->SetVelocity(0.0f);
+					gameObject->Destroy();
+					gameObject->GetColliderComponent()->DisableComponent();
+					gameObject->SetIsInControl(true);
 				}
 			}
 		}
@@ -118,7 +121,7 @@ void Building::SetType(std::string typeSet)
 	}
 
 	if (type == "Control")
-		this->GetGraphicsComponent()->SetModel(vecModel[45]);
+		this->GetGraphicsComponent()->SetModel(vecModel[46]);
 }
 
 std::string Building::GetType()

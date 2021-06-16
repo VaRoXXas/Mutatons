@@ -31,6 +31,7 @@ private:
 	bool hasInput = false;
 	bool clickedOn = false;
 	bool mouseHoveredOver = false;
+	bool inControl = false;
 
 	int element = 0;
 public:
@@ -64,5 +65,7 @@ public:
 	std::shared_ptr<TransformComponent> GetTransformComponent();
 	std::shared_ptr<ColliderComponent> GetColliderComponent();
 	void ClearChildren();
+	void SetIsInControl(bool inControl);
+	bool GetIsInControl();
 };
 
