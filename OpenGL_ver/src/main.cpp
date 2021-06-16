@@ -97,7 +97,7 @@ extern bool LMBreleaseEventTriggered = false;
 //variable representing camera mode
 bool isometric = true;
 
-bool IMGUI_ENABLED = true;
+bool IMGUI_ENABLED = false;
 bool sceneExplorationModeEnabled = true;
 bool confusionPostProcessOn = false;
 bool chaosPostProcessOn = false;
@@ -717,6 +717,7 @@ int main()
 	std::chrono::time_point start = std::chrono::system_clock::now();
 	std::chrono::time_point between = std::chrono::system_clock::now();
 	double posX, posY;
+	int diffSec, diffTSec, diffMinute;
 
 	double lasttime = glfwGetTime();
 
@@ -860,9 +861,13 @@ int main()
 		// Drawing HUD
 		between = std::chrono::system_clock::now();
 		std::chrono::duration <double> diff = between - start;
+		diffMinute = diff.count() / 60;
+		diffTSec =  (diff.count() - diffMinute*60) / 10;
+		diffSec = diff.count() - diffMinute * 60 - diffTSec * 10;
+
 		CustomDrawing::DrawHud1();
 		//CustomDrawing::DrawHud2();
-		CustomDrawing::RenderText(std::to_string((int)diff.count()), 950.0f, 100.0f, 1.0f, glm::vec3(0.1, 0.1f, 0.7f));
+		CustomDrawing::RenderText(std::to_string((int)diffMinute)+":"+ std::to_string((int)diffTSec) + std::to_string((int)diffSec), 925.0f, 100.0f, 1.0f, glm::vec3(0.1, 0.1f, 0.7f));
 		CustomDrawing::RenderText(std::to_string(mutatonCounter)+'/'+std::to_string(maxMutatonsInLevel), 680.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
 		//CustomDrawing::RenderText("Mutatons left:", 1640.0f, 880.0f, 0.8f, glm::vec3(0.3, 0.7f, 0.9f));
 		std::chrono::system_clock::time_point p = std::chrono::system_clock::now();
@@ -882,7 +887,16 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		//CustomDrawing::DrawQuad();
-		std::cout << posX << std::endl << posY<<std::endl<<std::endl;
+		//std::cout << posX << std::endl << posY<<std::endl<<std::endl;
+		if (levelManager.GetCurrScene() > 0)
+		{
+			if ((glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS) || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1770 < posX && posX < 1840 && 930 < posY && posY < 990))
+			{
+				stateEsc = false;
+				levelManager.LoadLevel("mainmenu");
+
+			}
+		}
 		if (levelManager.GetCurrScene() == 0)
 		{
 			levelManager.LoadLevel("mainmenu");
