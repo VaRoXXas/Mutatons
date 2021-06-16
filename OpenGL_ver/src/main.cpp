@@ -42,7 +42,6 @@
 #include "FragmentShaders.h"
 
 // input externs
-extern bool cursorEnabled;
 extern void (*wKeyActionPtr)();
 extern void (*sKeyActionPtr)();
 extern void (*aKeyActionPtr)();
@@ -97,8 +96,6 @@ extern bool LMBreleaseEventTriggered = false;
 
 //variable representing camera mode
 bool isometric = true;
-//variables used in cullings
-int queryNumber = 0, frustumNumber = 0;
 
 bool IMGUI_ENABLED = true;
 bool sceneExplorationModeEnabled = true;
@@ -254,33 +251,6 @@ int main()
 	//Parent GameObject declaration
 	levelManager.CreateParent();
 	levelManager.LoadLevel("mainmenu");
-	//gameObjectPtr = new GameObject;
-	//gameObjectPtr->SetActive();
-	//gameObjectPtr->SetTag("Parent");
-	//gameObjectPtr->AddComponent(std::make_shared<TransformComponent>());
-	//gameObjectVector.push_back(gameObjectPtr);
-
-	//Loading gameobjects from file
-	//GameObjectLoader loader;
-	//loader.LoadGameObjects("res/level1.txt", *gameObjectVector[0]);
-	//loader.LoadGameObjects("res/level_buildings1.txt", *gameObjectVector[0]);
-
-	//objectScalePtr = new glm::vec3(0.01f, 0.01f, 0.01f);
-	//Testing gameobjects' declaration
-	gameObjectPtr = new GameObject;
-	gameObjectPtr->SetActive();
-	gameObjectPtr->SetVelocity(5.0f);
-	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(9.0f,1.0f,-7.0f)));
-	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
-	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
-	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	//gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[4]);
-	gameObjectPtr->GetGraphicsComponent()->SetModel(vecAnimModel[1]);
-	gameObjectPtr->GetGraphicsComponent()->SetOversized(true);
-	gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM_CREATURE_BASIC);
-	gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
-	modifiableGameObjectVector.push_back(gameObjectPtr);
-	gameObjectVector[0]->AddChild(gameObjectPtr);
 
 #pragma endregion
 
@@ -664,19 +634,6 @@ int main()
 	projectionMatrixPtr = &projection;
 
 #pragma endregion
-
-	//editor propeties
-	float posFloat[] = { 1.0,1.0,1.0 };
-	bool update = modifiableGameObjectVector.front()->HasUpdate();
-	glm::vec3 pos = modifiableGameObjectVector.front()->GetTransformComponent()->GetLocation();
-	bool once = false;
-	bool reset = true;
-	static const char * items[] = { "forward", "back", "right", "left" };
-	static int selectedItem = 0;
-	int modelID = 0;
-
-	//generate queries to occlusion culling
-	//glGenQueries(1, &queryName);
 	
 	//text init
 	glEnable(GL_BLEND);
@@ -830,16 +787,8 @@ int main()
 			Util::EnableWireframeMode();
 		else
 			Util::DisableWireframeMode();
-		if (!cursorEnabled)
-		{
-			glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Blocking cursor inside a window and disabling its graphic representation.
-			glfwSetCursorPosCallback(windowPtr, Input::CursorPosCallback);
-		}
-		else
-		{
-			glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-			glfwSetCursorPosCallback(windowPtr, nullptr);
-		}
+		glfwSetInputMode(windowPtr, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		glfwSetCursorPosCallback(windowPtr, nullptr);
 
 		lineShaderEndPointPos = directionalLightsDirection;
 		PseudoMesh directionalLightIndicator(CustomDrawing::DrawLine);
@@ -935,6 +884,9 @@ int main()
 			levelManager.LoadLevel("mainmenu");
 			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 			{
+				counter = 0;
+				mutatonCounter = 0;
+				maxMutatonsInLevel = 8;
 				start = std::chrono::system_clock::now();
 				levelManager.LoadLevel("first");
 			}
@@ -949,6 +901,9 @@ int main()
 		{
 			if(glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
 			{
+				counter = 0;
+				mutatonCounter = 0;
+				maxMutatonsInLevel = 8;
 				start = std::chrono::system_clock::now();
 				levelManager.LoadLevel("second");
 
@@ -973,50 +928,7 @@ int main()
 			}
 		}
 
-		//GameObject editor options, first one determines if gameobject has Update
-		if (update && !once)
-		{
-			modifiableGameObjectVector.front()->SetUpdate();
-			once = true;
-		}
-		else if (!update && once)
-		{
-			posFloat[0] = pos.x;
-			posFloat[1] = pos.y;
-			posFloat[2] = pos.z;
-			modifiableGameObjectVector.front()->SetUpdate();
-			once = false;
-		}
-		else if (!update)
-		{
-			pos = glm::vec3(posFloat[0], posFloat[1], posFloat[2]);
-		}
-
-		//Setting up movedirection of gameobject
-		if (reset)
-		{
-			switch (selectedItem)
-			{
-			case 0:
-				modifiableGameObjectVector.front()->SetDirection("forward");
-				reset = false;
-				break;
-			case 1:
-				modifiableGameObjectVector.front()->SetDirection("back");
-				reset = false;
-				break;
-			case 2:
-				modifiableGameObjectVector.front()->SetDirection("right");
-				reset = false;
-				break;
-			case 3:
-				modifiableGameObjectVector.front()->SetDirection("left");
-				reset = false;
-				break;
-			}
-		}
 		//GameObject's updates
-		modifiableGameObjectVector.front()->Update(pos,deltaTime/100000);
 		for (GameObject* g : modifiableGameObjectVector)
 		{
 			g->Update(g->GetTransformComponent()->GetLocationAddr(), deltaTime);
@@ -1031,20 +943,11 @@ int main()
 			ImGui::NewFrame();
 
 			ImGui::Checkbox("Wireframe mode", &wireframeModeEnabled);
-			ImGui::Checkbox("Cursor enabled", &cursorEnabled);
 			ImGui::Checkbox("Directional light enabled", &directionalLightEnabled);
 			ImGui::Checkbox("Lights' positions/directions shown", &lightsPositionsDirectionsShown);
-			ImGui::ColorEdit4("Directional light color", directionalLightColorPtr);
 			
 			//gameobject editor
-			ImGui::Checkbox("GameObject Update", &update);
-			ImGui::SliderFloat3("GameObject position", posFloat , -10.0f, 10.0f);
 			ImGui::SliderFloat("lightsDirectionVectorAngleOffset", &lightsDirectionVectorAngleOffset, -10.0f, 10.0f);
-			ImGui::Combo("MoveDirection", &selectedItem, items, IM_ARRAYSIZE(items));
-			ImGui::Checkbox("MoveDirection reset", &reset);
-			ImGui::SliderInt("GameObject model", &modelID, 0, 29);
-			ImGui::Text("Number of hidden object due to occlusion culling: %i", queryNumber);
-			ImGui::Text("Number of object rendered with frustum culling: %i", frustumNumber);
 
 			// PostProcessing
 			if(ImGui::Button("Shake it"))
@@ -1189,33 +1092,4 @@ void Reset(unsigned short levelIndex)
 	loader.LoadGameObjects(levelPath, *gameObjectVector[0]);
 	loader.LoadGameObjects(levelBuildingsPath, *gameObjectVector[0]);
 
-	//Testing gameobjects' declaration
-	gameObjectPtr = new GameObject;
-	gameObjectPtr->SetActive();
-	gameObjectPtr->SetVelocity(5.0f);
-	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(9.0f, 1.0f, -7.0f)));
-	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
-	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
-	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	gameObjectPtr->GetGraphicsComponent()->SetModel(vecAnimModel[0]);
-	gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM);
-	gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
-	modifiableGameObjectVector.push_back(gameObjectPtr);
-	gameObjectVector[0]->AddChild(gameObjectPtr);
-
-	gameObjectPtr = new GameObject;
-	gameObjectPtr->SetTag("mutaton" + std::to_string(mutatonCounter));
-	gameObjectPtr->SetActive();
-	gameObjectPtr->SetVelocity(4.0f);
-	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f, 1.0f, -7.0f)));
-	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
-	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
-	gameObjectPtr->SetUpdate();
-	gameObjectPtr->GetTransformComponent()->SetScale(*objectScalePtr);
-	gameObjectPtr->GetGraphicsComponent()->SetModel(vecModel[12]);
-	//gameObjectPtr->GetGraphicsComponent()->InitializeAnimation(ANIM);
-	//gameObjectPtr->GetColliderComponent()->Initialize(gameObjectPtr->GetTransformComponent());
-	modifiableGameObjectVector.push_back(gameObjectPtr);
-	gameObjectVector[0]->AddChild(gameObjectPtr);
-	std::cout << gameObjectPtr->GetTag() << std::endl;
 }

@@ -15,7 +15,6 @@
 extern Frustum frustum;
 GLuint queryName, numSamplesRendered;
 int queryCount = 0, frustumCount = 0, iterator = 0;
-extern int queryNumber, frustumNumber;
 extern Shader* unlitTexturedAnimatedShaderPtr;
 extern bool LMBreleaseEventTriggered;
 GameObject* childPtr;
@@ -268,8 +267,6 @@ void GameObject::Render(const glm::mat4& transform)
 
 		}
 	}
-	frustumNumber = frustumCount;
-	queryNumber = queryCount;
 	frustumCount = 0;
 	queryCount = 0;
 }
