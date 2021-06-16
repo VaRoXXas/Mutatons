@@ -759,6 +759,7 @@ int main()
 
 	std::chrono::time_point start = std::chrono::system_clock::now();
 	std::chrono::time_point between = std::chrono::system_clock::now();
+	double posX, posY;
 
 	double lasttime = glfwGetTime();
 
@@ -800,6 +801,8 @@ int main()
 		{
 			stateEsc = true;
 		}
+
+		glfwGetCursorPos(windowPtr, &posX, &posY);
 
 		// updating matrices, uniforms, vectors
 		transform = glm::mat4(1.0f);
@@ -930,15 +933,16 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		//CustomDrawing::DrawQuad();
+		std::cout << posX << std::endl << posY<<std::endl<<std::endl;
 		if (levelManager.GetCurrScene() == 0)
 		{
 			levelManager.LoadLevel("mainmenu");
-			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1300 < posX && posX < 1800 && 450 < posY && posY < 700)
 			{
 				start = std::chrono::system_clock::now();
 				levelManager.LoadLevel("first");
 			}
-			if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true)
+			if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) ||( glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 900 < posX && posX < 1050 && 875 < posY && posY < 950))
 			{
 				stateEsc = false;
 				glfwSetWindowShouldClose(windowPtr, true);
