@@ -133,6 +133,7 @@ int capturedCounter = 0;
 int counter = 0;
 int mutatonCounter = 0;
 int maxMutatonsInLevel = 8;
+int mutatonsInControl = 0;
 
 AudioManager audioManager = AudioManager();
 extern sf::SoundBuffer winningSoundBuffer, losingSoundBuffer, mutationSoundBuffer, controlPanelSoundBuffer, dyingFromLaserSoundBuffer;
@@ -888,6 +889,8 @@ int main()
 			{
 				if (!m->IsActive() && !inactiveMutatons.empty() )
 				{
+					if (m->GetIsInControl())
+						mutatonsInControl++;
 					inactiveMutatons.push_back(m->GetTag());
 					std::_Erase_remove(modifiableGameObjectVector, modifiableGameObjectVector[pos]);
 					break;
@@ -895,6 +898,8 @@ int main()
 			}
 			if (inactiveMutatons.empty() && !m->IsActive())
 			{
+				if (m->GetIsInControl())
+					mutatonsInControl++;
 				inactiveMutatons.push_back(m->GetTag());
 				std::_Erase_remove(modifiableGameObjectVector, modifiableGameObjectVector[pos]);
 				break;
@@ -958,6 +963,7 @@ int main()
 				counter = 0;
 				mutatonCounter = 0;
 				maxMutatonsInLevel = 8;
+				mutatonsInControl = 0;
 				start = std::chrono::system_clock::now();
 				levelManager.LoadLevel("first");
 			}
