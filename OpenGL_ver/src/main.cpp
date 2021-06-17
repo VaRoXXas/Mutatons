@@ -737,7 +737,7 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		//L = reset
-		
+
 		//if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
 		//{
 		//	//static unsigned short levelIndex = 0;
@@ -834,7 +834,7 @@ int main()
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		const bool postProcessingEnabled = false;
-		if(postProcessingEnabled)
+		if (postProcessingEnabled)
 		{
 			postProcessorPtr->BeginRender();
 			RenderScene();
@@ -889,7 +889,7 @@ int main()
 		{
 			for (std::string s : inactiveMutatons)
 			{
-				if (!m->IsActive() && !inactiveMutatons.empty() )
+				if (!m->IsActive() && !inactiveMutatons.empty())
 				{
 					if (m->GetIsInControl())
 						mutatonsInControl++;
@@ -910,17 +910,17 @@ int main()
 		}
 
 		//Checking if all conditions to finish level are met 
-		if(modifiableGameObjectVector.empty() && capturedPoints.size() == maxCapturedPoints)
+		if (modifiableGameObjectVector.empty() && capturedPoints.size() == maxCapturedPoints)
 			//std::cout << "END" << std::endl;
 
 		// And the skybox...
-		CustomDrawing::DrawSkybox();
+			CustomDrawing::DrawSkybox();
 
 		// Drawing HUD
 		between = std::chrono::system_clock::now();
 		std::chrono::duration <double> diff = between - start;
 		diffMinute = diff.count() / 60;
-		diffTSec =  (diff.count() - diffMinute*60) / 10;
+		diffTSec = (diff.count() - diffMinute * 60) / 10;
 		diffSec = diff.count() - diffMinute * 60 - diffTSec * 10;
 
 		//CustomDrawing::DrawHud1();
@@ -930,13 +930,13 @@ int main()
 		//CustomDrawing::RenderText(std::to_string(mutatonsInControl) + '/' + std::to_string(maxCapturedPoints), 1350.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
 		//CustomDrawing::RenderText("aaaaaaaaaaaaaaaaaaaaaaaaa", 1350.0f, 200.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
 		//CustomDrawing::RenderText("afasgfsgf", 925.0f, 200.0f, 1.0f, glm::vec3(0.1, 0.1f, 0.7f));
-		
+
 		//CustomDrawing::RenderText("Mutatons left:", 1640.0f, 880.0f, 0.8f, glm::vec3(0.3, 0.7f, 0.9f));
-		std::chrono::system_clock::time_point p = std::chrono::system_clock::now();
-		time_t t = std::chrono::system_clock::to_time_t(p);
-		char str[26];
-		ctime_s(str, sizeof str, &t);
-		std::string sysTime(str);
+		//std::chrono::system_clock::time_point p = std::chrono::system_clock::now();
+		//time_t t = std::chrono::system_clock::to_time_t(p);
+		//char str[26];
+		//ctime_s(str, sizeof str, &t);
+		//std::string sysTime(str);
 		//CustomDrawing::RenderText("System time: " + sysTime, 500.0f, 50.0f, 1.0f, glm::vec3(0.5, 0.1f, 0.2f));
 		//CustomDrawing::DrawMainmenu();
 		//TextRendering::TextInitialize();
@@ -950,13 +950,13 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		//CustomDrawing::DrawQuad();
 		//std::cout << posX << std::endl << posY << std::endl << std::endl;
-		//std::cout<<"mutatony:"<<modifiableGameObjectVector.size()<<std::endl;
-		
+		//std::cout<<"mutatony:"<<capturedPoints.size()<<std::endl;
+
 		//Scene changing
 		if (levelManager.GetCurrScene() > 10)
 		{
 			CustomDrawing::DrawHud1();
-			CustomDrawing::RenderText(std::to_string((int)diffMinute) + ":" + std::to_string((int)diffTSec) + std::to_string((int)diffSec), 925.0f, 100.0f, 1.0f, glm::vec3(0.1, 0.1f, 0.7f));
+			CustomDrawing::RenderText(std::to_string((int)diffMinute) + ":" + std::to_string((int)diffTSec) + std::to_string((int)diffSec), 927.0f, 100.0f, 1.0f, glm::vec3(0.1, 0.1f, 0.7f));
 			CustomDrawing::RenderText(std::to_string(mutatonCounter) + '/' + std::to_string(maxMutatonsInLevel), 680.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
 			CustomDrawing::RenderText(std::to_string(capturedCounter) + '/' + std::to_string(maxCapturedPoints), 1350.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
 			befCurrScene = levelManager.GetCurrScene();
@@ -986,12 +986,13 @@ int main()
 				mutatonCounter = 0;
 				maxMutatonsInLevel = 8;
 				mutatonsInControl = 0;
+				capturedPoints.clear();
 				befCurrScene = 11;
 				start = std::chrono::system_clock::now();
-				levelManager.LoadLevel("first");
-				
+				levelManager.LoadLevel("victory");
+
 			}
-			
+
 		}
 		if (levelManager.GetCurrScene() == 0)
 		{
@@ -1004,15 +1005,16 @@ int main()
 				mutatonCounter = 0;
 				maxMutatonsInLevel = 3;
 				mutatonsInControl = 0;
+				capturedPoints.clear();
 				start = std::chrono::system_clock::now();
 				AudioManager::ChangeMainMenuMusicToGameplayMusic();
 				levelManager.LoadLevel("tutorial");
 			}
-			if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) ||( glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 850 < posX && posX < 1070 && 890 < posY && posY < 940))
+			if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 850 < posX && posX < 1070 && 890 < posY && posY < 940))
 			{
 				stateEsc = false;
 				glfwSetWindowShouldClose(windowPtr, true);
-			
+
 			}
 		}
 		if (levelManager.GetCurrScene() == 1 || levelManager.GetCurrScene() == 2)
@@ -1025,9 +1027,10 @@ int main()
 			else if (levelManager.GetCurrScene() == 2)
 			{
 				levelManager.LoadLevel("victory");
-				CustomDrawing::RenderText(std::to_string((600-score)*100), 928.0f, 850.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+				CustomDrawing::RenderText(std::to_string((600 - score) * 100), 928.0f, 850.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 			}
-			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1280 < posX && posX < 1800 && 590 < posY && posY < 800)
+			if ((levelManager.GetCurrScene() == 1 && glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1270 < posX && posX < 1800 && 590 < posY && posY < 810) ||
+				 (levelManager.GetCurrScene() == 2 && glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1380 < posX && posX < 1730 && 680 < posY && posY < 840))
 			{
 				if(befCurrScene == 11)
 				{
@@ -1037,11 +1040,12 @@ int main()
 					mutatonCounter = 0;
 					maxMutatonsInLevel = 8;
 					mutatonsInControl = 0;
+					capturedPoints.clear();
 					start = std::chrono::system_clock::now();
 					AudioManager::ChangeMainMenuMusicToGameplayMusic();
 					levelManager.LoadLevel("first");
 				}
-				if (befCurrScene == 12)
+				else if (befCurrScene == 12)
 				{
 					maxCapturedPoints = 1;
 					capturedCounter = 0;
@@ -1049,6 +1053,7 @@ int main()
 					mutatonCounter = 0;
 					maxMutatonsInLevel = 3;
 					mutatonsInControl = 0;
+					capturedPoints.clear();
 					start = std::chrono::system_clock::now();
 					AudioManager::ChangeMainMenuMusicToGameplayMusic();
 					levelManager.LoadLevel("tutorial");
@@ -1061,7 +1066,7 @@ int main()
 				AudioManager::GameplayMusicToMainMenuMusic();
 				levelManager.LoadLevel("mainmenu");
 			}
-			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1280 < posX && posX < 1800 && 100 < posY && posY < 300)
+			if (levelManager.GetCurrScene() == 2 && glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1230 < posX && posX < 1700 && 510 < posY && posY < 680)
 			{
 				if (befCurrScene == 12 && levelManager.GetCurrScene() == 2)
 				{
@@ -1071,6 +1076,7 @@ int main()
 					mutatonCounter = 0;
 					maxMutatonsInLevel = 8;
 					mutatonsInControl = 0;
+					capturedPoints.clear();
 					start = std::chrono::system_clock::now();
 					AudioManager::ChangeMainMenuMusicToGameplayMusic();
 					levelManager.LoadLevel("first");
