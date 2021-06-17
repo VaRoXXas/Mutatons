@@ -4,7 +4,9 @@
 #include "Camera.h"
 #include "FrustumCulling/Frustum.h"
 
+
 Frustum frustum;
+extern int sceneNumber;
 
 Camera::Camera(bool isometric, float yaw, float pitch)
 : isometric(isometric), position(glm::vec3(12.0f, 10.0f, 0.0f)), front(glm::vec3(-1.0f, -3.0f, -1.0f)), worldUp(glm::vec3(0.0f, 1.0f, 0.0f)), yaw(yaw), pitch(pitch), movementSpeed(S_SPEED_DEFAULT), mouseSensitivity(S_SENSITIVITY_DEFAULT), zoom(S_ZOOM_DEFAULT)
@@ -72,27 +74,55 @@ void Camera::ProcessKeyboard(const CameraDirection& direction, const float& delt
     }
     if (isometric == 1)
     {
-        switch (direction)
+        if (sceneNumber == 1)
         {
-        case CameraDirection::Forward:
-            if(position.x >= 0 && position.z >= -10)
-                position -= glm::vec3(1.0f, 0.0f, 1.0f) * velocity;
-            break;
-        case CameraDirection::Backward:
-            if (position.x <= 30 && position.z <= 15)
-                position += glm::vec3(1.0f, 0.0f, 1.0f) * velocity;
-            break;
-        case CameraDirection::Left:
-            if (position.x >= 0 && position.z <= 15)
-                position -= glm::vec3(1.0f, 0.0f, -1.0f) * velocity;
-            break;
-        case CameraDirection::Right:
-            if (position.x <= 30 && position.z >= -10)
-                position += glm::vec3(1.0f, 0.0f, -1.0f) * velocity;
-            break;
-        default:
-            break;
+            switch (direction)
+            {
+            case CameraDirection::Forward:
+                if (position.x >= 5 && position.z >= -5)
+                    position -= glm::vec3(1.0f, 0.0f, 1.0f) * velocity;
+                break;
+            case CameraDirection::Backward:
+                if (position.x <= 20 && position.z <= 5)
+                    position += glm::vec3(1.0f, 0.0f, 1.0f) * velocity;
+                break;
+            case CameraDirection::Left:
+                if (position.x >= 5 && position.z <= 5)
+                    position -= glm::vec3(1.0f, 0.0f, -1.0f) * velocity;
+                break;
+            case CameraDirection::Right:
+                if (position.x <= 20 && position.z >= -5)
+                    position += glm::vec3(1.0f, 0.0f, -1.0f) * velocity;
+                break;
+            default:
+                break;
+            }
         }
+        else
+        {
+            switch (direction)
+            {
+            case CameraDirection::Forward:
+                if (position.x >= 2 && position.z >= -10)
+                    position -= glm::vec3(1.0f, 0.0f, 1.0f) * velocity;
+                break;
+            case CameraDirection::Backward:
+                if (position.x <= 30 && position.z <= 15)
+                    position += glm::vec3(1.0f, 0.0f, 1.0f) * velocity;
+                break;
+            case CameraDirection::Left:
+                if (position.x >= 2 && position.z <= 15)
+                    position -= glm::vec3(1.0f, 0.0f, -1.0f) * velocity;
+                break;
+            case CameraDirection::Right:
+                if (position.x <= 30 && position.z >= -10)
+                    position += glm::vec3(1.0f, 0.0f, -1.0f) * velocity;
+                break;
+            default:
+                break;
+            }
+        }
+        
     }
 }
 

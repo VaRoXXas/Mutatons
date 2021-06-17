@@ -93,6 +93,7 @@ extern std::vector<Model*> vecAnimModel;
 extern Frustum frustum;
 extern GLuint queryName;
 extern bool LMBreleaseEventTriggered = false;
+extern int sceneNumber = -1;
 
 //variable representing camera mode
 bool isometric = true;
@@ -966,20 +967,34 @@ int main()
 				AudioManager::GameplayMusicToMainMenuMusic();
 				levelManager.LoadLevel("mainmenu");
 			}
-			if (mutatonCounter == maxMutatonsInLevel && modifiableGameObjectVector.empty() && mutatonsInControl != maxCapturedPoints)
+			if (mutatonCounter == maxMutatonsInLevel && modifiableGameObjectVector.empty() && mutatonsInControl < maxCapturedPoints)
 			{
 				AudioManager::PlaySfSound(losingSoundBuffer);
 				levelManager.LoadLevel("lose");
+				
 			}
 			if (capturedCounter == maxCapturedPoints)
 			{
-				score = (int)diff.count();
-				AudioManager::PlaySfSound(winningSoundBuffer);
-				levelManager.LoadLevel("victory");
+				bool allInactive = true;
+				for (int i = 0; i < modifiableGameObjectVector.size(); i++)
+				{
+					if(modifiableGameObjectVector[i]->IsActive() == true)
+					{
+						allInactive = false;
+					}
+				}
+				if (allInactive == true)
+				{
+					score = (int)diff.count();
+					AudioManager::PlaySfSound(winningSoundBuffer);
+					levelManager.LoadLevel("victory");
+				}
+				
 			}
 			//debug//////////////////////////
 			if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
 			{
+				sceneNumber = 2;
 				maxCapturedPoints = 2;
 				capturedCounter = 0;
 				counter = 0;
@@ -999,6 +1014,7 @@ int main()
 			levelManager.LoadLevel("mainmenu");
 			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1300 < posX && posX < 1800 && 470 < posY && posY < 700)
 			{
+				sceneNumber = 1;
 				maxCapturedPoints = 1;
 				capturedCounter = 0;
 				counter = 0;
@@ -1027,13 +1043,14 @@ int main()
 			else if (levelManager.GetCurrScene() == 2)
 			{
 				levelManager.LoadLevel("victory");
-				CustomDrawing::RenderText(std::to_string((600 - score) * 100), 928.0f, 850.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+				CustomDrawing::RenderText(std::to_string((score* mutatonsInControl) * 120), 928.0f, 850.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 			}
 			if ((levelManager.GetCurrScene() == 1 && glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1270 < posX && posX < 1800 && 590 < posY && posY < 810) ||
 				 (levelManager.GetCurrScene() == 2 && glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1380 < posX && posX < 1730 && 680 < posY && posY < 840))
 			{
 				if(befCurrScene == 11)
 				{
+					sceneNumber = 2;
 					maxCapturedPoints = 2;
 					capturedCounter = 0;
 					counter = 0;
@@ -1047,6 +1064,7 @@ int main()
 				}
 				else if (befCurrScene == 12)
 				{
+					sceneNumber = 1;
 					maxCapturedPoints = 1;
 					capturedCounter = 0;
 					counter = 0;
@@ -1070,6 +1088,7 @@ int main()
 			{
 				if (befCurrScene == 12 && levelManager.GetCurrScene() == 2)
 				{
+					sceneNumber = 2;
 					maxCapturedPoints = 2;
 					capturedCounter = 0;
 					counter = 0;
