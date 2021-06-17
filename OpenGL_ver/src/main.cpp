@@ -724,9 +724,8 @@ int main()
 
 	std::chrono::time_point start = std::chrono::system_clock::now();
 	std::chrono::time_point between = std::chrono::system_clock::now();
-	int score;
 	double posX, posY;
-	int diffSec, diffTSec, diffMinute;
+	int diffSec, diffTSec, diffMinute, score, befCurrScene;
 
 	double lasttime = glfwGetTime();
 	int pos = 0;
@@ -959,14 +958,15 @@ int main()
 			CustomDrawing::DrawHud1();
 			CustomDrawing::RenderText(std::to_string((int)diffMinute) + ":" + std::to_string((int)diffTSec) + std::to_string((int)diffSec), 925.0f, 100.0f, 1.0f, glm::vec3(0.1, 0.1f, 0.7f));
 			CustomDrawing::RenderText(std::to_string(mutatonCounter) + '/' + std::to_string(maxMutatonsInLevel), 680.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
-			CustomDrawing::RenderText(std::to_string(mutatonsInControl) + '/' + std::to_string(maxCapturedPoints), 1350.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
+			CustomDrawing::RenderText(std::to_string(capturedCounter) + '/' + std::to_string(maxCapturedPoints), 1350.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
+			befCurrScene = levelManager.GetCurrScene();
 			if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1770 < posX && posX < 1840 && 930 < posY && posY < 990))
 			{
 				stateEsc = false;
 				levelManager.LoadLevel("mainmenu");
 
 			}
-			if (maxMutatonsInLevel - mutatonCounter ==0 && modifiableGameObjectVector.empty() ==0 && capturedCounter != maxCapturedPoints)
+			if (mutatonCounter == maxMutatonsInLevel && modifiableGameObjectVector.empty() && mutatonsInControl != maxCapturedPoints)
 			{
 				levelManager.LoadLevel("lose");
 			}
@@ -975,6 +975,7 @@ int main()
 				score = (int)diff.count();
 				levelManager.LoadLevel("victory");
 			}
+			//debug//////////////////////////
 			if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
 			{
 				maxCapturedPoints = 2;
@@ -982,8 +983,10 @@ int main()
 				counter = 0;
 				mutatonCounter = 0;
 				maxMutatonsInLevel = 8;
+				mutatonsInControl = 0;
+				befCurrScene = 11;
 				start = std::chrono::system_clock::now();
-				levelManager.LoadLevel("lose");
+				levelManager.LoadLevel("first");
 
 			}
 			
@@ -993,14 +996,14 @@ int main()
 			levelManager.LoadLevel("mainmenu");
 			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1300 < posX && posX < 1800 && 470 < posY && posY < 700)
 			{
-				maxCapturedPoints = 2;
+				maxCapturedPoints = 1;
 				capturedCounter = 0;
 				counter = 0;
 				mutatonCounter = 0;
-				maxMutatonsInLevel = 8;
+				maxMutatonsInLevel = 3;
 				mutatonsInControl = 0;
 				start = std::chrono::system_clock::now();
-				levelManager.LoadLevel("first");
+				levelManager.LoadLevel("tutorial");
 			}
 			if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) ||( glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 850 < posX && posX < 1070 && 890 < posY && posY < 940))
 			{
@@ -1014,32 +1017,77 @@ int main()
 			if (levelManager.GetCurrScene() == 1)
 			{
 				levelManager.LoadLevel("lose");
-				CustomDrawing::RenderText("0", 1000.0f, 850.0f, 1.2f, glm::vec3(0.5, 0.8f, 0.2f));
+				CustomDrawing::RenderText("0", 925.0f, 850.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 			}
 			else if (levelManager.GetCurrScene() == 2)
 			{
 				levelManager.LoadLevel("victory");
-				CustomDrawing::RenderText("(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
-				CustomDrawing::RenderText(std::to_string((600 - score) * 100), 800.0f, 850.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+				CustomDrawing::RenderText(std::to_string((600-score)*100), 928.0f, 850.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 			}
 			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1280 < posX && posX < 1800 && 590 < posY && posY < 800)
 			{
-				maxCapturedPoints = 2;
-				capturedCounter = 0;
-				counter = 0;
-				mutatonCounter = 0;
-				maxMutatonsInLevel = 8;
-				mutatonsInControl = 0;
-				start = std::chrono::system_clock::now();
-				levelManager.LoadLevel("first");
+				if(befCurrScene == 11)
+				{
+					maxCapturedPoints = 2;
+					capturedCounter = 0;
+					counter = 0;
+					mutatonCounter = 0;
+					maxMutatonsInLevel = 8;
+					mutatonsInControl = 0;
+					start = std::chrono::system_clock::now();
+					levelManager.LoadLevel("first");
+				}
+				if (befCurrScene == 12)
+				{
+					maxCapturedPoints = 1;
+					capturedCounter = 0;
+					counter = 0;
+					mutatonCounter = 0;
+					maxMutatonsInLevel = 3;
+					mutatonsInControl = 0;
+					start = std::chrono::system_clock::now();
+					levelManager.LoadLevel("tutorial");
+				}
+
 			}
 			if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 860 < posX && posX < 1070 && 750 < posY && posY < 830))
 			{
 				stateEsc = false;
 				levelManager.LoadLevel("mainmenu");
-
+			}
+			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1280 < posX && posX < 1800 && 100 < posY && posY < 300)
+			{
+				if (befCurrScene == 12 && levelManager.GetCurrScene() == 2)
+				{
+					maxCapturedPoints = 2;
+					capturedCounter = 0;
+					counter = 0;
+					mutatonCounter = 0;
+					maxMutatonsInLevel = 8;
+					mutatonsInControl = 0;
+					start = std::chrono::system_clock::now();
+					levelManager.LoadLevel("first");
+				}
+				if (befCurrScene == 11 && levelManager.GetCurrScene() == 2)
+				{
+					levelManager.LoadLevel("mainmenu");
+				}
 			}
 		}
+		//if (levelManager.GetCurrScene() == 2)
+		//{
+		//	if(glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
+		//	{
+		//		start = std::chrono::system_clock::now();
+		//		levelManager.LoadLevel("first");
+		//	}
+		//	if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 860 < posX && posX < 1070 && 750 < posY && posY < 830))
+		//	{
+		//		stateEsc = false;
+		//		levelManager.LoadLevel("mainmenu");
+		//
+		//	}
+		//}
 		
 		//if (levelManager.GetCurrScene() == 2)
 		//{

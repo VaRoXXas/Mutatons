@@ -72,11 +72,11 @@ void LevelManager::LoadLevel(std::string level)
 		loader.LoadGameObjects("res/level1.txt", *gameObjectVector[0]);
 		loader.LoadGameObjects("res/level_buildings1.txt", *gameObjectVector[0]);
 	}
-	if (level == "second")
+	if (level == "tutorial")
 	{
 		currScene = 12;
-		loader.LoadGameObjects("res/level2.txt", *gameObjectVector[0]);
-		loader.LoadGameObjects("res/level_buildings2.txt", *gameObjectVector[0]);
+		loader.LoadGameObjects("res/level_tutorial.txt", *gameObjectVector[0]);
+		loader.LoadGameObjects("res/level_buildings_tutorial.txt", *gameObjectVector[0]);
 	}
 }
 int LevelManager::GetCurrScene()
