@@ -76,7 +76,7 @@ extern bool pointLightEnabled;
 extern bool spotLight1Enabled;
 extern bool spotLight2Enabled;
 extern bool lightsPositionsDirectionsShown;
-extern const float depthMapNearPlane = 1.0f, depthMapFarPlane = 7.5f;
+extern const float depthMapNearPlane = 0.1f, depthMapFarPlane = 17.5f;
 extern float lightsDirectionVectorAngleOffset;
 extern float* directionalLightColorPtr;
 extern float* spotLight1ColorPtr;
@@ -136,7 +136,7 @@ int maxMutatonsInLevel = 8;
 int mutatonsInControl = 0;
 
 AudioManager audioManager = AudioManager();
-extern sf::SoundBuffer winningSoundBuffer, losingSoundBuffer, mutationSoundBuffer, controlPanelSoundBuffer, dyingFromLaserSoundBuffer;
+extern sf::SoundBuffer winningSoundBuffer, losingSoundBuffer, mutationSoundBuffer, controlPanelSoundBuffer, dyingFromLaserSoundBuffer, bridgeClickedSoundBuffer;
 
 void RenderScene();
 void DepthRenderScene();
