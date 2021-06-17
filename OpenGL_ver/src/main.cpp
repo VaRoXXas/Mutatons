@@ -68,7 +68,7 @@ extern Shader* postProcessingShaderPtr;
 extern Shader* mainmenuShaderPtr;
 extern PostProcessor* postProcessorPtr;
 extern GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO, textVAO, textVBO;
-extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture, mainmenuTexture, UITexture;
+extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture, mainmenuTexture, UITexture, loseTexture, victoryTexture;
 extern glm::vec3 lineShaderEndPointPos;
 extern int geometryShaderPseudoMeshDetailLevel;
 extern bool directionalLightEnabled;
@@ -240,6 +240,8 @@ int main()
 	//planeSpecularTexture = dataManager.LoadTexture("grass_specular.jpg");
 	mainmenuTexture = dataManager.LoadTexture("res/textures/mainmenu.png");
 	UITexture = dataManager.LoadTexture("res/textures/UI.png");
+	loseTexture = dataManager.LoadTexture("res/textures/gameOver.png");
+	victoryTexture = dataManager.LoadTexture("res/textures/levelCompleted.png");
 	
 	cubemapTexture = dataManager.LoadCubemap();
 
@@ -722,6 +724,7 @@ int main()
 
 	std::chrono::time_point start = std::chrono::system_clock::now();
 	std::chrono::time_point between = std::chrono::system_clock::now();
+	int score;
 	double posX, posY;
 	int diffSec, diffTSec, diffMinute;
 
@@ -736,22 +739,22 @@ int main()
 		lastFrame = currentFrame;
 		//L = reset
 		
-		if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
-		{
-			//static unsigned short levelIndex = 0;
-			//levelIndex++;
-			//Reset(levelIndex);
-
-			mainCamera.SetFront(glm::vec3(-1.0f, -3.0f, -1.0f));
-			mainCamera.SetPosition(glm::vec3(12.0f, 10.0f, 0.0f));
-			mainCamera.SetWorldUp(glm::vec3(0.0f, 1.0f, 0.0f));
-			mainCamera.SetZoom(S_ZOOM_DEFAULT);
-
-			levelManager.LoadLevel("second");
-			counter = 0;
-			mutatonCounter = 0;
-			maxMutatonsInLevel = 9;
-		}
+		//if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
+		//{
+		//	//static unsigned short levelIndex = 0;
+		//	//levelIndex++;
+		//	//Reset(levelIndex);
+		//
+		//	mainCamera.SetFront(glm::vec3(-1.0f, -3.0f, -1.0f));
+		//	mainCamera.SetPosition(glm::vec3(12.0f, 10.0f, 0.0f));
+		//	mainCamera.SetWorldUp(glm::vec3(0.0f, 1.0f, 0.0f));
+		//	mainCamera.SetZoom(S_ZOOM_DEFAULT);
+		//
+		//	levelManager.LoadLevel("second");
+		//	counter = 0;
+		//	mutatonCounter = 0;
+		//	maxMutatonsInLevel = 9;
+		//}
 
 		counter++;
 		//if (counter%375 == 0 && mutatonCounter!=8 )
@@ -921,10 +924,14 @@ int main()
 		diffTSec =  (diff.count() - diffMinute*60) / 10;
 		diffSec = diff.count() - diffMinute * 60 - diffTSec * 10;
 
-		CustomDrawing::DrawHud1();
-		//CustomDrawing::DrawHud2();
-		CustomDrawing::RenderText(std::to_string((int)diffMinute)+":"+ std::to_string((int)diffTSec) + std::to_string((int)diffSec), 925.0f, 100.0f, 1.0f, glm::vec3(0.1, 0.1f, 0.7f));
-		CustomDrawing::RenderText(std::to_string(mutatonCounter)+'/'+std::to_string(maxMutatonsInLevel), 680.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
+		//CustomDrawing::DrawHud1();
+		////CustomDrawing::DrawHud2();
+		//CustomDrawing::RenderText(std::to_string((int)diffMinute)+":"+ std::to_string((int)diffTSec) + std::to_string((int)diffSec), 925.0f, 100.0f, 1.0f, glm::vec3(0.1, 0.1f, 0.7f));
+		//CustomDrawing::RenderText(std::to_string(mutatonCounter)+'/'+std::to_string(maxMutatonsInLevel), 680.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
+		//CustomDrawing::RenderText(std::to_string(mutatonsInControl) + '/' + std::to_string(maxCapturedPoints), 1350.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
+		//CustomDrawing::RenderText("aaaaaaaaaaaaaaaaaaaaaaaaa", 1350.0f, 200.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
+		//CustomDrawing::RenderText("afasgfsgf", 925.0f, 200.0f, 1.0f, glm::vec3(0.1, 0.1f, 0.7f));
+		
 		//CustomDrawing::RenderText("Mutatons left:", 1640.0f, 880.0f, 0.8f, glm::vec3(0.3, 0.7f, 0.9f));
 		std::chrono::system_clock::time_point p = std::chrono::system_clock::now();
 		time_t t = std::chrono::system_clock::to_time_t(p);
@@ -943,20 +950,48 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		//CustomDrawing::DrawQuad();
-		//std::cout << posX << std::endl << posY<<std::endl<<std::endl;
-		if (levelManager.GetCurrScene() > 0)
+		std::cout << posX << std::endl << posY << std::endl << std::endl;
+		std::cout<<"mutatony:"<<modifiableGameObjectVector.size()<<std::endl;
+		
+		//Scene changing
+		if (levelManager.GetCurrScene() > 10)
 		{
-			if ((glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS) || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1770 < posX && posX < 1840 && 930 < posY && posY < 990))
+			CustomDrawing::DrawHud1();
+			CustomDrawing::RenderText(std::to_string((int)diffMinute) + ":" + std::to_string((int)diffTSec) + std::to_string((int)diffSec), 925.0f, 100.0f, 1.0f, glm::vec3(0.1, 0.1f, 0.7f));
+			CustomDrawing::RenderText(std::to_string(mutatonCounter) + '/' + std::to_string(maxMutatonsInLevel), 680.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
+			CustomDrawing::RenderText(std::to_string(mutatonsInControl) + '/' + std::to_string(maxCapturedPoints), 1350.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
+			if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1770 < posX && posX < 1840 && 930 < posY && posY < 990))
 			{
 				stateEsc = false;
 				levelManager.LoadLevel("mainmenu");
 
 			}
+			if (maxMutatonsInLevel - mutatonCounter ==0 && modifiableGameObjectVector.empty() ==0 && capturedCounter != maxCapturedPoints)
+			{
+				levelManager.LoadLevel("lose");
+			}
+			if (capturedCounter == maxCapturedPoints)
+			{
+				score = (int)diff.count();
+				levelManager.LoadLevel("victory");
+			}
+			if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
+			{
+				maxCapturedPoints = 2;
+				capturedCounter = 0;
+				counter = 0;
+				mutatonCounter = 0;
+				maxMutatonsInLevel = 8;
+				start = std::chrono::system_clock::now();
+				levelManager.LoadLevel("lose");
+
+			}
+			
 		}
 		if (levelManager.GetCurrScene() == 0)
 		{
 			levelManager.LoadLevel("mainmenu");
-			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1300 < posX && posX < 1800 && 450 < posY && posY < 700)
+			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1300 < posX && posX < 1800 && 470 < posY && posY < 700)
 			{
 				maxCapturedPoints = 2;
 				capturedCounter = 0;
@@ -967,45 +1002,98 @@ int main()
 				start = std::chrono::system_clock::now();
 				levelManager.LoadLevel("first");
 			}
-			if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) ||( glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 900 < posX && posX < 1050 && 875 < posY && posY < 950))
+			if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) ||( glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 850 < posX && posX < 1070 && 890 < posY && posY < 940))
 			{
 				stateEsc = false;
 				glfwSetWindowShouldClose(windowPtr, true);
 			
 			}
 		}
-		if (levelManager.GetCurrScene() == 1)
+		if (levelManager.GetCurrScene() == 1 || levelManager.GetCurrScene() == 2)
 		{
-			if(glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
+			if (levelManager.GetCurrScene() == 1)
+			{
+				levelManager.LoadLevel("lose");
+				CustomDrawing::RenderText("0", 1000.0f, 850.0f, 1.2f, glm::vec3(0.5, 0.8f, 0.2f));
+			}
+			else if (levelManager.GetCurrScene() == 2)
+			{
+				levelManager.LoadLevel("victory");
+				CustomDrawing::RenderText("(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+				CustomDrawing::RenderText(std::to_string((600 - score) * 100), 800.0f, 850.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+			}
+			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1280 < posX && posX < 1800 && 590 < posY && posY < 800)
 			{
 				maxCapturedPoints = 2;
 				capturedCounter = 0;
 				counter = 0;
 				mutatonCounter = 0;
 				maxMutatonsInLevel = 8;
-				start = std::chrono::system_clock::now();
-				levelManager.LoadLevel("second");
-
-			}
-			if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true)
-			{
-				stateEsc = false;
-				levelManager.LoadLevel("mainmenu");
-			}
-		}
-		if (levelManager.GetCurrScene() == 2)
-		{
-			if(glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
-			{
+				mutatonsInControl = 0;
 				start = std::chrono::system_clock::now();
 				levelManager.LoadLevel("first");
 			}
-			if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true)
+			if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 860 < posX && posX < 1070 && 750 < posY && posY < 830))
 			{
 				stateEsc = false;
 				levelManager.LoadLevel("mainmenu");
+
 			}
 		}
+		
+		//if (levelManager.GetCurrScene() == 2)
+		//{
+		//	levelManager.LoadLevel("victory");
+		//	if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1300 < posX && posX < 1800 && 600 < posY && posY < 800)
+		//	{
+		//		maxCapturedPoints = 2;
+		//		capturedCounter = 0;
+		//		counter = 0;
+		//		mutatonCounter = 0;
+		//		maxMutatonsInLevel = 8;
+		//		mutatonsInControl = 0;
+		//		start = std::chrono::system_clock::now();
+		//		levelManager.LoadLevel("first");
+		//	}
+		//	if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 900 < posX && posX < 1050 && 800 < posY && posY < 900))
+		//	{
+		//		stateEsc = false;
+		//		levelManager.LoadLevel("mainmenu");
+		//
+		//	}
+		//}
+		//if (levelManager.GetCurrScene() == 11)
+		//{
+		//	if(glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
+		//	{
+		//		maxCapturedPoints = 2;
+		//		capturedCounter = 0;
+		//		counter = 0;
+		//		mutatonCounter = 0;
+		//		maxMutatonsInLevel = 8;
+		//		start = std::chrono::system_clock::now();
+		//		levelManager.LoadLevel("second");
+		//
+		//	}
+		//	if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true)
+		//	{
+		//		stateEsc = false;
+		//		levelManager.LoadLevel("mainmenu");
+		//	}
+		//}
+		//if (levelManager.GetCurrScene() == 12)
+		//{
+		//	if(glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
+		//	{
+		//		start = std::chrono::system_clock::now();
+		//		levelManager.LoadLevel("first");
+		//	}
+		//	if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true)
+		//	{
+		//		stateEsc = false;
+		//		levelManager.LoadLevel("mainmenu");
+		//	}
+		//}
 
 		//GameObject's updates
 		for (GameObject* g : modifiableGameObjectVector)

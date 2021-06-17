@@ -63,13 +63,13 @@ void GeometryCreation::MainmenuCreation()
 {
     float mainmenuver[] = {
         // Pierwszy trójk¹t  
-         1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // Prawy górny  
-         1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Prawy dolny  
-         -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Lewy górny   
+         1.0f, 1.0f, 0.6f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // Prawy górny  
+         1.0f, -1.0f, 0.6f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Prawy dolny  
+         -1.0f, 1.0f, 0.6f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Lewy górny   
         // Drugi trójk¹t  
-         1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Prawy dolny  
-        -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // Lewy dolny  
-        -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // Lewy górny  
+         1.0f, -1.0f, 0.6f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Prawy dolny  
+        -1.0f, -1.0f, 0.6f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // Lewy dolny  
+        -1.0f, 1.0f, 0.6f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // Lewy górny  
     };
 
 

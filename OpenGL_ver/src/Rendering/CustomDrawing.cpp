@@ -22,7 +22,7 @@ Shader* textShaderPtr;
 Shader* postProcessingShaderPtr;
 Shader* mainmenuShaderPtr;
 GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO, hud1VAO, hud1VBO, textVAO, textVBO, mainmenuVAO, mainmenuVBO;
-GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture, mainmenuTexture, UITexture;
+GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture, mainmenuTexture, UITexture, loseTexture, victoryTexture;
 std::vector<GLuint*> customVAOs, customVBOs;
 glm::vec3 lineShaderEndPointPos;
 int geometryShaderPseudoMeshDetailLevel = 3;
@@ -261,6 +261,34 @@ void CustomDrawing::DrawMainmenu()
 	mainmenuShaderPtr->Use();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, mainmenuTexture);
+	glm::mat4 transform = glm::mat4(1.0f);
+	//transform = glm::translate(transform, glm::vec3(0.3, 0.4, 0));
+
+
+	glBindVertexArray(mainmenuVAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0); // no need to unbind it every time 
+
+}
+void CustomDrawing::DrawLose()
+{
+	mainmenuShaderPtr->Use();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, loseTexture);
+	glm::mat4 transform = glm::mat4(1.0f);
+	//transform = glm::translate(transform, glm::vec3(0.3, 0.4, 0));
+
+
+	glBindVertexArray(mainmenuVAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0); // no need to unbind it every time 
+
+}
+void CustomDrawing::DrawVictory()
+{
+	mainmenuShaderPtr->Use();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, victoryTexture);
 	glm::mat4 transform = glm::mat4(1.0f);
 	//transform = glm::translate(transform, glm::vec3(0.3, 0.4, 0));
 

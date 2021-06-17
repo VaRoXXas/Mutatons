@@ -20,4 +20,6 @@ namespace CustomDrawing
 	void DrawHud2();
 	void RenderText(std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 	void DrawMainmenu();
+	void DrawLose();
+	void DrawVictory();
 }

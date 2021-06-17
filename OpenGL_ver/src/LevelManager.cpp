@@ -56,15 +56,25 @@ void LevelManager::LoadLevel(std::string level)
 		currScene = 0;
 		CustomDrawing::DrawMainmenu();
 	}
-	if (level == "first")
+	if (level == "lose")
 	{
 		currScene = 1;
+		CustomDrawing::DrawLose();
+	}
+	if (level == "victory")
+	{
+		currScene = 2;
+		CustomDrawing::DrawVictory();
+	}
+	if (level == "first")
+	{
+		currScene = 11;
 		loader.LoadGameObjects("res/level1.txt", *gameObjectVector[0]);
 		loader.LoadGameObjects("res/level_buildings1.txt", *gameObjectVector[0]);
 	}
 	if (level == "second")
 	{
-		currScene = 2;
+		currScene = 12;
 		loader.LoadGameObjects("res/level2.txt", *gameObjectVector[0]);
 		loader.LoadGameObjects("res/level_buildings2.txt", *gameObjectVector[0]);
 	}
