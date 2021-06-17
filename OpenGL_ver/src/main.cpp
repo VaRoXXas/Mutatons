@@ -136,7 +136,7 @@ int maxMutatonsInLevel = 8;
 int mutatonsInControl = 0;
 
 AudioManager audioManager = AudioManager();
-extern sf::SoundBuffer winningSoundBuffer, losingSoundBuffer, mutationSoundBuffer, controlPanelSoundBuffer, dyingFromLaserSoundBuffer;
+extern sf::SoundBuffer winningSoundBuffer, losingSoundBuffer, mutationSoundBuffer, controlPanelSoundBuffer, dyingFromLaserSoundBuffer, bridgeClickedSoundBuffer;
 
 void RenderScene();
 void DepthRenderScene();

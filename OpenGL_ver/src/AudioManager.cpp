@@ -4,7 +4,7 @@
 const bool MUSIC_ENABLED = true, SOUNDS_ENABLED = true;
 std::list<sf::Sound*> soundsRunning;
 sf::Music mainMenuMusic, gameplayMusic;
-sf::SoundBuffer winningSoundBuffer, losingSoundBuffer, mutationSoundBuffer, controlPanelSoundBuffer, dyingFromLaserSoundBuffer;
+sf::SoundBuffer winningSoundBuffer, losingSoundBuffer, mutationSoundBuffer, controlPanelSoundBuffer, dyingFromLaserSoundBuffer, bridgeClickedSoundBuffer;
 
 
 void AudioManager::Initialize()
@@ -14,7 +14,8 @@ void AudioManager::Initialize()
 	LoadSoundFileToBuffer("losing_sound.ogg", losingSoundBuffer);
 	LoadSoundFileToBuffer("dying_from_laser_sound.ogg", dyingFromLaserSoundBuffer);
 	LoadSoundFileToBuffer("control_panel_sound.ogg", controlPanelSoundBuffer);
-
+	LoadSoundFileToBuffer("bridge.ogg", bridgeClickedSoundBuffer);
+	
 	if (MUSIC_ENABLED)
 	{
 		mainMenuMusic.openFromFile("res/audio/music/main_menu_music_looping.ogg");
