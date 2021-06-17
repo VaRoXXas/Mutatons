@@ -181,7 +181,7 @@ void Crossing::AddDir(std::string str)
 		
 		tempLoc = this->GetTransformComponent()->GetLocation();
 		tempLoc.x = tempLoc.x -1.5f;
-		bridgeOneCollider->Initialize(tempLoc, glm::vec3(1.0f));
+		bridgeOneCollider->Initialize(tempLoc, glm::vec3(0.7f, 1.0f, 1.0f));
 		this->AddComponent(bridgeOneCollider);
 	}
 	if (str == "left")
@@ -210,7 +210,7 @@ void Crossing::AddDir(std::string str)
 
 		tempLoc = this->GetTransformComponent()->GetLocation();
 		tempLoc.x = tempLoc.x + 1.5f;
-		bridgeTwoCollider->Initialize(tempLoc, glm::vec3(1.0f));
+		bridgeTwoCollider->Initialize(tempLoc, glm::vec3(0.7f,1.0f,1.0f));
 		this->AddComponent(bridgeTwoCollider);
 	}
 	if (str == "forward")
@@ -237,7 +237,7 @@ void Crossing::AddDir(std::string str)
 
 		tempLoc = this->GetTransformComponent()->GetLocation();
 		tempLoc.z = tempLoc.z + 1.5f;
-		bridgeTwoCollider->Initialize(tempLoc, glm::vec3(1.0f));
+		bridgeTwoCollider->Initialize(tempLoc, glm::vec3(1.0f, 1.0f, 0.7f));
 		this->AddComponent(bridgeTwoCollider);
 	}
 	if (str == "back")
@@ -264,7 +264,7 @@ void Crossing::AddDir(std::string str)
 
 		tempLoc = this->GetTransformComponent()->GetLocation();
 		tempLoc.z = tempLoc.z - 1.5f;
-		bridgeOneCollider->Initialize(tempLoc, glm::vec3(1.0f));
+		bridgeOneCollider->Initialize(tempLoc, glm::vec3(1.0f, 1.0f, 0.7f));
 		this->AddComponent(bridgeOneCollider);
 	}
 }
