@@ -962,10 +962,10 @@ int main()
 				capturedCounter = 0;
 				counter = 0;
 				mutatonCounter = 0;
-				maxMutatonsInLevel = 8;
+				maxMutatonsInLevel = 3;
 				mutatonsInControl = 0;
 				start = std::chrono::system_clock::now();
-				levelManager.LoadLevel("first");
+				levelManager.LoadLevel("tutorial");
 			}
 			if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) ||( glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 900 < posX && posX < 1050 && 875 < posY && posY < 950))
 			{
@@ -978,13 +978,14 @@ int main()
 		{
 			if(glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
 			{
-				maxCapturedPoints = 2;
+				maxCapturedPoints = 1;
 				capturedCounter = 0;
 				counter = 0;
 				mutatonCounter = 0;
 				maxMutatonsInLevel = 8;
+				mutatonsInControl = 0;
 				start = std::chrono::system_clock::now();
-				levelManager.LoadLevel("second");
+				levelManager.LoadLevel("first");
 
 			}
 			if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true)
