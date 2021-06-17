@@ -1050,7 +1050,7 @@ int main()
 					maxMutatonsInLevel = 3;
 					mutatonsInControl = 0;
 					start = std::chrono::system_clock::now();
-					AudioManager::GameplayMusicToMainMenuMusic();
+					AudioManager::ChangeMainMenuMusicToGameplayMusic();
 					levelManager.LoadLevel("tutorial");
 				}
 
