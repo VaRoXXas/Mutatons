@@ -84,9 +84,13 @@ void Building::Reaction(GameObject* gameObject)
 //setters and getters
 void Building::SetType(std::string typeSet)
 {
+	glm::vec3 tempLoc = this->GetTransformComponent()->GetLocation();
 	type = typeSet;
 	if (type == "Obstacle")
 	{
+		tempLoc.z = tempLoc.z + 0.35f;
+		tempLoc.x = tempLoc.x + 0.35f;
+		this->GetColliderComponent()->Initialize(tempLoc, glm::vec3(0.3f));
 		if (this->GetElement() == 1)
 		{
 			laserModel = 31;
@@ -102,7 +106,6 @@ void Building::SetType(std::string typeSet)
 	}
 	if (type == "Laboratory")
 	{
-		glm::vec3 tempLoc = this->GetTransformComponent()->GetLocation();
 		tempLoc.z = tempLoc.z + 0.9f;
 		tempLoc.x = tempLoc.x + 0.9f;
 		this->GetColliderComponent()->Initialize(tempLoc,glm::vec3(0.1f));

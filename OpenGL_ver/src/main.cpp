@@ -127,6 +127,8 @@ Building* buildingPtr;
 
 
 std::vector<std::string> capturedPoints;
+std::vector<std::string> inactiveMutatons;
+int maxCapturedPoints = 0;
 int capturedCounter = 0;
 int counter = 0;
 int mutatonCounter = 0;
@@ -723,6 +725,7 @@ int main()
 	int diffSec, diffTSec, diffMinute;
 
 	double lasttime = glfwGetTime();
+	int pos = 0;
 
 	// game loop
 	while (!glfwWindowShouldClose(windowPtr))
@@ -857,16 +860,52 @@ int main()
 		//	}
 		//}
 
-		for (Building* b : buildingVector)
+
+		//Checking if all points are captured (may not work with more than three)
+		if (capturedPoints.size() != maxCapturedPoints)
 		{
-			for(std::string s : capturedPoints )
-				if ( (s!=b->GetTag() && b->GetCaptured()) || (capturedPoints.empty() && b->GetCaptured()) )
+			for (Building* b : buildingVector)
+			{
+				for (std::string s : capturedPoints)
+					if ((s != b->GetTag() && b->GetCaptured()))
+					{
+						capturedCounter++;
+						capturedPoints.push_back(b->GetTag());
+					}
+				if (capturedPoints.empty() && b->GetCaptured())
 				{
 					capturedCounter++;
 					capturedPoints.push_back(b->GetTag());
 				}
+			}
 		}
-		
+
+		//Checking if all mutatons are inactive and removes them from a vector
+		pos = 0;
+		for (GameObject* m : modifiableGameObjectVector)
+		{
+			for (std::string s : inactiveMutatons)
+			{
+				if (!m->IsActive() && !inactiveMutatons.empty() )
+				{
+					inactiveMutatons.push_back(m->GetTag());
+					std::_Erase_remove(modifiableGameObjectVector, modifiableGameObjectVector[pos]);
+					break;
+				}
+			}
+			if (inactiveMutatons.empty() && !m->IsActive())
+			{
+				inactiveMutatons.push_back(m->GetTag());
+				std::_Erase_remove(modifiableGameObjectVector, modifiableGameObjectVector[pos]);
+				break;
+			}
+			pos++;
+		}
+
+		//Checking if all conditions to finish level are met 
+		if(modifiableGameObjectVector.empty() && capturedPoints.size() == maxCapturedPoints)
+			std::cout << "END" << std::endl;
+
 		// And the skybox...
 		CustomDrawing::DrawSkybox();
 
@@ -914,6 +953,7 @@ int main()
 			levelManager.LoadLevel("mainmenu");
 			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1300 < posX && posX < 1800 && 450 < posY && posY < 700)
 			{
+				maxCapturedPoints = 2;
 				capturedCounter = 0;
 				counter = 0;
 				mutatonCounter = 0;
@@ -932,6 +972,8 @@ int main()
 		{
 			if(glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
 			{
+				maxCapturedPoints = 2;
+				capturedCounter = 0;
 				counter = 0;
 				mutatonCounter = 0;
 				maxMutatonsInLevel = 8;
