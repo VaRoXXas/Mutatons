@@ -125,6 +125,9 @@ GameObject* gameObjectPtr;
 Crossing* crossingPtr;
 Building* buildingPtr;
 
+
+std::vector<std::string> capturedPoints;
+int capturedCounter = 0;
 int counter = 0;
 int mutatonCounter = 0;
 int maxMutatonsInLevel = 8;
@@ -854,6 +857,15 @@ int main()
 		//	}
 		//}
 
+		for (Building* b : buildingVector)
+		{
+			for(std::string s : capturedPoints )
+				if ( (s!=b->GetTag() && b->GetCaptured()) || (capturedPoints.empty() && b->GetCaptured()) )
+				{
+					capturedCounter++;
+					capturedPoints.push_back(b->GetTag());
+				}
+		}
 		
 		// And the skybox...
 		CustomDrawing::DrawSkybox();
@@ -902,6 +914,7 @@ int main()
 			levelManager.LoadLevel("mainmenu");
 			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1300 < posX && posX < 1800 && 450 < posY && posY < 700)
 			{
+				capturedCounter = 0;
 				counter = 0;
 				mutatonCounter = 0;
 				maxMutatonsInLevel = 8;

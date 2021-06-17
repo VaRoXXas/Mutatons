@@ -19,4 +19,5 @@ public:
 	bool CheckObstacles();
 	void ObstacleSetup();
 	void AddLaserSide(std::string side);
+	bool GetCaptured();
 };

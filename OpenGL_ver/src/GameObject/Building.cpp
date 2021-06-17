@@ -210,3 +210,8 @@ void Building::AddLaserSide(std::string side)
 		this->AddChild(gameObjectPtr);
 	}
 }
+
+bool Building::GetCaptured()
+{
+	return captured;
+}
