@@ -231,7 +231,7 @@ void Lighting::InitLighting(Shader& shader)
 void Lighting::UpdateLighting(Shader& shader)
 {
     // for shadow mapping
-    const glm::mat4 lightProjection = glm::ortho(-12.0f, 12.0f, -12.0f, 12.0f, depthMapNearPlane, depthMapFarPlane);;
+    const glm::mat4 lightProjection = glm::ortho(-42.0f, 22.0f, -22.0f, 22.0f, depthMapNearPlane, depthMapFarPlane);;
     const glm::mat4 lightView = glm::lookAt(directionalLightPos, directionalLightsDirection, glm::vec3(0.0, 1.0, 0.0));
     directionalLightSpaceMatrix = lightProjection * lightView;
 	
