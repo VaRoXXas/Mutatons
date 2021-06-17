@@ -36,6 +36,17 @@ void AudioManager::ChangeMainMenuMusicToGameplayMusic()
 	}
 }
 
+void AudioManager::GameplayMusicToMainMenuMusic()
+{
+	if (MUSIC_ENABLED)
+	{
+		gameplayMusic.stop();
+		mainMenuMusic.setVolume(10.0f);
+		mainMenuMusic.setLoop(true);
+		mainMenuMusic.play();
+	}
+}
+
 void AudioManager::PlaySfSound(sf::SoundBuffer& buffer)
 {
 	if (SOUNDS_ENABLED)

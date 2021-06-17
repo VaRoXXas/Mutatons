@@ -9,6 +9,8 @@ public:
 	static void Initialize();
 	// Ends main menu music and begins playing gameplay music.
 	static void ChangeMainMenuMusicToGameplayMusic();
+	// Ends gameplay music and begins playing main menu music.
+	static void GameplayMusicToMainMenuMusic();
 	// Plays a new sound from buffer.
 	static void PlaySfSound(sf::SoundBuffer& buffer);
 	// Cleans sounds list from sounds which stopped playing.
