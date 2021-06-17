@@ -29,7 +29,7 @@ void AudioManager::ChangeMainMenuMusicToGameplayMusic()
 	if (MUSIC_ENABLED)
 	{
 		mainMenuMusic.stop();
-		gameplayMusic.openFromFile("res/audio/music/main_menu_music_looping.ogg");
+		gameplayMusic.openFromFile("res/audio/music/gameplay_music_looping.ogg");
 		gameplayMusic.setVolume(10.0f);
 		gameplayMusic.setLoop(true);
 		gameplayMusic.play();
