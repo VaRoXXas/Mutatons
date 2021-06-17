@@ -14,7 +14,7 @@ void AudioManager::Initialize()
 	LoadSoundFileToBuffer("losing_sound.ogg", losingSoundBuffer);
 	LoadSoundFileToBuffer("dying_from_laser_sound.ogg", dyingFromLaserSoundBuffer);
 	LoadSoundFileToBuffer("control_panel_sound.ogg", controlPanelSoundBuffer);
-	LoadSoundFileToBuffer("bridge.ogg", bridgeClickedSoundBuffer);
+	LoadSoundFileToBuffer("bridge_clicked_sound.ogg", bridgeClickedSoundBuffer);
 	
 	if (MUSIC_ENABLED)
 	{

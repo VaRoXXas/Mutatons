@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "AudioManager.h"
 #include "GameObject/GameObject.h"
 #include "Component.h"
 #include "Collisions.h"
@@ -18,6 +19,7 @@ extern std::vector<GameObject*> gameObjectVector;
 glm::vec3 tempLoc, tempLoc2;
 float oneRotation = -90.f;
 float twoRotation = 90.f;
+extern sf::SoundBuffer bridgeClickedSoundBuffer;
 
 
 
@@ -72,11 +74,13 @@ void Crossing::InputDirection()
 		once = true;
 		if (dir != availableDirs[0])
 		{
+			AudioManager::PlaySfSound(bridgeClickedSoundBuffer);
 			SetDir(availableDirs[0]);
 			openedBridge = 0;
 		}
 		else if (dir == availableDirs[0])
 		{
+			AudioManager::PlaySfSound(bridgeClickedSoundBuffer);
 			SetDir(availableDirs[1]);
 			openedBridge = 1;
 		}
