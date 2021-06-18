@@ -116,6 +116,7 @@ glm::mat4* projectionMatrixPtr;
 
 glm::vec3* modelLocationPtr;
 glm::vec3* objectScalePtr;
+glm::vec3* spawnPointPtr;
 extern Model* modelPtr;
 
 std::vector<GameObject*> gameObjectVector;
@@ -251,6 +252,7 @@ int main()
 
 	MousePicker picker(&mainCamera, windowPtr);
 	glm::vec3 terrainPoint;
+	spawnPointPtr = new glm::vec3(1.0f);
 
 #pragma region game objects declarations
 
@@ -979,6 +981,7 @@ int main()
 				maxMutatonsInLevel = 3;
 				mutatonsInControl = 0;
 				capturedPoints.clear();
+				spawnPointPtr = new glm::vec3(10.0f, 1.0f, -7.0f);
 				start = std::chrono::system_clock::now();
 				AudioManager::ChangeMainMenuMusicToGameplayMusic();
 				levelManager.LoadLevel("tutorial");
@@ -1159,7 +1162,8 @@ void SpawnMutaton()
 	gameObjectPtr->SetTag("mutaton"+std::to_string(mutatonCounter));
 	gameObjectPtr->SetActive();
 	gameObjectPtr->SetVelocity(10.0f);
-	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f, 1.0f, -7.0f)));
+	//gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(10.0f, 1.0f, -7.0f)));
+	gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(*spawnPointPtr));
 	gameObjectPtr->AddComponent(std::make_shared<GraphicsComponent>());
 	gameObjectPtr->AddComponent(std::make_shared<ColliderComponent>());
 	gameObjectPtr->SetUpdate();
