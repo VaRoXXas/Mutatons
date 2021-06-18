@@ -23,11 +23,6 @@ Camera::Camera(bool isometric, float yaw, float pitch)
     
 }
 
-/*Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
-: position(glm::vec3(posX, posY, posZ)), front(glm::vec3(0.0f, 0.0f, -1.0f)), worldUp(glm::vec3(upX, upY, upZ)), yaw(yaw), pitch(pitch), movementSpeed(S_SPEED_DEFAULT), mouseSensitivity(S_SENSITIVITY_DEFAULT), zoom(S_ZOOM_DEFAULT)
-{
-    UpdateCameraVectors();
-}*/
 
 glm::mat4 Camera::GetViewMatrix() const
 {
@@ -155,10 +150,10 @@ void Camera::ProcessMouseScroll(const float& yoffset)
 {
     zoom -= static_cast<float>(yoffset);
 	
-    if (zoom < 1.0f)
-        zoom = 1.0f;
-    if (zoom > 90.0f)
-        zoom = 90.0f;
+    if (zoom < 30.0f)
+        zoom = 30.0f;
+    if (zoom > 45.0f)
+        zoom = 45.0f;
 }
 
 const glm::vec3& Camera::GetPosition() const

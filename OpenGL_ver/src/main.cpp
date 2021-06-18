@@ -156,7 +156,7 @@ extern std::map<GLchar, TextCharacter> TextCharacters;
 
 int main()
 {
-	//Util::HideTerminal();
+	Util::HideTerminal();
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -590,13 +590,6 @@ int main()
 
 #pragma region imgui init
 
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(windowPtr, true);
-	ImGui_ImplOpenGL3_Init((char*)(glGetString(GL_NUM_SHADING_LANGUAGE_VERSIONS))); // C++ style casting doesn' work here.
-
 	// imgui variables
 	bool xRotationEnabled = false;
 	bool yRotationEnabled = false;
@@ -740,22 +733,7 @@ int main()
 		lastFrame = currentFrame;
 		//L = reset
 
-		//if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
-		//{
-		//	//static unsigned short levelIndex = 0;
-		//	//levelIndex++;
-		//	//Reset(levelIndex);
-		//
-		//	mainCamera.SetFront(glm::vec3(-1.0f, -3.0f, -1.0f));
-		//	mainCamera.SetPosition(glm::vec3(12.0f, 10.0f, 0.0f));
-		//	mainCamera.SetWorldUp(glm::vec3(0.0f, 1.0f, 0.0f));
-		//	mainCamera.SetZoom(S_ZOOM_DEFAULT);
-		//
-		//	levelManager.LoadLevel("second");
-		//	counter = 0;
-		//	mutatonCounter = 0;
-		//	maxMutatonsInLevel = 9;
-		//}
+
 
 		counter++;
 		//if (counter%375 == 0 && mutatonCounter!=8 )
@@ -854,16 +832,7 @@ int main()
 
 		terrainPoint = picker.GetCurrentTerrainPoint();
 
-		//if (terrainPoint.x >= -1.f && terrainPoint.x <= 1.f && terrainPoint.z >= -1.f && terrainPoint.z <= 1.f)
-		//{
-		//	model = glm::translate(model, terrainPoint);
-		//	if (LMBreleaseEventTriggered == true)
-		//	{
-		//		{
-		//			modeltest.Draw(litTexturedShader);
-		//		}
-		//	}
-		//}
+
 
 
 		//Checking if all points are captured (may not work with more than three)
@@ -925,23 +894,7 @@ int main()
 		diffTSec = (diff.count() - diffMinute * 60) / 10;
 		diffSec = diff.count() - diffMinute * 60 - diffTSec * 10;
 
-		//CustomDrawing::DrawHud1();
-		////CustomDrawing::DrawHud2();
-		//CustomDrawing::RenderText(std::to_string((int)diffMinute)+":"+ std::to_string((int)diffTSec) + std::to_string((int)diffSec), 925.0f, 100.0f, 1.0f, glm::vec3(0.1, 0.1f, 0.7f));
-		//CustomDrawing::RenderText(std::to_string(mutatonCounter)+'/'+std::to_string(maxMutatonsInLevel), 680.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
-		//CustomDrawing::RenderText(std::to_string(mutatonsInControl) + '/' + std::to_string(maxCapturedPoints), 1350.0f, 75.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
-		//CustomDrawing::RenderText("aaaaaaaaaaaaaaaaaaaaaaaaa", 1350.0f, 200.0f, 1.0f, glm::vec3(0.9, 0.2f, 0.7f));
-		//CustomDrawing::RenderText("afasgfsgf", 925.0f, 200.0f, 1.0f, glm::vec3(0.1, 0.1f, 0.7f));
 
-		//CustomDrawing::RenderText("Mutatons left:", 1640.0f, 880.0f, 0.8f, glm::vec3(0.3, 0.7f, 0.9f));
-		//std::chrono::system_clock::time_point p = std::chrono::system_clock::now();
-		//time_t t = std::chrono::system_clock::to_time_t(p);
-		//char str[26];
-		//ctime_s(str, sizeof str, &t);
-		//std::string sysTime(str);
-		//CustomDrawing::RenderText("System time: " + sysTime, 500.0f, 50.0f, 1.0f, glm::vec3(0.5, 0.1f, 0.2f));
-		//CustomDrawing::DrawMainmenu();
-		//TextRendering::TextInitialize();
 
 		// render Depth map to quad for visual debugging
 		// ---------------------------------------------
@@ -951,8 +904,7 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		//CustomDrawing::DrawQuad();
-		std::cout << posX << std::endl << posY << std::endl << std::endl;
-		//std::cout<<"mutatony:"<<capturedPoints.size()<<std::endl;
+		//std::cout << posX << std::endl << posY << std::endl << std::endl;
 
 		//Scene changing
 		if (levelManager.GetCurrScene() > 10)
@@ -1012,7 +964,6 @@ int main()
 				levelManager.LoadLevel("victory");
 
 			}
-
 		}
 		if (levelManager.GetCurrScene() == 0)
 		{
@@ -1136,120 +1087,15 @@ int main()
 				}
 			}
 		}
-		//if (levelManager.GetCurrScene() == 2)
-		//{
-		//	if(glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
-		//	{
-		//		start = std::chrono::system_clock::now();
-		//		levelManager.LoadLevel("first");
-		//	}
-		//	if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 860 < posX && posX < 1070 && 750 < posY && posY < 830))
-		//	{
-		//		stateEsc = false;
-		//		levelManager.LoadLevel("mainmenu");
-		//
-		//	}
-		//}
 		
-		//if (levelManager.GetCurrScene() == 2)
-		//{
-		//	levelManager.LoadLevel("victory");
-		//	if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1300 < posX && posX < 1800 && 600 < posY && posY < 800)
-		//	{
-		//		maxCapturedPoints = 2;
-		//		capturedCounter = 0;
-		//		counter = 0;
-		//		mutatonCounter = 0;
-		//		maxMutatonsInLevel = 8;
-		//		mutatonsInControl = 0;
-		//		start = std::chrono::system_clock::now();
-		//		levelManager.LoadLevel("first");
-		//	}
-		//	if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 900 < posX && posX < 1050 && 800 < posY && posY < 900))
-		//	{
-		//		stateEsc = false;
-		//		levelManager.LoadLevel("mainmenu");
-		//
-		//	}
-		//}
-		//if (levelManager.GetCurrScene() == 11)
-		//{
-		//	if(glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
-		//	{
-		//		maxCapturedPoints = 2;
-		//		capturedCounter = 0;
-		//		counter = 0;
-		//		mutatonCounter = 0;
-		//		maxMutatonsInLevel = 8;
-		//		start = std::chrono::system_clock::now();
-		//		levelManager.LoadLevel("second");
-		//
-		//	}
-		//	if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true)
-		//	{
-		//		stateEsc = false;
-		//		levelManager.LoadLevel("mainmenu");
-		//	}
-		//}
-		//if (levelManager.GetCurrScene() == 12)
-		//{
-		//	if(glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
-		//	{
-		//		start = std::chrono::system_clock::now();
-		//		levelManager.LoadLevel("first");
-		//	}
-		//	if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true)
-		//	{
-		//		stateEsc = false;
-		//		levelManager.LoadLevel("mainmenu");
-		//	}
-		//}
 
 		//GameObject's updates
 		for (GameObject* g : modifiableGameObjectVector)
 		{
 			g->Update(g->GetTransformComponent()->GetLocationAddr(), deltaTime);
 		}
-		//Choosing model for the gameobject
-		//modifiableGameObjectVector.front()->GetGraphicsComponent()->SetModel(vecModel[modelID]);
-		// ImGui (UI for debugging purposes)
-		if(IMGUI_ENABLED)
-		{
-			ImGui_ImplOpenGL3_NewFrame();
-			ImGui_ImplGlfw_NewFrame();
-			ImGui::NewFrame();
 
-			ImGui::Checkbox("Wireframe mode", &wireframeModeEnabled);
-			ImGui::Checkbox("Directional light enabled", &directionalLightEnabled);
-			ImGui::Checkbox("Lights' positions/directions shown", &lightsPositionsDirectionsShown);
-			
-			//gameobject editor
-			ImGui::SliderFloat("lightsDirectionVectorAngleOffset", &lightsDirectionVectorAngleOffset, -10.0f, 10.0f);
 
-			// PostProcessing
-			if(ImGui::Button("Shake it"))
-			{
-				// shaking the screen
-				postProcessorPtr->SetShakeTime(0.5f);
-				postProcessorPtr->shake = GL_TRUE;
-			}
-			if (postProcessorPtr->GetShakeTime() > 0.0f)
-			{
-				postProcessorPtr->SetShakeTime(postProcessorPtr->GetShakeTime() - deltaTime);
-				if (postProcessorPtr->GetShakeTime() <= 0.0f)
-					postProcessorPtr->shake = GL_FALSE;
-			}
-			ImGui::Checkbox("Confusion post process", &confusionPostProcessOn);
-			ImGui::Checkbox("Chaos post process", &chaosPostProcessOn);
-
-			if (ImGui::Button("SoundTest"))
-			{
-				audioManager.PlaySfSound(losingSoundBuffer);
-			}
-			
-			ImGui::Render();
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		}
 
 		//Checking if any crossing is colliding with moving gameobjects
 		for (Crossing *c : crossingVector)
@@ -1263,8 +1109,6 @@ int main()
 			c->CheckInput(terrainPoint);
 			c->InputDirection();
 		}
-		//objectScalePtr = new glm::vec3(0.1f);
-		//modifiableGameObjectVector[0]->GetTransformComponent()->SetScale(*objectScalePtr);
 
 		for (Building* b : buildingVector)
 		{
@@ -1287,16 +1131,11 @@ int main()
 		glfwPollEvents();
 	}
 
-	//glDeleteQueries(1, &queryName);
-
 	// de-allocation
 	delete[] directionalLightColorPtr;
 	delete[] spotLight1ColorPtr;
 	delete[] spotLight2ColorPtr;
 	delete[] pointLightColorPtr;
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
 	glfwTerminate();
 
 	return EXIT_SUCCESS;
