@@ -11,6 +11,7 @@ public:
 	void CreateParent();
 	void LoadLevel(std::string level);
 	int GetCurrScene();
+	void SetCurrScene(int scene);
 	//void SpawnMutaton();
 };
 

@@ -66,6 +66,11 @@ void LevelManager::LoadLevel(std::string level)
 		currScene = 2;
 		CustomDrawing::DrawVictory();
 	}
+	if (level == "tutorialScreen")
+	{
+		currScene = 3;
+		CustomDrawing::DrawTutorial();
+	}
 	if (level == "first")
 	{
 		currScene = 11;
@@ -82,6 +87,10 @@ void LevelManager::LoadLevel(std::string level)
 int LevelManager::GetCurrScene()
 {
 	return currScene;
+}
+void LevelManager::SetCurrScene(int scene)
+{
+	currScene = scene;
 }
 
 //void LevelManager::SpawnMutaton()

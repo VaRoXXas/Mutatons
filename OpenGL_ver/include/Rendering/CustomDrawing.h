@@ -22,4 +22,5 @@ namespace CustomDrawing
 	void DrawMainmenu();
 	void DrawLose();
 	void DrawVictory();
+	void DrawTutorial();
 }

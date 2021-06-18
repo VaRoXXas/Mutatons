@@ -68,7 +68,7 @@ extern Shader* postProcessingShaderPtr;
 extern Shader* mainmenuShaderPtr;
 extern PostProcessor* postProcessorPtr;
 extern GLuint orbitVAO, orbitVBO, sphereVAO, sphereVBO, cubeVAO, cubeVBO, boxVAO, boxVBO, planeVAO, planeVBO, pyramidVAO, pyramidVBO, skyboxVAO, skyboxVBO, textVAO, textVBO;
-extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture, mainmenuTexture, UITexture, loseTexture, victoryTexture;
+extern GLuint houseBaseDiffuseTexture, roofDiffuseTexture, planeDiffuseTexture, houseBaseSpecularTexture, roofSpecularTexture, planeSpecularTexture, cubemapTexture, mainmenuTexture, UITexture, loseTexture, victoryTexture, tutorialTexture;
 extern glm::vec3 lineShaderEndPointPos;
 extern int geometryShaderPseudoMeshDetailLevel;
 extern bool directionalLightEnabled;
@@ -243,6 +243,7 @@ int main()
 	UITexture = dataManager.LoadTexture("res/textures/UI.png");
 	loseTexture = dataManager.LoadTexture("res/textures/gameOver.png");
 	victoryTexture = dataManager.LoadTexture("res/textures/levelCompleted.png");
+	tutorialTexture = dataManager.LoadTexture("res/textures/tutorial.png");
 	
 	cubemapTexture = dataManager.LoadCubemap();
 
@@ -950,7 +951,7 @@ int main()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		//CustomDrawing::DrawQuad();
-		//std::cout << posX << std::endl << posY << std::endl << std::endl;
+		std::cout << posX << std::endl << posY << std::endl << std::endl;
 		//std::cout<<"mutatony:"<<capturedPoints.size()<<std::endl;
 
 		//Scene changing
@@ -991,6 +992,10 @@ int main()
 				}
 				
 			}
+			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 80 < posX && posX < 145 && 930 < posY && posY < 990)
+			{
+				levelManager.SetCurrScene(3);
+			}
 			//debug//////////////////////////
 			if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
 			{
@@ -1012,6 +1017,7 @@ int main()
 		if (levelManager.GetCurrScene() == 0)
 		{
 			levelManager.LoadLevel("mainmenu");
+			befCurrScene = 0;
 			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1300 < posX && posX < 1800 && 470 < posY && posY < 700)
 			{
 				sceneNumber = 1;
@@ -1032,8 +1038,12 @@ int main()
 				glfwSetWindowShouldClose(windowPtr, true);
 
 			}
+			if (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 75 < posX && posX < 160 && 40 < posY && posY < 130)
+			{
+				levelManager.LoadLevel("tutorialScreen");
+			}
 		}
-		if (levelManager.GetCurrScene() == 1 || levelManager.GetCurrScene() == 2)
+		if (levelManager.GetCurrScene() == 1 || levelManager.GetCurrScene() == 2 || levelManager.GetCurrScene() == 3)
 		{
 			if (levelManager.GetCurrScene() == 1)
 			{
@@ -1044,6 +1054,10 @@ int main()
 			{
 				levelManager.LoadLevel("victory");
 				CustomDrawing::RenderText(std::to_string((score* mutatonsInControl) * 120), 928.0f, 850.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+			}
+			else if (levelManager.GetCurrScene() == 3)
+			{
+				CustomDrawing::DrawTutorial();
 			}
 			if ((levelManager.GetCurrScene() == 1 && glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1270 < posX && posX < 1800 && 590 < posY && posY < 810) ||
 				 (levelManager.GetCurrScene() == 2 && glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1380 < posX && posX < 1730 && 680 < posY && posY < 840))
@@ -1083,6 +1097,21 @@ int main()
 				stateEsc = false;
 				AudioManager::GameplayMusicToMainMenuMusic();
 				levelManager.LoadLevel("mainmenu");
+			}
+			if (levelManager.GetCurrScene() == 3 && glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1500 < posX && posX < 1900 && 40 < posY && posY < 130)
+			{
+				if (befCurrScene == 0)
+				{
+					levelManager.SetCurrScene(0);
+				}
+				else if (befCurrScene == 11)
+				{
+					levelManager.SetCurrScene(11);
+				}
+				else if (befCurrScene == 12)
+				{
+					levelManager.SetCurrScene(12);
+				}
 			}
 			if (levelManager.GetCurrScene() == 2 && glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1230 < posX && posX < 1700 && 510 < posY && posY < 680)
 			{
