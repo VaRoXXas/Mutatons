@@ -954,20 +954,20 @@ int main()
 				levelManager.SetCurrScene(3);
 			}
 			//debug//////////////////////////
-			if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
-			{
-				maxCapturedPoints = 2;
-				capturedCounter = 0;
-				counter = 0;
-				mutatonCounter = 0;
-				maxMutatonsInLevel = 8;
-				mutatonsInControl = 0;
-				capturedPoints.clear();
-				befCurrScene = 11;
-				start = std::chrono::system_clock::now();
-				levelManager.LoadLevel("victory");
-
-			}
+			//if (glfwGetKey(windowPtr, GLFW_KEY_L) == GLFW_PRESS)
+			//{
+			//	maxCapturedPoints = 2;
+			//	capturedCounter = 0;
+			//	counter = 0;
+			//	mutatonCounter = 0;
+			//	maxMutatonsInLevel = 8;
+			//	mutatonsInControl = 0;
+			//	capturedPoints.clear();
+			//	befCurrScene = 11;
+			//	start = std::chrono::system_clock::now();
+			//	levelManager.LoadLevel("victory");
+			//
+			//}
 		}
 
 		//if for mainmenu
@@ -983,7 +983,7 @@ int main()
 				capturedCounter = 0;
 				counter = 0;
 				mutatonCounter = 0;
-				maxMutatonsInLevel = 3;
+				maxMutatonsInLevel = 4;
 				mutatonsInControl = 0;
 				capturedPoints.clear();
 				spawnPointPtr = new glm::vec3(10.0f, 1.0f, -7.0f);
@@ -1062,7 +1062,7 @@ int main()
 					capturedCounter = 0;
 					counter = 0;
 					mutatonCounter = 0;
-					maxMutatonsInLevel = 3;
+					maxMutatonsInLevel = 4;
 					mutatonsInControl = 0;
 					capturedPoints.clear();
 					spawnPointPtr = new glm::vec3(10.0f, 1.0f, -7.0f);
@@ -1072,13 +1072,19 @@ int main()
 				}
 
 			}
-			if ((levelManager.GetCurrScene() == 1 || levelManager.GetCurrScene() == 2 || levelManager.GetCurrScene()==3) && ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 860 < posX && posX < 1070 && 750 < posY && posY < 830)))
+			if ((levelManager.GetCurrScene() == 1 || levelManager.GetCurrScene() == 2) && ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 860 < posX && posX < 1070 && 750 < posY && posY < 830)))
 			{
 				stateEsc = false;
 				AudioManager::GameplayMusicToMainMenuMusic();
 				levelManager.LoadLevel("mainmenu");
 			}
-			if (levelManager.GetCurrScene() == 3 && glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1500 < posX && posX < 1900 && 40 < posY && posY < 130)
+			if(levelManager.GetCurrScene()==3 && glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true)
+			{
+				stateEsc = false;
+				AudioManager::GameplayMusicToMainMenuMusic();
+				levelManager.LoadLevel("mainmenu");
+			}
+			if (levelManager.GetCurrScene() == 3 && glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 1745 < posX && posX < 1835 && 40 < posY && posY < 130)
 			{
 				if (befCurrScene == 0)
 				{
