@@ -925,7 +925,7 @@ int main()
 				AudioManager::GameplayMusicToMainMenuMusic();
 				levelManager.LoadLevel("mainmenu");
 			}
-			if (mutatonCounter == maxMutatonsInLevel && modifiableGameObjectVector.empty() && mutatonsInControl < maxCapturedPoints)
+			if (mutatonCounter == maxMutatonsInLevel && modifiableGameObjectVector.empty() && maxCapturedPoints != capturedCounter)//mutatonsInControl < maxCapturedPoints
 			{
 				AudioManager::PlaySfSound(losingSoundBuffer);
 				levelManager.LoadLevel("lose");
@@ -1027,6 +1027,7 @@ int main()
 			{
 				if(befCurrScene == 11)
 				{
+					sceneNumber = 1;
 					maxCapturedPoints = 1;
 					capturedCounter = 0;
 					counter = 0;
@@ -1041,6 +1042,7 @@ int main()
 				}
 				else if (befCurrScene == 12)
 				{
+					sceneNumber = 2;
 					maxCapturedPoints = 2;
 					capturedCounter = 0;
 					counter = 0;
@@ -1055,6 +1057,7 @@ int main()
 				}
 				else if (befCurrScene == 20)
 				{
+					sceneNumber = 1;
 					maxCapturedPoints = 1;
 					capturedCounter = 0;
 					counter = 0;
@@ -1098,6 +1101,7 @@ int main()
 			{
 				if (befCurrScene == 20 && levelManager.GetCurrScene() == 2)
 				{
+					sceneNumber = 1;
 					maxCapturedPoints = 1;
 					capturedCounter = 0;
 					counter = 0;
@@ -1112,6 +1116,7 @@ int main()
 				}
 				if (befCurrScene == 11 && levelManager.GetCurrScene() == 2)
 				{
+					sceneNumber = 2;
 					maxCapturedPoints = 2;
 					capturedCounter = 0;
 					counter = 0;
