@@ -99,7 +99,7 @@ void LevelManager::LoadLevel(std::string level)
 		//capturedPoints.clear();
 		//spawnPointPtr = new glm::vec3(10.0f, 1.0f, -7.0f);
 
-		currScene = 13;
+		currScene = 12;
 		loader.LoadGameObjects("res/level2.txt", *gameObjectVector[0]);
 		loader.LoadGameObjects("res/level_buildings2.txt", *gameObjectVector[0]);
 	}
@@ -110,12 +110,12 @@ void LevelManager::LoadLevel(std::string level)
 		//capturedCounter = 0;
 		//counter = 0;
 		//mutatonCounter = 0;
-		//maxMutatonsInLevel = 4d;
+		//maxMutatonsInLevel = 3;
 		//mutatonsInControl = 0;
 		//capturedPoints.clear();
 		//spawnPointPtr = new glm::vec3(10.0f, 1.0f, -7.0f);
 
-		currScene = 12;
+		currScene = 20;
 		loader.LoadGameObjects("res/level_tutorial.txt", *gameObjectVector[0]);
 		loader.LoadGameObjects("res/level_buildings_tutorial.txt", *gameObjectVector[0]);
 	}
