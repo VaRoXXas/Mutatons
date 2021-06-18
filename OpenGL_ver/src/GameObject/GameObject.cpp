@@ -256,7 +256,7 @@ void GameObject::Render(const glm::mat4& transform)
 				queryCount++;
 			}*/
 			//frustum culling
-			if (frustum.SphereInFrustum(corner, 20) != Frustum::OUTSIDE)
+			if (frustum.SphereInFrustum(corner, 22) != Frustum::OUTSIDE)
 			{
 				frustumCount = frustumCount + 1;
 				//glBeginConditionalRender(queryName, GL_QUERY_WAIT);
