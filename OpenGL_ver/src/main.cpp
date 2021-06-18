@@ -1043,7 +1043,7 @@ int main()
 				}
 
 			}
-			if ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 860 < posX && posX < 1070 && 750 < posY && posY < 830))
+			if ((levelManager.GetCurrScene() == 1 || levelManager.GetCurrScene() == 2) && ((glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_RELEASE && stateEsc == true) || (glfwGetMouseButton(windowPtr, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && 860 < posX && posX < 1070 && 750 < posY && posY < 830)))
 			{
 				stateEsc = false;
 				AudioManager::GameplayMusicToMainMenuMusic();
