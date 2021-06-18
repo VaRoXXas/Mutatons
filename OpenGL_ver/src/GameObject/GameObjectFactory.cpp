@@ -41,7 +41,7 @@ void GameObjectFactory::BuildGameObjects(GameObjectBlueprint& bp, std::string ga
 				glm::vec3 tempScale = glm::vec3(bp.GetScale(), bp.GetScale(), bp.GetScale());
 				gameObjectPtr->AddComponent(std::make_shared<TransformComponent>(glm::vec3(bp.GetX(), bp.GetY(), bp.GetZ())));
 				gameObjectPtr->GetTransformComponent()->SetRotation(bp.GetRotation(), bp.GetRotationAxis());
-				if (bp.GetRotation() == 90)
+				if (bp.GetRotation() == 90 || bp.GetRotation() == 180)
 				{
 					tempScale.x = -tempScale.x;
 				}
