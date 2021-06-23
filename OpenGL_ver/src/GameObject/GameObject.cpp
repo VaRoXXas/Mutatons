@@ -33,31 +33,31 @@ void GameObject::Update(glm::vec3& locationVec, GLfloat time)
 		velocity = tempVel;
 		if (moveDirection == "forward")
 		{
-			locationVec.z = locationVec.z + (0.001f * velocity);
+			locationVec.z = locationVec.z + (0.05f * velocity * (float)time );
 			face = 0.0f;
 		}
 		else if (moveDirection == "back")
 		{
-			locationVec.z = locationVec.z - (0.001f * velocity);
+			locationVec.z = locationVec.z - (0.05f * velocity * (float)time );
 			face = 180.0f;
 		}
 		else if (moveDirection == "right")
 		{
-			locationVec.x = locationVec.x - (0.001f * velocity);
+			locationVec.x = locationVec.x - (0.05f * velocity * (float)time );
 			face = -90.0f;
 		}
 		else if (moveDirection == "left")
 		{
-			locationVec.x = locationVec.x + (0.001f * velocity);
+			locationVec.x = locationVec.x + (0.05f * velocity * (float)time );
 			face = 90.0f;
 		}
 		else if (moveDirection == "up")
 		{
-			locationVec.y = locationVec.y + (0.001f * velocity);
+			locationVec.y = locationVec.y + (0.05f * velocity * (float)time );
 		}
 		else if (moveDirection == "down")
 		{
-			locationVec.y = locationVec.y - (0.001f * velocity);
+			locationVec.y = locationVec.y - (0.05f * velocity * (float)time );
 		}
 	} else 
 		velocity = 0.0f;

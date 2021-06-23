@@ -554,6 +554,7 @@ int main()
 	// -----------------------
 	//const unsigned int SHADOW_WIDTH = 16384, SHADOW_HEIGHT = 16384;
 	const unsigned int SHADOW_WIDTH = 8192, SHADOW_HEIGHT = 8192;
+	//const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
 	unsigned int depthMapFBO;
 	glGenFramebuffers(1, &depthMapFBO);
 	// create depth texture
@@ -723,7 +724,7 @@ int main()
 	std::chrono::time_point between = std::chrono::system_clock::now();
 	double posX, posY;
 	int diffSec, diffTSec, diffMinute, score, befCurrScene;
-
+	bool spawned = false;
 	double lasttime = glfwGetTime();
 	int pos = 0;
 
@@ -737,13 +738,7 @@ int main()
 
 
 
-		counter++;
-		//if (counter%375 == 0 && mutatonCounter!=8 )
-		if (counter % 500 == 0 && mutatonCounter != maxMutatonsInLevel)
-		{
-			SpawnMutaton();
-			mutatonCounter++;
-		}
+
 		// getting input
 		Input::ProcessInput(windowPtr);
 		if (glfwGetKey(windowPtr, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -896,8 +891,17 @@ int main()
 		diffTSec = (diff.count() - diffMinute * 60) / 10;
 		diffSec = diff.count() - diffMinute * 60 - diffTSec * 10;
 
+		counter++;
+		//if (counter%375 == 0 && mutatonCounter!=8 )
+		if (((diffTSec * 10) + diffSec) % 8 == 0 && mutatonCounter != maxMutatonsInLevel && !spawned && ((diffTSec * 10) + diffSec)>0)
+		{
+			SpawnMutaton();
+			mutatonCounter++;
+			spawned = true;
+		}
 
-
+		if(((diffTSec * 10) + diffSec) % 8 != 0)
+			spawned = false;
 		// render Depth map to quad for visual debugging
 		// ---------------------------------------------
 		depthMapDebugShader.Use();
@@ -1149,7 +1153,7 @@ int main()
 		{
 			g->Update(g->GetTransformComponent()->GetLocationAddr(), deltaTime);
 		}
-
+		
 
 
 		//Checking if any crossing is colliding with moving gameobjects
